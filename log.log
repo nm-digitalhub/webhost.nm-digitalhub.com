@@ -1,0 +1,75 @@
+=== Scanning for invalid getPages() definitions ===
+
+⚠️  Potential legacy getPages() found in: app/Filament/Resources/PageResource.php
+        public static function getPages(): array
+        {
+            return [
+                'index' => Pages\ListPages::route('/'),
+                'create' => Pages\CreatePage::route('/create'),
+                'edit' => Pages\EditPage::route('/{record}/edit'),
+
+⚠️  Potential legacy getPages() found in: app/Filament/Resources/ClientPageResource.php
+        public static function getPages(): array
+        {
+            return [
+                'index' => Pages\ListClientPages::route('/'),
+                'create' => Pages\CreateClientPage::route('/create'),
+                'edit' => Pages\EditClientPage::route('/{record}/edit'),
+
+⚠️  Potential legacy getPages() found in: app/Filament/Resources/ClientModuleResource.php
+        public static function getPages(): array
+        {
+            return [
+                'index' => Pages\ListClientModules::route('/'),
+                'create' => Pages\CreateClientModule::route('/create'),
+                'edit' => Pages\EditClientModule::route('/{record}/edit'),
+
+⚠️  Potential legacy getPages() found in: app/Filament/Resources/MailTemplateResource.php
+        public static function getPages(): array
+        {
+            return [
+                'index' => Pages\ListMailTemplates::route('/'),
+                'create' => Pages\CreateMailTemplate::route('/create'),
+                'edit' => Pages\EditMailTemplate::route('/{record}/edit'),
+
+⚠️  Potential legacy getPages() found in: app/Filament/Resources/ProductResource.php
+        public static function getPages(): array
+        {
+            return [
+                'index' => Pages\ListProducts::route('/'),
+                'create' => Pages\CreateProduct::route('/create'),
+                'edit' => Pages\EditProduct::route('/{record}/edit'),
+
+⚠️  Potential legacy getPages() found in: app/Filament/Resources/GeneratorResource.php
+        public static function getPages(): array
+        {
+            return [
+                'index' => Pages\ListGenerators::route('/'),
+                'create' => Pages\CreateGenerator::route('/create'),
+                'edit' => Pages\EditGenerator::route('/{record}/edit'),
+
+⚠️  Potential legacy getPages() found in: app/Filament/Resources/GenerationLogResource.php
+        public static function getPages(): array
+        {
+            return [
+                'index' => Pages\ListGenerationLogs::route('/'),
+                'create' => Pages\CreateGenerationLog::route('/create'),
+                'edit' => Pages\EditGenerationLog::route('/{record}/edit'),
+
+⚠️  Potential legacy getPages() found in: app/Filament/Resources/ModuleManagerResource.php
+        public static function getPages(): array
+        {
+            return [
+                'index' => Pages\ListModuleManagers::route('/'),
+                'view-code' => Pages\ViewComponentCode::route('/{path}/code'),
+            ];
+
+⚠️  Potential legacy getPages() found in: app/Filament/Resources/MailSettingResource.php
+        public static function getPages(): array
+        {
+            return [
+                'index' => Pages\ListMailSettings::route('/'),
+                'create' => Pages\CreateMailSetting::route('/create'),
+                'edit' => Pages\EditMailSetting::route('/{record}/edit'),
+
+✅ All getPages() methods appear to be compatible with Filament 3.

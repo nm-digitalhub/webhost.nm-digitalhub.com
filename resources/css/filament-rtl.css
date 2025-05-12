@@ -1,0 +1,125 @@
+/* Custom RTL fixes for Filament */
+/* Custom RTL fixes for Filament */
+
+/* Force RTL directionality */
+[dir="rtl"] .fi-sidebar,
+[dir="rtl"] .fi-topbar,
+[dir="rtl"] .fi-main {
+    direction: rtl;
+}
+
+/* Fix for navigation items alignment */
+.fi-topbar, 
+.fi-sidebar {
+    direction: rtl;
+}
+
+/* Ensure consistent spacing in RTL mode */
+.fi-dropdown-panel {
+    --tw-space-x-reverse: 1;
+}
+
+/* Fix for header items wrapping */
+.fi-topbar .flex {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+}
+
+/* Fix for content alignment */
+.fi-main {
+    direction: rtl;
+}
+
+/* Apply Heebo font for better Hebrew support */
+body {
+    font-family: 'Heebo', sans-serif;
+}
+
+/* Fix for icon alignment in RTL mode */
+.fi-sidebar-item-icon {
+    margin-left: 0.75rem;
+    margin-right: 0;
+}
+
+/* Fix spacing for forms and inputs */
+.fi-form-component-container {
+    direction: rtl;
+    text-align: right;
+}
+
+/* Fix for tables in RTL mode */
+.fi-ta-content {
+    direction: rtl;
+}
+
+/* Fix for notification positioning */
+.fi-notification {
+    right: auto;
+    left: 1rem;
+}
+
+/* Better handling of widgets in dashboard */
+.grid-cols-1 > * {
+    max-width: 100%;
+    overflow: hidden;
+}
+
+/* Fix Livewire components within Filament */
+.livewire-wrapper {
+    direction: rtl;
+}
+/* Fix for navigation items alignment */
+.fi-topbar,
+.fi-sidebar {
+    direction: rtl;
+}
+
+/* Ensure consistent spacing in RTL mode */
+.fi-dropdown-panel {
+    --tw-space-x-reverse: 1;
+}
+
+/* Fix for header items wrapping */
+.fi-topbar .flex {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+}
+
+/* Fix for content alignment */
+.fi-main {
+    direction: rtl;
+}
+
+/* Apply Heebo font for better Hebrew support */
+body {
+    font-family: 'Heebo', sans-serif;
+}
+
+/* Fix for icon alignment in RTL mode */
+.fi-sidebar-item-icon {
+    margin-left: 0.75rem;
+    margin-right: 0;
+}
+
+/* Fix spacing for forms and inputs */
+.fi-form-component-container {
+    direction: rtl;
+    text-align: right;
+}
+
+/* Fix for tables in RTL mode */
+.fi-ta-content {
+    direction: rtl;
+}
+
+/* Fix for notification positioning */
+.fi-notification {
+    right: auto;
+    left: 1rem;
+}
+
+/* Better handling of widgets in dashboard */
+.grid-cols-1 > * {
+    max-width: 100%;
+    overflow: hidden;
+}

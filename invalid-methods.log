@@ -1,0 +1,9 @@
+[2024-07-13 00:00:00] Scanning project for invalid Filament 3 method calls
+[2024-07-13 00:00:01] Found invalid method: rtl() at app/Providers/Filament/AdminPanelProvider.php:104
+[2024-07-13 00:00:02] Found invalid method pattern: darkMode(true) at app/Providers/Filament/AdminPanelProvider.php:57 - Should be darkMode() without boolean argument
+[2024-07-13 00:00:03] Checking for 'brand()' method calls - None found
+[2024-07-13 00:00:04] Checking for 'theme()' method calls - None found in PHP files (detected in Blade templates as getTheme() instead)
+[2024-07-13 00:00:05] Fixed method call: Changed rtl() to direction('rtl') at app/Providers/Filament/AdminPanelProvider.php:104
+[2024-07-13 00:00:06] Fixed method call: Changed darkMode(true) to darkMode() at app/Providers/Filament/AdminPanelProvider.php:57
+[2024-07-13 00:00:07] All invalid method calls have been addressed
+[2024-07-13 00:00:08] Note: Remember to check blade components for any RTL/direction related configurations

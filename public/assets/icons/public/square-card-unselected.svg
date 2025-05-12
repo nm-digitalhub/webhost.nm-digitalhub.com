@@ -1,0 +1,11 @@
+<svg width="120" height="140" viewBox="0 0 120 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Card Container -->
+  <rect x="1" y="1" width="118" height="138" rx="12" fill="white" stroke="#CBD5E1" stroke-width="2"/>
+  
+  <!-- Square Logo -->
+  <rect x="36" y="24" width="48" height="48" rx="8" stroke="#0F766E" stroke-width="4" fill="none"/>
+  <rect x="52" y="40" width="16" height="16" rx="2" fill="#0F766E"/>
+  
+  <!-- Square Text -->
+  <text x="60" y="100" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#0F766E">Square</text>
+</svg>

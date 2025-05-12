@@ -1,0 +1,10 @@
+
+[✔] PageResource רשום בפאנל
+[✖] ClientPageResource לא רשום בפאנל
+[✖] ClientModuleResource לא רשום בפאנל
+[✔] MailTemplateResource רשום בפאנל
+[✖] ProductResource לא רשום בפאנל
+[✔] GeneratorResource רשום בפאנל
+[✔] GenerationLogResource רשום בפאנל
+[✖] ModuleManagerResource לא רשום בפאנל
+[✔] MailSettingResource רשום בפאנל

@@ -1,0 +1,37 @@
+ ------ ------------------------------------------------------- 
+  Line   web.php                                                
+ ------ ------------------------------------------------------- 
+  55     Cannot call method name() on                           
+         array|Illuminate\Routing\Route.                        
+         🪪  method.nonObject                                   
+  74     Cannot call method name() on                           
+         array|Illuminate\Routing\Route.                        
+         🪪  method.nonObject                                   
+  79     Cannot call method name() on                           
+         array|Illuminate\Routing\Route.                        
+         🪪  method.nonObject                                   
+  79     Class                                                  
+         App\Http\Controllers\AuthenticatedSessionController    
+         not found.                                             
+         🪪  class.notFound                                     
+         💡 Learn more at                                       
+            https://phpstan.org/user-guide/discovering-symbols  
+  165    Class App\Livewire\Client\Domains not found.           
+         🪪  class.notFound                                     
+         💡 Learn more at                                       
+            https://phpstan.org/user-guide/discovering-symbols  
+  186    Class App\Livewire\Client\Vps not found.               
+         🪪  class.notFound                                     
+         💡 Learn more at                                       
+            https://phpstan.org/user-guide/discovering-symbols  
+  216    Cannot call method name() on                           
+         array|Illuminate\Routing\Route.                        
+         🪪  method.nonObject                                   
+  219    Cannot call method name() on                           
+         array|Illuminate\Routing\Route.                        
+         🪪  method.nonObject                                   
+ ------ ------------------------------------------------------- 
+
+
+ [ERROR] Found 8 errors                                
+

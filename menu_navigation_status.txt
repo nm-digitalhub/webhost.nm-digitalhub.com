@@ -1,0 +1,11 @@
+
+
+[✖] GenerateCode – לא רשום, אבל מכיל תכונות ניווט
+[✔] PageResource – רשום ב־AdminPanelProvider
+[✔] ClientPageResource – רשום ב־AdminPanelProvider
+[✔] ClientModuleResource – רשום ב־AdminPanelProvider
+[✔] MailTemplateResource – רשום ב־AdminPanelProvider
+[✔] GeneratorResource – רשום ב־AdminPanelProvider
+[✔] GenerationLogResource – רשום ב־AdminPanelProvider
+[✔] ModuleManagerResource – רשום ב־AdminPanelProvider
+[✔] MailSettingResource – רשום ב־AdminPanelProvider

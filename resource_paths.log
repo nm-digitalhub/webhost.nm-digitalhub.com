@@ -1,0 +1,11 @@
+app/Filament/Resources/GeneratorResource/Pages/GenerateCode.php
+app/Filament/Resources/PageResource.php
+app/Filament/Resources/ClientPageResource.php
+app/Filament/Resources/ClientModuleResource.php
+app/Filament/Resources/MailTemplateResource.php
+app/Filament/Resources/ProductResource.php
+app/Filament/Resources/GeneratorResource.php
+app/Filament/Resources/GenerationLogResource.php
+app/Filament/Resources/ModuleManagerResource.php
+app/Filament/Resources/MailSettingResource.php
+app/Filament/Resources/UserResource.php

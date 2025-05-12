@@ -1,0 +1,18 @@
+== קבצים שנארזו ==
+config/session.php
+config/livewire.php
+config/queue.php
+config/auth.php
+config/mail.php
+config/app.php
+config/jetstream.php
+config/cache.php
+config/fortify.php
+config/sanctum.php
+config/database.php
+config/filament_custom.php
+config/services.php
+config/filesystems.php
+config/filament.php
+config/permission.php
+config/logging.php

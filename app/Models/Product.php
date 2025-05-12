@@ -1,0 +1,148 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class Product extends Model
+{
+    use HasFactory, SoftDeletes;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'name',
+        'slug',
+        'description',
+        'short_description',
+        'sku',
+        'price',
+        'sale_price',
+        'currency',
+        'plan_id',
+        'type',
+        'is_active',
+        'is_featured',
+        'image',
+        'metadata',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'price' => 'decimal:2',
+        'sale_price' => 'decimal:2',
+        'is_active' => 'boolean',
+        'is_featured' => 'boolean',
+        'metadata' => 'array',
+    ];
+
+    /**
+     * Product types
+     */
+    const TYPE_HOSTING = 'hosting';
+    const TYPE_DOMAIN = 'domain';
+    const TYPE_VPS = 'vps';
+    const TYPE_ADDON = 'addon';
+    const TYPE_SERVICE = 'service';
+
+    /**
+     * Get the plan that owns the product.
+     */
+    public function plan(): BelongsTo
+    {
+        return $this->belongsTo(Plan::class);
+    }
+
+    /**
+     * Get the order items for the product.
+     */
+    public function orderItems(): HasMany
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+    
+    /**
+     * Get active products.
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+    
+    /**
+     * Get featured products.
+     */
+    public function scopeFeatured($query)
+    {
+        return $query->where('is_featured', true);
+    }
+    
+    /**
+     * Get products of a specific type.
+     */
+    public function scopeOfType($query, $type)
+    {
+        return $query->where('type', $type);
+    }
+    
+    /**
+     * Format the price with currency symbol.
+     */
+    public function formattedPrice(): string
+    {
+        $symbol = $this->currency === 'ILS' ? '₪' : ($this->currency === 'USD' ? '$' : '€');
+        return $symbol . number_format($this->price, 2);
+    }
+    
+    /**
+     * Format the sale price with currency symbol.
+     */
+    public function formattedSalePrice(): string
+    {
+        if (!$this->sale_price) {
+            return '';
+        }
+        
+        $symbol = $this->currency === 'ILS' ? '₪' : ($this->currency === 'USD' ? '$' : '€');
+        return $symbol . number_format($this->sale_price, 2);
+    }
+    
+    /**
+     * Get the effective price (sale price if available, otherwise regular price).
+     */
+    public function getEffectivePrice()
+    {
+        return ($this->sale_price && $this->sale_price < $this->price) ? $this->sale_price : $this->price;
+    }
+    
+    /**
+     * Check if the product is on sale.
+     */
+    public function isOnSale(): bool
+    {
+        return $this->sale_price && $this->sale_price < $this->price;
+    }
+    
+    /**
+     * Calculate the discount percentage.
+     */
+    public function discountPercentage(): ?int
+    {
+        if (!$this->isOnSale()) {
+            return null;
+        }
+        
+        return (int)(100 - (($this->sale_price / $this->price) * 100));
+    }
+}

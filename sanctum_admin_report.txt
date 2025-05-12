@@ -1,0 +1,23 @@
+📄 דוח הגדרת Sanctum ומנהל מערכת
+תאריך: Sun May  4 08:58:48 UTC 2025
+--------------------------------------
+
+🔍 בדיקה: שימוש ב-HasApiTokens במודל User:
+✔️  HasApiTokens מוגדר במודל User
+
+🔍 בדיקה: middleware בקובץ bootstrap/app.php:
+❌  middleware של Sanctum חסר ב-bootstrap/app.php
+
+🔍 בדיקה: קיום קובץ config/sanctum.php:
+✔️  קובץ sanctum.php קיים
+
+🔍 בדיקה: קיום route עם auth:sanctum:
+✔️  auth:sanctum מוגדר ב-api.php
+
+🔍 בדיקה: קיום טבלת personal_access_tokens:
+✔️ קיימת
+
+🔧 יצירת משתמש מנהל:
+✔️  משתמש מנהל נוצר בהצלחה.
+   📧 אימייל: admin@example.com
+   🔑 סיסמה: 90ULHsi0FyP5NNTL

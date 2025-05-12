@@ -1,0 +1,314 @@
+/*
+ * NM-DigitalHUB Filament Panel Theme Customizations
+ * Custom styles for enhancing the Filament admin dashboard experience
+ */
+
+/* KPI Summary Styling */
+.filament-widgets-container {
+    @apply gap-6;
+}
+
+.nm-kpi-summary {
+    @apply bg-primary-500/5 dark:bg-primary-500/10 rounded-xl p-2 -mx-2 mb-6;
+}
+
+.filament-stats-overview-widget {
+    @apply shadow-none;
+}
+
+.filament-stats-overview-widget .filament-stats-overview-widget-stats {
+    @apply grid sm:grid-cols-2 md:grid-cols-4 gap-4;
+}
+
+.filament-stats-overview-widget .filament-stats-overview-widget-stats .filament-stats-overview-widget-stat {
+    @apply bg-white dark:bg-gray-800 rounded-xl shadow-sm border-none ring-1 ring-gray-950/5 dark:ring-white/10;
+}
+
+.filament-stats-overview-widget-stat .filament-stats-overview-widget-stat-description {
+    @apply text-xs whitespace-pre-line;
+}
+
+/* System Health Indicators */
+.system-indicator {
+    @apply flex items-center text-xs;
+}
+
+.system-indicator-dot {
+    @apply h-2 w-2 rounded-full mr-1.5;
+}
+
+.system-indicator-dot.status-ok {
+    @apply bg-success-500;
+}
+
+.system-indicator-dot.status-warning {
+    @apply bg-warning-500;
+}
+
+.system-indicator-dot.status-error {
+    @apply bg-danger-500;
+}
+
+/* Responsive Mobile Optimizations */
+@media (max-width: 768px) {
+    /* Make all stats stack on mobile */
+    .filament-stats-overview-widget .filament-stats-overview-widget-stats {
+        @apply grid-cols-1;
+    }
+
+    /* Make all tables horizontally scrollable on mobile */
+    .filament-tables-container {
+        @apply overflow-x-auto -mx-4 px-4;
+    }
+    
+    /* Sticky mobile header */
+    .filament-header {
+        @apply sticky top-0 z-20 bg-white dark:bg-gray-900 shadow-sm pb-0;
+    }
+    
+    /* Improve padding for mobile content */
+    .filament-main {
+        @apply px-3;
+    }
+    
+    /* Improve form spacing on mobile */
+    .filament-form-component-container {
+        @apply py-2;
+    }
+    
+    /* Mobile navbar drawer - mobile-optimized sidebar */
+    .fi-sidebar {
+        @apply fixed inset-y-0 start-0 z-30 w-64 -ms-64 lg:ms-0 
+               bg-white dark:bg-gray-900 overflow-y-auto
+               border-e border-gray-200 dark:border-gray-800
+               transition-all duration-300 lg:translate-x-0 shadow-xl;
+    }
+    
+    /* When sidebar is open */
+    .fi-sidebar-open .fi-sidebar {
+        @apply ms-0 translate-x-0;
+    }
+    
+    /* Mobile sidebar overlay */
+    .fi-sidebar-open .fi-sidebar-close-overlay {
+        @apply fixed inset-0 z-20 bg-gray-950/50 dark:bg-gray-950/75
+               lg:hidden transition-opacity;
+    }
+    
+    /* Mobile sticky top bar */
+    .fi-topbar {
+        @apply sticky top-0 z-20 flex h-16 items-center bg-white dark:bg-gray-900
+               border-b border-gray-200 dark:border-gray-800
+               px-4 sm:px-6 lg:px-8 shadow-sm;
+    }
+    
+    /* Mobile content container */
+    .fi-main {
+        @apply flex-1 px-4 sm:px-6 lg:px-8 pb-12 pt-4 lg:pt-10;
+    }
+    
+    /* Improved mobile header action buttons */
+    .fi-header-heading {
+        @apply text-xl sm:text-2xl;
+    }
+    
+    /* Collapsible filters on mobile */
+    .fi-table-filters {
+        @apply mt-4 basis-full sm:mt-0 sm:basis-auto;
+    }
+    
+    /* Collapsible toolbar on mobile */
+    .fi-table-toolbar {
+        @apply flex flex-wrap gap-3 sm:flex-nowrap;
+    }
+    
+    /* Smaller typography for mobile */
+    .fi-ta-text {
+        @apply text-sm;
+    }
+    
+    /* Sticky mobile navigation when scrolling */
+    .fi-mobile-navigation-trigger {
+        @apply sticky top-0 z-20 bg-white dark:bg-gray-900 py-3 shadow-sm;
+    }
+    
+    /* Improved mobile forms layout */
+    .fi-form-section-content {
+        @apply grid gap-4 sm:gap-6;
+    }
+    
+    /* Create a sticky mobile control bar at bottom */
+    .fi-sticky-footer {
+        @apply fixed bottom-0 inset-x-0 p-4 sm:px-6
+               bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800
+               z-20 flex items-center justify-between;
+    }
+    
+    /* Push content up when sticky footer is present */
+    .fi-has-sticky-footer .fi-main {
+        @apply pb-24;
+    }
+    
+    /* Better mobile notifications positioning */
+    .fi-notification-panel {
+        @apply fixed top-0 end-0 p-6 max-w-xs w-full;
+    }
+}
+
+/* Mobile Navigation Drawer Enhancements */
+.filament-sidebar-collapse-button {
+    @apply bg-primary-500 hover:bg-primary-600 text-white shadow;
+}
+
+.filament-sidebar-item {
+    @apply rounded-md transition-all duration-150 ease-in-out;
+}
+
+.filament-sidebar-item:hover {
+    @apply transform scale-[1.02];
+}
+
+.filament-sidebar-group {
+    @apply px-2;
+}
+
+/* Better Section Headers */
+.filament-section-header {
+    @apply border-b border-gray-200 dark:border-gray-700 mb-4 pb-2;
+}
+
+/* Status Badge Styling */
+.status-badge {
+    @apply inline-flex items-center gap-1 justify-center min-h-6 px-2 py-0.5 text-xs font-medium rounded-full;
+}
+
+.status-badge.active {
+    @apply bg-success-500/10 text-success-700 dark:text-success-500 ring-1 ring-inset ring-success-600/20;
+}
+
+.status-badge.inactive {
+    @apply bg-gray-500/10 text-gray-600 dark:text-gray-400 ring-1 ring-inset ring-gray-500/20;
+}
+
+.status-badge.warning {
+    @apply bg-warning-500/10 text-warning-700 dark:text-warning-500 ring-1 ring-inset ring-warning-600/20;
+}
+
+.status-badge.error {
+    @apply bg-danger-500/10 text-danger-700 dark:text-danger-500 ring-1 ring-inset ring-danger-600/20;
+}
+
+/* Global Search Styling */
+.global-search-container {
+    @apply relative mx-auto max-w-md;
+}
+
+.global-search-container input {
+    @apply h-9 w-full rounded-full border-0 bg-white dark:bg-gray-900 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-inset focus:ring-primary-500;
+}
+
+.global-search-results {
+    @apply absolute mt-2 w-full rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden z-50;
+}
+
+/* Toast Notifications */
+.toast-notification {
+    @apply fixed top-4 right-4 z-50 max-w-sm overflow-hidden rounded-lg bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 transform transition-all duration-300 ease-in-out;
+}
+
+.toast-notification.entering {
+    @apply translate-x-full opacity-0;
+}
+
+.toast-notification.entered {
+    @apply translate-x-0 opacity-100;
+}
+
+.toast-notification.exiting {
+    @apply translate-x-full opacity-0;
+}
+
+/* Dark Mode Toggle */
+.dark-mode-toggle {
+    @apply p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-500 rounded-md;
+}
+
+/* RTL Support */
+[dir="rtl"] .filament-stats-overview-widget-stat .filament-stats-overview-widget-stat-chart {
+    @apply mr-auto ml-0;
+}
+
+[dir="rtl"] .system-indicator-dot {
+    @apply ml-1.5 mr-0;
+}
+
+[dir="rtl"] .filament-sidebar-item .filament-sidebar-item-icon {
+    @apply ml-3 mr-0;
+}
+
+/* Utility Classes for Animation */
+.hover-scale {
+    @apply transition-transform duration-150 ease-in-out hover:scale-[1.02];
+}
+
+/* Improved Card Layouts */
+.filament-card {
+    @apply rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm ring-1 ring-gray-950/5 dark:ring-white/10;
+}
+
+/* Table Responsive Fixes */
+.filament-tables-component {
+    @apply overflow-x-auto rounded-xl;
+}
+
+@media (max-width: 640px) {
+    .filament-tables-header {
+        @apply flex-col gap-4 items-start;
+    }
+    
+    .filament-tables-header-toolbar {
+        @apply w-full justify-between;
+    }
+}
+
+/* Ensure Forms Stack Properly on Mobile */
+@media (max-width: 640px) {
+    .filament-form-component-container > .grid-cols-2,
+    .filament-form-component-container > .grid-cols-3 {
+        @apply grid-cols-1;
+    }
+}
+
+/* Enhance Legibility */
+.filament-main {
+    @apply text-gray-700 dark:text-gray-300;
+}
+
+/* Header Improvements for Mobile */
+@media (max-width: 768px) {
+    .filament-header {
+        @apply flex-col items-start gap-4 mb-6;
+    }
+    
+    .filament-header-heading {
+        @apply text-2xl;
+    }
+    
+    .filament-header-subheading {
+        @apply text-sm;
+    }
+}
+
+/* Use Inter & Heebo fonts */
+body {
+    font-family: 'Inter', 'Heebo', sans-serif;
+}
+
+[dir="rtl"] {
+    font-family: 'Heebo', 'Inter', sans-serif;
+}
+
+/* Sticky Mobile Header */
+.mobile-sticky-header {
+    @apply sticky top-0 z-30 bg-white dark:bg-gray-900 pt-1 pb-3 shadow-sm;
+}

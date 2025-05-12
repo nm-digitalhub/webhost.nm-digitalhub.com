@@ -1,0 +1,37 @@
+
+   Symfony\Component\ErrorHandler\Error\FatalError 
+
+  Could not check compatibility between App\Filament\Resources\ClientModuleResource::form(Filament\Resources\Form $form): Filament\Resources\Form and Filament\Resources\Resource::form(Filament\Forms\Form $form): Filament\Forms\Form, because class Filament\Resources\Form is not available
+
+  at app/Filament/Resources/ClientModuleResource.php:27
+     23▕     {
+     24▕         return true;
+     25▕     }
+     26▕ 
+  ➜  27▕     public static function form(Form $form): Form
+     28▕     {
+     29▕         return $form->schema([]);
+     30▕     }
+     31▕
+
+
+   Whoops\Exception\ErrorException 
+
+  Could not check compatibility between App\Filament\Resources\ClientModuleResource::form(Filament\Resources\Form $form): Filament\Resources\Form and Filament\Resources\Resource::form(Filament\Forms\Form $form): Filament\Forms\Form, because class Filament\Resources\Form is not available
+
+  at app/Filament/Resources/ClientModuleResource.php:27
+     23▕     {
+     24▕         return true;
+     25▕     }
+     26▕ 
+  ➜  27▕     public static function form(Form $form): Form
+     28▕     {
+     29▕         return $form->schema([]);
+     30▕     }
+     31▕
+
+      [2m+1 vendor frames [22m
+
+  2   [internal]:0
+      Whoops\Run::handleShutdown()
+

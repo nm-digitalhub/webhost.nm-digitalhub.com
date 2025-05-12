@@ -1,0 +1,145 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Brand Colors */
+:root {
+    --primary-color: #006CC9;
+    --secondary-bg-color: #F0F2F5;
+    --text-primary-color: #0D1E3C;
+    --text-secondary-color: #607295;
+}
+
+/* Import Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Language-specific font settings */
+:lang(he) {
+    font-family: 'Heebo', sans-serif;
+}
+
+:lang(en) {
+    font-family: 'Inter', sans-serif;
+}
+
+/* RTL support */
+[dir="rtl"] .rtl-flip {
+    transform: scaleX(-1);
+}
+
+/* Custom button styles */
+.btn-primary {
+    @apply bg-[#006CC9] hover:bg-[#0050A0] text-white font-medium py-2 px-4 rounded-md transition duration-300;
+}
+
+.btn-secondary {
+    @apply bg-[#F0F2F5] hover:bg-gray-300 text-[#0D1E3C] font-medium py-2 px-4 rounded-md transition duration-300;
+}
+
+.btn-outline {
+    @apply border border-[#006CC9] text-[#006CC9] hover:bg-[#006CC9] hover:text-white font-medium py-2 px-4 rounded-md transition duration-300;
+}
+
+/* Heading styles */
+h1, h2, h3, h4, h5, h6 {
+    @apply text-[#0D1E3C] font-bold;
+}
+
+/* Text styles */
+.text-primary {
+    @apply text-[#0D1E3C];
+}
+
+.text-secondary {
+    @apply text-[#607295];
+}
+
+/* Background styles */
+.bg-primary {
+    @apply bg-[#006CC9];
+}
+
+.bg-secondary {
+    @apply bg-[#F0F2F5];
+}
+
+/* Language switcher */
+.lang-switcher {
+    @apply inline-flex items-center text-sm text-gray-600 hover:text-gray-800 mx-1;
+}
+
+.lang-switcher.active {
+    @apply font-bold text-[#006CC9];
+}
+
+/* Brand Colors */
+:root {
+    --primary-color: #006CC9;
+    --secondary-bg-color: #F0F2F5;
+    --text-primary-color: #0D1E3C;
+    --text-secondary-color: #607295;
+}
+
+/* Import Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Language-specific font settings */
+:lang(he) {
+    font-family: 'Heebo', sans-serif;
+}
+
+:lang(en) {
+    font-family: 'Inter', sans-serif;
+}
+
+/* RTL support */
+[dir="rtl"] .rtl-flip {
+    transform: scaleX(-1);
+}
+
+/* Custom button styles */
+.btn-primary {
+    @apply bg-[#006CC9] hover:bg-[#0050A0] text-white font-medium py-2 px-4 rounded-md transition duration-300;
+}
+
+.btn-secondary {
+    @apply bg-[#F0F2F5] hover:bg-gray-300 text-[#0D1E3C] font-medium py-2 px-4 rounded-md transition duration-300;
+}
+
+.btn-outline {
+    @apply border border-[#006CC9] text-[#006CC9] hover:bg-[#006CC9] hover:text-white font-medium py-2 px-4 rounded-md transition duration-300;
+}
+
+/* Heading styles */
+h1, h2, h3, h4, h5, h6 {
+    @apply text-[#0D1E3C] font-bold;
+}
+
+/* Text styles */
+.text-primary {
+    @apply text-[#0D1E3C];
+}
+
+.text-secondary {
+    @apply text-[#607295];
+}
+
+/* Background styles */
+.bg-primary {
+    @apply bg-[#006CC9];
+}
+
+.bg-secondary {
+    @apply bg-[#F0F2F5];
+}
+
+/* Language switcher */
+.lang-switcher {
+    @apply inline-flex items-center text-sm text-gray-600 hover:text-gray-800 mx-1;
+}
+
+.lang-switcher.active {
+    @apply font-bold text-[#006CC9];
+}

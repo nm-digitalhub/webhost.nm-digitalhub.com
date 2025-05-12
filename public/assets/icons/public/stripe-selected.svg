@@ -1,0 +1,16 @@
+<svg viewBox="0 0 270 270" xmlns="http://www.w3.org/2000/svg">
+  <!-- Card Container -->
+  <rect width="270" height="270" rx="25" ry="25" fill="white" stroke="#4A57FF" stroke-width="3"/>
+  
+  <!-- Selected Indicator -->
+  <circle cx="225" cy="45" r="20" fill="#4A57FF"/>
+  <path d="M215,45 L222,52 L235,38" stroke="white" stroke-width="3" fill="none"/>
+  
+  <!-- Stripe Logo -->
+  <g transform="translate(135, 120)">
+    <text x="0" y="0" font-family="Arial" font-size="70" font-weight="bold" text-anchor="middle" fill="#6772e5">stripe</text>
+  </g>
+  
+  <!-- Stripe Text -->
+  <text x="135" y="210" font-family="Arial" font-size="32" font-weight="bold" text-anchor="middle" fill="#1A1F36">Stripe</text>
+</svg>

@@ -1,0 +1,293 @@
+== PHPStan Analysis ==
+Note: Using configuration file /var/www/vhosts/nm-digitalhub.com/webhost.nm-digitalhub.com/phpstan.neon.
+File '/var/www/vhosts/nm-digitalhub.com/webhost.nm-digitalhub.com/phpstan-baseline.neon' is missing or is not readable.
+
+== Rector Fixing ==
+  0/26 [░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%[1G[2K 10/26 [▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░░░░░░░]  38%[1G[2K 26/26 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%
+3 files with changes
+====================
+
+1) app/Console/Commands/CleanupFilamentClasses.php:64
+
+    ---------- begin diff ----------
+@@ @@
+     private function fixPanelProviderContent($content)
+     {
+         // Remove duplicate PHP tags
+-        $content = preg_replace('/^<\?php\s+<\?php/', '<?php', $content);
++        $content = preg_replace('/^<\?php\s+<\?php/', '<?php', (string) $content);
+
+         // Extract namespace, imports and class content from both parts
+         if (preg_match('/namespace\s+([^;]+);(.*?)class\s+AdminPanelProvider.*?{(.*?)}\s*namespace/s', $content, $firstMatch) &&
+@@ @@
+             $newContent .= "            ->brandName('NM DigitalHUB')\n";
+             $newContent .= "            ->sidebarCollapsibleOnDesktop(true);\n";
+             $newContent .= "    }\n";
+-            $newContent .= "}\n";
+
+-            return $newContent;
++            return $newContent . "}\n";
+         }
+
+         // If regex didn't match, just remove duplicate PHP tags and namespaces
+         $content = preg_replace('/(<\?php.*?namespace\s+[^;]+;)/s', '<?php', $content, 1);
+-        $content = preg_replace('/namespace\s+([^;]+);/', 'namespace App\\Providers\\Filament;', $content, 1);
+
+-        return $content;
++        return preg_replace('/namespace\s+([^;]+);/', 'namespace App\\Providers\\Filament;', $content, 1);
+     }
+
+     private function checkFilamentPages()
+    ----------- end diff -----------
+
+Applied rules:
+ * SimplifyUselessVariableRector
+ * NullToStrictStringFuncCallArgRector
+
+
+2) app/Console/Commands/FixDuplicatePhpTags.php:37
+
+    ---------- begin diff ----------
+@@ @@
+                     }
+
+                     // Fix 2: Check for namespace followed by another namespace (duplicate class declaration)
+-                    if (preg_match('/namespace\s+([^;]+);.*?class\s+(\w+).*?}\s*namespace\s+/s', $content, $matches)) {
++                    if (preg_match('/namespace\s+([^;]+);.*?class\s+(\w+).*?}\s*namespace\s+/s', (string) $content, $matches)) {
+                         $this->warn("Found duplicate namespace and class declaration in: {$file->getPathname()}");
+
+                         // Extract the first class name and namespace
+@@ @@
+                         $className = $matches[2];
+
+                         // Check how many class declarations we have with the same name
+-                        preg_match_all('/class\s+' . $className . '\s+/s', $content, $classMatches);
++                        preg_match_all('/class\s+' . $className . '\s+/s', (string) $content, $classMatches);
+
+                         if (count($classMatches[0]) > 1) {
+                             // This is more complex - we need manual intervention
+@@ @@
+                     }
+
+                     // Fix 3: Look for files with triple or more PHP tags
+-                    $phpTagCount = substr_count($content, '<?php');
++                    $phpTagCount = substr_count((string) $content, '<?php');
+                     if ($phpTagCount > 2) {
+                         $this->error("Found {$phpTagCount} PHP tags in: {$file->getPathname()}");
+                         $this->info("This requires manual intervention to fix properly.");
+@@ @@
+                         $this->info("Created backup at {$backupPath}");
+
+                         // Try to fix by keeping only the first tag
+-                        $content = preg_replace('/<\?php/', '<?php', $content, 1);
+-                        $content = preg_replace('/<\?php/', '// <?php tag removed', $content);
++                        $content = preg_replace('/<\?php/', '<?php', (string) $content, 1);
++                        $content = preg_replace('/<\?php/', '// <?php tag removed', (string) $content);
+                         $wasFixed = true;
+                     }
+
+@@ @@
+             }
+         }
+
+-        if (empty($fixedFiles)) {
++        if ($fixedFiles === []) {
+             $this->info('No files with duplicate PHP tags or class declarations found.');
+         } else {
+             $this->info(count($fixedFiles) . ' files fixed.');
+    ----------- end diff -----------
+
+Applied rules:
+ * SimplifyEmptyCheckOnEmptyArrayRector
+ * NullToStrictStringFuncCallArgRector
+
+
+3) app/Console/Commands/FixResourceGetPages.php:87
+
+    ---------- begin diff ----------
+@@ @@
+
+                             return "{$prefix}{$pageDefinitions}{$suffix}";
+                         },
+-                        $content
++                        (string) $content
+                     );
+
+                     // Add type hint if missing
+@@ @@
+                     $content = preg_replace(
+                         '/(function\s+getPages\s*\(\s*\))([^:])/m',
+                         '$1: array$2',
+-                        $content
++                        (string) $content
+                     );
+
+                     File::put($file->getPathname(), $content);
+@@ @@
+
+     private function getNamespace($content)
+     {
+-        if (preg_match('/namespace\s+([^;]+);/m', $content, $matches)) {
++        if (preg_match('/namespace\s+([^;]+);/m', (string) $content, $matches)) {
+             return $matches[1];
+         }
+    ----------- end diff -----------
+
+Applied rules:
+ * NullToStrictStringFuncCallArgRector
+
+
+ [ERROR] Could not process "resources/views/filament/resources/module-manager/pages/ListModuleManagers.php" file, due   
+         to:                                                                                                            
+         "Syntax error, unexpected T_NS_SEPARATOR, expecting T_VARIABLE, Syntax error, unexpected T_NS_SEPARATOR, Syntax
+         error, unexpected T_NS_SEPARATOR, Syntax error, unexpected T_NS_SEPARATOR, Syntax error, unexpected            
+         T_NS_SEPARATOR, Syntax error, unexpected T_NS_SEPARATOR, Syntax error, unexpected T_NS_SEPARATOR, Syntax error,
+         unexpected T_NS_SEPARATOR, Syntax error, unexpected T_NS_SEPARATOR, expecting T_VARIABLE, Syntax error,        
+         unexpected T_NS_SEPARATOR, Syntax error, unexpected ',', Syntax error, unexpected T_NS_SEPARATOR, expecting    
+         T_VARIABLE, Syntax error, unexpected T_NS_SEPARATOR, expecting T_VARIABLE, Syntax error, unexpected            
+         T_NS_SEPARATOR, expecting ')', Syntax error, unexpected ')', Syntax error, unexpected T_NS_SEPARATOR, Syntax   
+         error, unexpected T_NS_SEPARATOR, Syntax error, unexpected T_NS_SEPARATOR, Syntax error, unexpected ','". On   
+         line: 12                                                                                                       
+
+ [ERROR] Could not process                                                                                              
+         "database/migrations_backup_20250504075753/2025_05_04_070319_create_personal_access_tokens_table.php" file, due
+         to:                                                                                                            
+         "Syntax error, unexpected T_IF, expecting ';' or '{'". On line: 13                                             
+
+ [ERROR] Could not process "database/migrations_backup_20250504075753/2025_05_01_195611_create_role_user_table.php"     
+         file, due to:                                                                                                  
+         "Syntax error, unexpected T_IF, expecting ';' or '{'". On line: 13                                             
+
+ [ERROR] Could not process "database/migrations_backup_20250504075753/2025_05_01_195534_create_roles_table.php" file,   
+         due to:                                                                                                        
+         "Syntax error, unexpected T_IF, expecting ';' or '{'". On line: 13                                             
+
+ [ERROR] Could not process                                                                                              
+         "database/migrations_backup_20250504075753/2025_05_01_195238_create_personal_access_tokens_table.php" file, due
+         to:                                                                                                            
+         "Syntax error, unexpected T_IF, expecting ';' or '{'". On line: 13                                             
+
+ [ERROR] Could not process "database/migrations_backup_20250504075753/0001_01_01_000002_create_jobs_table.php" file, due
+         to:                                                                                                            
+         "Syntax error, unexpected T_IF, expecting ';' or '{', Syntax error, unexpected '}', expecting EOF". On line: 13
+
+ [ERROR] Could not process "database/migrations_backup_20250504075753/0001_01_01_000000_create_users_table.php" file,   
+         due to:                                                                                                        
+         "Syntax error, unexpected T_IF, expecting ';' or '{', Syntax error, unexpected '}', expecting EOF". On line: 13
+
+ [ERROR] Could not process "app/Providers/RouteServiceProvider.php" file, due to:                                       
+         "Namespace declaration statement has to be the very first statement in the script, Syntax error, unexpected    
+         '}', expecting EOF". On line: 8                                                                                
+
+ [ERROR] Could not process "app/Models/User.php" file, due to:                                                          
+         "Syntax error, unexpected '<', Namespace declaration statement has to be the very first statement in the       
+         script". On line: 2                                                                                            
+
+ [ERROR] Could not process "app/Http/Middleware/IsAdmin.php" file, due to:                                              
+         "Syntax error, unexpected '<', Namespace declaration statement has to be the very first statement in the       
+         script". On line: 2                                                                                            
+
+ [ERROR] Could not process "app/Filament/Pages/Dashboard.php" file, due to:                                             
+         "Syntax error, unexpected '<', Namespace declaration statement has to be the very first statement in the       
+         script". On line: 2                                                                                            
+
+ [ERROR] Could not process "app/Console/Commands/FixFilamentPageRegistrations.php" file, due to:                        
+         "Syntax error, unexpected T_NS_SEPARATOR, Syntax error, unexpected T_NS_SEPARATOR, Syntax error, unexpected    
+         T_NS_SEPARATOR, Syntax error, unexpected ')', expecting '(', Syntax error, unexpected T_NS_SEPARATOR, expecting
+         ',' or ']' or ')', Syntax error, unexpected ')', expecting ']', Syntax error, unexpected ','". On line: 59     
+
+
+== Laravel Cache Clear ==
+
+   BadMethodCallException 
+
+  Method Filament\Panel::direction does not exist.
+
+  at vendor/filament/support/src/Concerns/Macroable.php:77
+     73▕     {
+     74▕         $macro = static::getMacro($method);
+     75▕ 
+     76▕         if ($macro === null) {
+  ➜  77▕             throw new BadMethodCallException(sprintf(
+     78▕                 'Method %s::%s does not exist.',
+     79▕                 static::class,
+     80▕                 $method,
+     81▕             ));
+
+  1   app/Providers/Filament/AdminPanelProvider.php:31
+      Filament\Support\Components\Component::__call()
+      [2m+36 vendor frames [22m
+
+  38  [internal]:0
+      Illuminate\Foundation\Application::Illuminate\Foundation\{closure}()
+
+
+   BadMethodCallException 
+
+  Method Filament\Panel::direction does not exist.
+
+  at vendor/filament/support/src/Concerns/Macroable.php:77
+     73▕     {
+     74▕         $macro = static::getMacro($method);
+     75▕ 
+     76▕         if ($macro === null) {
+  ➜  77▕             throw new BadMethodCallException(sprintf(
+     78▕                 'Method %s::%s does not exist.',
+     79▕                 static::class,
+     80▕                 $method,
+     81▕             ));
+
+  1   app/Providers/Filament/AdminPanelProvider.php:31
+      Filament\Support\Components\Component::__call()
+      [2m+36 vendor frames [22m
+
+  38  [internal]:0
+      Illuminate\Foundation\Application::Illuminate\Foundation\{closure}()
+
+
+   BadMethodCallException 
+
+  Method Filament\Panel::direction does not exist.
+
+  at vendor/filament/support/src/Concerns/Macroable.php:77
+     73▕     {
+     74▕         $macro = static::getMacro($method);
+     75▕ 
+     76▕         if ($macro === null) {
+  ➜  77▕             throw new BadMethodCallException(sprintf(
+     78▕                 'Method %s::%s does not exist.',
+     79▕                 static::class,
+     80▕                 $method,
+     81▕             ));
+
+  1   app/Providers/Filament/AdminPanelProvider.php:31
+      Filament\Support\Components\Component::__call()
+      [2m+36 vendor frames [22m
+
+  38  [internal]:0
+      Illuminate\Foundation\Application::Illuminate\Foundation\{closure}()
+
+
+   BadMethodCallException 
+
+  Method Filament\Panel::direction does not exist.
+
+  at vendor/filament/support/src/Concerns/Macroable.php:77
+     73▕     {
+     74▕         $macro = static::getMacro($method);
+     75▕ 
+     76▕         if ($macro === null) {
+  ➜  77▕             throw new BadMethodCallException(sprintf(
+     78▕                 'Method %s::%s does not exist.',
+     79▕                 static::class,
+     80▕                 $method,
+     81▕             ));
+
+  1   app/Providers/Filament/AdminPanelProvider.php:31
+      Filament\Support\Components\Component::__call()
+      [2m+36 vendor frames [22m
+
+  38  [internal]:0
+      Illuminate\Foundation\Application::Illuminate\Foundation\{closure}()
+
+== DONE ==

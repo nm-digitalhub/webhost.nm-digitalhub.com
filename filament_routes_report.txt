@@ -1,0 +1,132 @@
+# דוח ניתובים - Filament
+
+## Resource Routes
+GenerateCode.php:             'index' => Pages\\List{$modelName}s::route('/'),
+GenerateCode.php:             'create' => Pages\\Create{$modelName}::route('/create'),
+GenerateCode.php:             'edit' => Pages\\Edit{$modelName}::route('/{record}/edit'),
+PageResource.php:             'index' => Pages\ListPages::route('/'),
+PageResource.php:             'create' => Pages\CreatePage::route('/create'),
+PageResource.php:             'edit' => Pages\EditPage::route('/{record}/edit'),
+ClientPageResource.php:                         ->url(fn (ClientPage $record): string => route('client.pages.show', ['slug' => $record->slug]))
+ClientPageResource.php:             'index' => Pages\ListClientPages::route('/'),
+ClientPageResource.php:             'create' => Pages\CreateClientPage::route('/create'),
+ClientPageResource.php:             'edit' => Pages\EditClientPage::route('/{record}/edit'),
+ClientModuleResource.php:             'index' => Pages\ListClientModules::route('/'),
+ClientModuleResource.php:             'create' => Pages\CreateClientModule::route('/create'),
+ClientModuleResource.php:             'edit' => Pages\EditClientModule::route('/{record}/edit'),
+MailTemplateResource.php:             'index' => Pages\ListMailTemplates::route('/'),
+MailTemplateResource.php:             'create' => Pages\CreateMailTemplate::route('/create'),
+MailTemplateResource.php:             'edit' => Pages\EditMailTemplate::route('/{record}/edit'),
+ProductResource.php:             'index' => Pages\ListProducts::route('/'),
+ProductResource.php:             'create' => Pages\CreateProduct::route('/create'),
+ProductResource.php:             'edit' => Pages\EditProduct::route('/{record}/edit'),
+GeneratorResource.php:                     ->url(fn (Generator $record): string => route('filament.admin.resources.generators.generate', $record))
+GeneratorResource.php:             'index' => Pages\ListGenerators::route('/'),
+GeneratorResource.php:             'create' => Pages\CreateGenerator::route('/create'),
+GeneratorResource.php:             'edit' => Pages\EditGenerator::route('/{record}/edit'),
+GeneratorResource.php:             'generate' => Pages\GenerateCode::route('/{record}/generate'),
+GenerationLogResource.php:             'index' => Pages\ListGenerationLogs::route('/'),
+GenerationLogResource.php:             'create' => Pages\CreateGenerationLog::route('/create'),
+GenerationLogResource.php:             'edit' => Pages\EditGenerationLog::route('/{record}/edit'),
+EditClientPage.php:                 ->url(fn (): string => route('client.pages.show', ['slug' => $this->record->slug]))
+ModuleManagerResource.php:             'index' => Pages\ListModuleManagers::route('/'),
+ModuleManagerResource.php:             'create' => Pages\CreateModuleManager::route('/create'),
+ModuleManagerResource.php:             'edit' => Pages\EditModuleManager::route('/{record}/edit'),
+MailSettingResource.php:                                 ->url(fn () => route('oauth.google.redirect'))
+MailSettingResource.php:             'index' => Pages\ListMailSettings::route('/'),
+MailSettingResource.php:             'create' => Pages\CreateMailSetting::route('/create'),
+MailSettingResource.php:             'edit' => Pages\EditMailSetting::route('/{record}/edit'),
+
+## Page Classes
+Page: app/Filament/Resources/MailSettingResource/Pages/ListMailSettings.php:class ListMailSettings extends ListRecords
+Page: app/Filament/Resources/MailSettingResource/Pages/EditMailSetting.php:class EditMailSetting extends EditRecord
+Page: app/Filament/Resources/MailSettingResource/Pages/CreateMailSetting.php:class CreateMailSetting extends CreateRecord
+Page: app/Filament/Resources/ProductResource/Pages/ListProducts.php:class ListProducts extends ListRecords
+Page: app/Filament/Resources/ProductResource/Pages/EditProduct.php:class EditProduct extends EditRecord
+Page: app/Filament/Resources/ProductResource/Pages/CreateProduct.php:class CreateProduct extends CreateRecord
+Page: app/Filament/Resources/GenerationLogResource/Pages/CreateGenerationLog.php:class CreateGenerationLog extends CreateRecord
+Page: app/Filament/Resources/GenerationLogResource/Pages/EditGenerationLog.php:class EditGenerationLog extends EditRecord
+Page: app/Filament/Resources/GenerationLogResource/Pages/ListGenerationLogs.php:class ListGenerationLogs extends ListRecords
+Page: app/Filament/Resources/GeneratorResource/Pages/EditGenerator.php:class EditGenerator extends EditRecord
+Page: app/Filament/Resources/GeneratorResource/Pages/CreateGenerator.php:class CreateGenerator extends CreateRecord
+Page: app/Filament/Resources/GeneratorResource/Pages/GenerateCode.php:class GenerateCode extends Page
+Page: app/Filament/Resources/GeneratorResource/Pages/GenerateCode.php:class {$name} extends " . class_basename($extends) . "
+Page: app/Filament/Resources/GeneratorResource/Pages/GenerateCode.php:class {$name} extends Resource
+Page: app/Filament/Resources/GeneratorResource/Pages/GenerateCode.php:class {$name} extends Page
+Page: app/Filament/Resources/GeneratorResource/Pages/GenerateCode.php:class {$name} extends BaseWidget
+Page: app/Filament/Resources/GeneratorResource/Pages/GenerateCode.php:class {$name} extends Widget
+Page: app/Filament/Resources/GeneratorResource/Pages/ListGenerators.php:class ListGenerators extends ListRecords
+Page: app/Filament/Resources/ClientModuleResource/Pages/ListClientModules.php:class ListClientModules extends ListRecords
+Page: app/Filament/Resources/ClientModuleResource/Pages/EditClientModule.php:class EditClientModule extends EditRecord
+Page: app/Filament/Resources/ClientModuleResource/Pages/CreateClientModule.php:class CreateClientModule extends CreateRecord
+Page: app/Filament/Resources/ClientPageResource/Pages/ListClientPages.php:class ListClientPages extends ListRecords
+Page: app/Filament/Resources/ClientPageResource/Pages/EditClientPage.php:class EditClientPage extends EditRecord
+Page: app/Filament/Resources/ClientPageResource/Pages/CreateClientPage.php:class CreateClientPage extends CreateRecord
+Page: app/Filament/Resources/MailTemplateResource/Pages/ListMailTemplates.php:class ListMailTemplates extends ListRecords
+Page: app/Filament/Resources/MailTemplateResource/Pages/EditMailTemplate.php:class EditMailTemplate extends EditRecord
+Page: app/Filament/Resources/MailTemplateResource/Pages/CreateMailTemplate.php:class CreateMailTemplate extends CreateRecord
+Page: app/Filament/Resources/ModuleManagerResource/Pages/EditModule.php:class EditModule extends EditRecord
+Page: app/Filament/Resources/ModuleManagerResource/Pages/CreateModule.php:class CreateModule extends CreateRecord
+Page: app/Filament/Resources/ModuleManagerResource/Pages/ListModules.php:class ListModules extends ListRecords
+Page: app/Filament/Resources/PageResource/Pages/ListPages.php:class ListPages extends ListRecords
+Page: app/Filament/Resources/PageResource/Pages/EditPage.php:class EditPage extends EditRecord
+Page: app/Filament/Resources/PageResource/Pages/CreatePage.php:class CreatePage extends CreateRecord
+
+## getPages() Definitions
+app/Filament/Resources/GeneratorResource/Pages/GenerateCode.php:    public static function getPages(): array
+app/Filament/Resources/PageResource.php:    public static function getPages(): array
+app/Filament/Resources/ClientPageResource.php:    public static function getPages(): array
+app/Filament/Resources/ClientModuleResource.php:    public static function getPages(): array
+app/Filament/Resources/MailTemplateResource.php:    public static function getPages(): array
+app/Filament/Resources/ProductResource.php:    public static function getPages(): array
+app/Filament/Resources/GeneratorResource.php:    public static function getPages(): array
+app/Filament/Resources/GenerationLogResource.php:    public static function getPages(): array
+app/Filament/Resources/ModuleManagerResource.php:    public static function getPages(): array
+app/Filament/Resources/MailSettingResource.php:    public static function getPages(): array
+
+## Inline Routes (route()/Route::get)
+app/Filament/Admin/Resources/Spatie/Permission/Models/PermissionResource.php:            'index' => Pages\ListPermissions::route('/'),
+app/Filament/Admin/Resources/Spatie/Permission/Models/PermissionResource.php:            'create' => Pages\CreatePermission::route('/create'),
+app/Filament/Admin/Resources/Spatie/Permission/Models/PermissionResource.php:            'edit' => Pages\EditPermission::route('/{record}/edit'),
+app/Filament/Admin/Resources/RoleResource.php:            'index' => Pages\ListRoles::route('/'),
+app/Filament/Admin/Resources/RoleResource.php:            'create' => Pages\CreateRole::route('/create'),
+app/Filament/Admin/Resources/RoleResource.php:            'edit' => Pages\EditRole::route('/{record}/edit'),
+app/Filament/Admin/Resources/UserResource.php:            'index' => Pages\ListUsers::route('/'),
+app/Filament/Admin/Resources/UserResource.php:            'create' => Pages\CreateUser::route('/create'),
+app/Filament/Admin/Resources/UserResource.php:            'edit' => Pages\EditUser::route('/{record}/edit'),
+app/Filament/Resources/GeneratorResource/Pages/GenerateCode.php:            'index' => Pages\\List{$modelName}s::route('/'),
+app/Filament/Resources/GeneratorResource/Pages/GenerateCode.php:            'create' => Pages\\Create{$modelName}::route('/create'),
+app/Filament/Resources/GeneratorResource/Pages/GenerateCode.php:            'edit' => Pages\\Edit{$modelName}::route('/{record}/edit'),
+app/Filament/Resources/PageResource.php:            'index' => Pages\ListPages::route('/'),
+app/Filament/Resources/PageResource.php:            'create' => Pages\CreatePage::route('/create'),
+app/Filament/Resources/PageResource.php:            'edit' => Pages\EditPage::route('/{record}/edit'),
+app/Filament/Resources/ClientPageResource.php:                        ->url(fn (ClientPage $record): string => route('client.pages.show', ['slug' => $record->slug]))
+app/Filament/Resources/ClientPageResource.php:            'index' => Pages\ListClientPages::route('/'),
+app/Filament/Resources/ClientPageResource.php:            'create' => Pages\CreateClientPage::route('/create'),
+app/Filament/Resources/ClientPageResource.php:            'edit' => Pages\EditClientPage::route('/{record}/edit'),
+app/Filament/Resources/ClientModuleResource.php:            'index' => Pages\ListClientModules::route('/'),
+app/Filament/Resources/ClientModuleResource.php:            'create' => Pages\CreateClientModule::route('/create'),
+app/Filament/Resources/ClientModuleResource.php:            'edit' => Pages\EditClientModule::route('/{record}/edit'),
+app/Filament/Resources/MailTemplateResource.php:            'index' => Pages\ListMailTemplates::route('/'),
+app/Filament/Resources/MailTemplateResource.php:            'create' => Pages\CreateMailTemplate::route('/create'),
+app/Filament/Resources/MailTemplateResource.php:            'edit' => Pages\EditMailTemplate::route('/{record}/edit'),
+app/Filament/Resources/ProductResource.php:            'index' => Pages\ListProducts::route('/'),
+app/Filament/Resources/ProductResource.php:            'create' => Pages\CreateProduct::route('/create'),
+app/Filament/Resources/ProductResource.php:            'edit' => Pages\EditProduct::route('/{record}/edit'),
+app/Filament/Resources/GeneratorResource.php:                    ->url(fn (Generator $record): string => route('filament.admin.resources.generators.generate', $record))
+app/Filament/Resources/GeneratorResource.php:            'index' => Pages\ListGenerators::route('/'),
+app/Filament/Resources/GeneratorResource.php:            'create' => Pages\CreateGenerator::route('/create'),
+app/Filament/Resources/GeneratorResource.php:            'edit' => Pages\EditGenerator::route('/{record}/edit'),
+app/Filament/Resources/GeneratorResource.php:            'generate' => Pages\GenerateCode::route('/{record}/generate'),
+app/Filament/Resources/GenerationLogResource.php:            'index' => Pages\ListGenerationLogs::route('/'),
+app/Filament/Resources/GenerationLogResource.php:            'create' => Pages\CreateGenerationLog::route('/create'),
+app/Filament/Resources/GenerationLogResource.php:            'edit' => Pages\EditGenerationLog::route('/{record}/edit'),
+app/Filament/Resources/ClientPageResource/Pages/EditClientPage.php:                ->url(fn (): string => route('client.pages.show', ['slug' => $this->record->slug]))
+app/Filament/Resources/ModuleManagerResource.php:            'index' => Pages\ListModuleManagers::route('/'),
+app/Filament/Resources/ModuleManagerResource.php:            'create' => Pages\CreateModuleManager::route('/create'),
+app/Filament/Resources/ModuleManagerResource.php:            'edit' => Pages\EditModuleManager::route('/{record}/edit'),
+app/Filament/Resources/MailSettingResource.php:                                ->url(fn () => route('oauth.google.redirect'))
+app/Filament/Resources/MailSettingResource.php:            'index' => Pages\ListMailSettings::route('/'),
+app/Filament/Resources/MailSettingResource.php:            'create' => Pages\CreateMailSetting::route('/create'),
+app/Filament/Resources/MailSettingResource.php:            'edit' => Pages\EditMailSetting::route('/{record}/edit'),
+

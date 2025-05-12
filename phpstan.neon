@@ -1,0 +1,17 @@
+includes:
+    - phpstan-baseline.neon
+
+parameters:
+    level: 5
+    paths:
+        - app/Http/Controllers
+        - app/Models
+    excludePaths:
+        - tests
+        - app/Filament/Resources
+        - app/Filament/Widgets
+    treatPhpDocTypesAsCertain: false
+    reportUnmatchedIgnoredErrors: false
+    tmpDir: storage/framework/cache/phpstan
+    parallel:
+        maximumNumberOfProcesses: 1

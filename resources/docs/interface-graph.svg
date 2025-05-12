@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900">
+    <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#666" />
+        </marker>
+        <marker id="dotted-arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#999" />
+        </marker>
+    </defs>
+    <style>
+        .node { font-family: Arial, sans-serif; font-size: 12px; }
+        .node-route { fill: #e1f5fe; stroke: #4fc3f7; stroke-width: 1; }
+        .node-controller { fill: #e8f5e9; stroke: #66bb6a; stroke-width: 1; }
+        .node-view { fill: #fff3e0; stroke: #ffb74d; stroke-width: 1; }
+        .node-model { fill: #f3e5f5; stroke: #ba68c8; stroke-width: 1; }
+        .node-resource { fill: #e3f2fd; stroke: #42a5f5; stroke-width: 1; }
+        .node-livewire { fill: #fce4ec; stroke: #f06292; stroke-width: 1; }
+        .node-admin { fill: #ede7f6; stroke: #9575cd; stroke-width: 1; }
+        .node-text { font-size: 10px; fill: #333; }
+        .link { stroke: #666; stroke-width: 1; fill: none; }
+        .link-dotted { stroke: #999; stroke-width: 1; stroke-dasharray: 3,3; fill: none; }
+        .label { font-size: 8px; fill: #666; }
+        .group-box { fill-opacity: 0.1; stroke-width: 1; }
+        .group-label { font-size: 14px; fill: #333; font-weight: bold; }
+    </style>
+    <!-- Background group boxes -->
+    <rect class="group-box" fill="#e3f2fd" x="50" y="50" width="500" height="300" rx="5" ry="5" />
+    <text class="group-label" x="60" y="70">Public Section</text>
+    
+    <rect class="group-box" fill="#ede7f6" x="600" y="50" width="500" height="300" rx="5" ry="5" />
+    <text class="group-label" x="610" y="70">Admin Section</text>
+    
+    <rect class="group-box" fill="#e8f5e9" x="50" y="400" width="1050" height="200" rx="5" ry="5" />
+    <text class="group-label" x="60" y="420">Models &amp; Resources</text>
+    
+    <!-- Sample nodes -->
+    <rect class="node node-route" x="100" y="100" width="120" height="40" rx="5" ry="5" />
+    <text class="node-text" x="110" y="125">/ (home)</text>
+    
+    <rect class="node node-controller" x="300" y="100" width="120" height="40" rx="5" ry="5" />
+    <text class="node-text" x="310" y="125">HomeController</text>
+    
+    <rect class="node node-view" x="300" y="200" width="120" height="40" rx="5" ry="5" />
+    <text class="node-text" x="310" y="225">home.blade.php</text>
+    
+    <rect class="node node-route node-admin" x="650" y="100" width="120" height="40" rx="5" ry="5" />
+    <text class="node-text" x="660" y="125">/admin/dashboard</text>
+    
+    <rect class="node node-livewire" x="850" y="100" width="120" height="40" rx="5" ry="5" />
+    <text class="node-text" x="860" y="125">Admin\Dashboard</text>
+    
+    <rect class="node node-view" x="850" y="200" width="120" height="40" rx="5" ry="5" />
+    <text class="node-text" x="860" y="225">admin.dashboard</text>
+    
+    <rect class="node node-model" x="100" y="450" width="120" height="40" rx="5" ry="5" />
+    <text class="node-text" x="110" y="475">User</text>
+    
+    <rect class="node node-model" x="300" y="450" width="120" height="40" rx="5" ry="5" />
+    <text class="node-text" x="310" y="475">Generator</text>
+    
+    <rect class="node node-resource" x="500" y="450" width="120" height="40" rx="5" ry="5" />
+    <text class="node-text" x="510" y="475">GeneratorResource</text>
+    
+    <rect class="node node-model" x="700" y="450" width="120" height="40" rx="5" ry="5" />
+    <text class="node-text" x="710" y="475">Product</text>
+    
+    <rect class="node node-resource" x="900" y="450" width="120" height="40" rx="5" ry="5" />
+    <text class="node-text" x="910" y="475">ProductResource</text>
+    
+    <!-- Sample connections -->
+    <path class="link" d="M220,120 L300,120" marker-end="url(#arrowhead)" />
+    <path class="link" d="M360,140 L360,200" marker-end="url(#arrowhead)" />
+    <path class="link" d="M770,120 L850,120" marker-end="url(#arrowhead)" />
+    <path class="link" d="M910,140 L910,200" marker-end="url(#arrowhead)" />
+    <path class="link-dotted" d="M160,450 L160,300" marker-end="url(#dotted-arrowhead)" />
+    <path class="link" d="M420,450 L500,450" marker-end="url(#arrowhead)" />
+    <path class="link" d="M820,450 L900,450" marker-end="url(#arrowhead)" />
+    
+    <!-- Legend -->
+    <rect x="50" y="650" width="1050" height="100" fill="#f5f5f5" rx="5" ry="5" />
+    <text x="60" y="670" font-size="14" font-weight="bold">Legend</text>
+    
+    <rect class="node-route" x="60" y="690" width="80" height="20" rx="3" ry="3" />
+    <text class="node-text" x="100" y="705" text-anchor="middle">Route</text>
+    
+    <rect class="node-controller" x="160" y="690" width="80" height="20" rx="3" ry="3" />
+    <text class="node-text" x="200" y="705" text-anchor="middle">Controller</text>
+    
+    <rect class="node-view" x="260" y="690" width="80" height="20" rx="3" ry="3" />
+    <text class="node-text" x="300" y="705" text-anchor="middle">View</text>
+    
+    <rect class="node-model" x="360" y="690" width="80" height="20" rx="3" ry="3" />
+    <text class="node-text" x="400" y="705" text-anchor="middle">Model</text>
+    
+    <rect class="node-resource" x="460" y="690" width="80" height="20" rx="3" ry="3" />
+    <text class="node-text" x="500" y="705" text-anchor="middle">Resource</text>
+    
+    <rect class="node-livewire" x="560" y="690" width="80" height="20" rx="3" ry="3" />
+    <text class="node-text" x="600" y="705" text-anchor="middle">Livewire</text>
+    
+    <line class="link" x1="660" y1="700" x2="720" y2="700" marker-end="url(#arrowhead)" />
+    <text class="node-text" x="690" y="690" text-anchor="middle">Direct</text>
+    
+    <line class="link-dotted" x1="740" y1="700" x2="800" y2="700" marker-end="url(#dotted-arrowhead)" />
+    <text class="node-text" x="770" y="690" text-anchor="middle">Reference</text>
+</svg>

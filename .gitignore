@@ -21,7 +21,5 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
-
 **/.claude/settings.local.json
-webhost_backup.zip
 webhost_backup.zip

@@ -12,8 +12,11 @@ class Plans extends Component
     protected $paginationTheme = 'tailwind';
 
     public $search = '';
+
     public $type = '';
+
     public $sortField = 'created_at';
+
     public $sortDirection = 'desc';
 
     protected $queryString = [

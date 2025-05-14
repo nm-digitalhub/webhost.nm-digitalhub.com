@@ -24,9 +24,7 @@ class PrimaryButton extends Component
          * The button size.
          */
         public $size = 'md'
-    )
-    {
-    }
+    ) {}
 
     /**
      * Get the view / contents that represent the component.

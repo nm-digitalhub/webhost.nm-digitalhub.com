@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 class FixBladeViews extends Command
 {
     protected $signature = 'views:fix-blade';
+
     protected $description = 'Fix Blade views to comply with Laravel 12 and Filament 3 standards';
 
     public function handle()
@@ -31,13 +32,14 @@ class FixBladeViews extends Command
 
     private function fixViewsInDirectory(string $directory)
     {
-        if (!File::isDirectory($directory)) {
+        if (! File::isDirectory($directory)) {
             $this->warn("Directory not found: {$directory}");
+
             return;
         }
 
         $files = File::glob("{$directory}/*.blade.php");
-        $this->info("Processing " . count($files) . " blade files in {$directory}");
+        $this->info('Processing '.count($files)." blade files in {$directory}");
 
         foreach ($files as $filePath) {
             $content = File::get($filePath);
@@ -86,7 +88,7 @@ class FixBladeViews extends Command
             }
 
             // Add dir attribute for RTL support if needed
-            if (!Str::contains($content, 'dir=') && (
+            if (! Str::contains($content, 'dir=') && (
                 Str::contains($content, '<html') ||
                 Str::contains($content, '<body') ||
                 Str::contains($content, '<div class="container">')
@@ -102,7 +104,7 @@ class FixBladeViews extends Command
             // Save changes if any were made
             if ($content !== $originalContent) {
                 // Create backup
-                File::put($filePath . '.bak', $originalContent);
+                File::put($filePath.'.bak', $originalContent);
                 $this->info("Created backup of {$fileName}");
 
                 // Save changes

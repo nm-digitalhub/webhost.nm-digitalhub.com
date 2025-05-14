@@ -19,17 +19,17 @@ class GenerationLog extends Model
         'file_path',
         'overwritten',
     ];
-    
+
     protected $casts = [
         'params' => 'array',
         'overwritten' => 'boolean',
     ];
-    
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-    
+
     public function generator()
     {
         return $this->belongsTo(Generator::class);

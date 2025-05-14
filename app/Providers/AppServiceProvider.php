@@ -4,10 +4,10 @@ namespace App\Providers;
 
 use App\Models\MailSetting;
 use App\Services\Mail\GoogleOAuthService;
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -69,7 +69,7 @@ class AppServiceProvider extends ServiceProvider
                 }
             }
         } catch (\Exception $e) {
-            Log::error('Failed to load mail settings: ' . $e->getMessage());
+            Log::error('Failed to load mail settings: '.$e->getMessage());
         }
     }
 }

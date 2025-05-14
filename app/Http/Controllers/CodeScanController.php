@@ -15,12 +15,12 @@ class CodeScanController extends Controller
         // קבצי קונפיג
         $configPath = config_path();
         $configFiles = File::exists($configPath) ? File::allFiles($configPath) : [];
-        $config = collect($configFiles)->map(fn($file) => $file->getRelativePathname());
+        $config = collect($configFiles)->map(fn ($file) => $file->getRelativePathname());
 
         // קבצי מסלולים
         $routePath = base_path('routes');
         $routeFiles = File::exists($routePath) ? File::allFiles($routePath) : [];
-        $routes = collect($routeFiles)->map(fn($file) => $file->getRelativePathname());
+        $routes = collect($routeFiles)->map(fn ($file) => $file->getRelativePathname());
 
         // קבצי מודלים
         $modelsPath = app_path('Models');
@@ -51,7 +51,7 @@ class CodeScanController extends Controller
             'has_personal_access_tokens_table' => $hasTokensTable,
             'controller_files' => collect($controllers)->map->getRelativePathname(),
             'auth_blade_files' => collect($bladeFiles)->map->getRelativePathname(),
-            'note' => 'סקריפט מותאם לפרויקטים ללא Kernel.php'
+            'note' => 'סקריפט מותאם לפרויקטים ללא Kernel.php',
         ]);
     }
 }

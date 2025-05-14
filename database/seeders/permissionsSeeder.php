@@ -15,7 +15,7 @@ class permissionsSeeder extends Seeder
             'edit settings',
             'create posts',
             'delete posts',
-            'mail.manage'
+            'mail.manage',
         ];
 
         foreach ($permissions as $permission) {

@@ -49,6 +49,7 @@ class Coupon extends Model
      * Coupon types
      */
     const TYPE_FIXED = 'fixed';
+
     const TYPE_PERCENTAGE = 'percentage';
 
     /**
@@ -57,7 +58,7 @@ class Coupon extends Model
     public function isValid(): bool
     {
         // Check if active
-        if (!$this->is_active) {
+        if (! $this->is_active) {
             return false;
         }
 
@@ -70,8 +71,9 @@ class Coupon extends Model
         if ($this->expires_at && now()->gt($this->expires_at)) {
             return false;
         }
+
         // Check if max uses reached
-        return !($this->max_uses && $this->used_count >= $this->max_uses);
+        return ! ($this->max_uses && $this->used_count >= $this->max_uses);
     }
 
     /**
@@ -80,7 +82,7 @@ class Coupon extends Model
     public function isApplicable(Cart $cart): bool
     {
         // Check minimum order value
-        return !($this->min_order_value && $cart->total < $this->min_order_value);
+        return ! ($this->min_order_value && $cart->total < $this->min_order_value);
     }
 
     /**

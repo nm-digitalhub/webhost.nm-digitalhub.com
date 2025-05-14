@@ -39,7 +39,7 @@ class PlanFeature extends Model
     {
         return $this->belongsTo(Plan::class);
     }
-    
+
     /**
      * Get highlighted features.
      */
@@ -47,7 +47,7 @@ class PlanFeature extends Model
     {
         return $query->where('is_highlighted', true);
     }
-    
+
     /**
      * Order features by sort_order.
      */

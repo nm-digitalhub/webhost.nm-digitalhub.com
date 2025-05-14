@@ -26,7 +26,7 @@ class Generator extends Model
         'confirm_overwrite',
         'target_path',
     ];
-    
+
     protected $casts = [
         'fillable' => 'boolean',
         'timestamps' => 'boolean',
@@ -36,7 +36,7 @@ class Generator extends Model
         'fields' => 'array',
         'relations' => 'array',
     ];
-    
+
     public function generationLogs()
     {
         return $this->hasMany(GenerationLog::class);

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\File;
 class LaravelProjectFixer extends Command
 {
     protected $signature = 'project:fix';
+
     protected $description = 'Comprehensive Laravel 12 + Filament 3 project fixer';
 
     public function handle()
@@ -44,7 +45,7 @@ class LaravelProjectFixer extends Command
 
     private function runCommand($command, $description)
     {
-        $this->info("\n" . str_repeat('-', 50));
+        $this->info("\n".str_repeat('-', 50));
         $this->info($description);
         $this->info(str_repeat('-', 50));
 
@@ -55,14 +56,14 @@ class LaravelProjectFixer extends Command
     {
         $panelProviderPath = app_path('Providers/Filament/AdminPanelProvider.php');
 
-        if (!File::exists($panelProviderPath)) {
-            $this->info("\n" . str_repeat('-', 50));
+        if (! File::exists($panelProviderPath)) {
+            $this->info("\n".str_repeat('-', 50));
             $this->info('Creating Filament Admin Panel Provider');
             $this->info(str_repeat('-', 50));
 
             $directoryPath = dirname($panelProviderPath);
 
-            if (!File::isDirectory($directoryPath)) {
+            if (! File::isDirectory($directoryPath)) {
                 File::makeDirectory($directoryPath, 0755, true);
             }
 
@@ -144,21 +145,21 @@ class AdminPanelProvider extends PanelProvider
 
             $providerClass = 'App\\Providers\\Filament\\AdminPanelProvider::class';
 
-            if (!str_contains($content, $providerClass)) {
+            if (! str_contains($content, $providerClass)) {
                 $pattern = "/(\'providers\'\s*=>\s*\[\s*)/";
-                $replacement = "$1\n        " . $providerClass . ",\n        ";
+                $replacement = "$1\n        ".$providerClass.",\n        ";
 
                 $content = preg_replace($pattern, $replacement, $content);
                 File::put($configPath, $content);
 
-                $this->info("Registered AdminPanelProvider in config/app.php");
+                $this->info('Registered AdminPanelProvider in config/app.php');
             }
         }
     }
 
     private function clearAllCaches()
     {
-        $this->info("\n" . str_repeat('-', 50));
+        $this->info("\n".str_repeat('-', 50));
         $this->info('Clearing all caches');
         $this->info(str_repeat('-', 50));
 

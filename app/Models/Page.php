@@ -61,7 +61,7 @@ class Page extends Model
         });
 
         static::updating(function ($page) {
-            if ($page->isDirty('title') && !$page->isDirty('slug')) {
+            if ($page->isDirty('title') && ! $page->isDirty('slug')) {
                 $page->slug = Str::slug($page->title);
             }
         });
@@ -145,7 +145,7 @@ class Page extends Model
      */
     public function getFeaturedImageUrl(): ?string
     {
-        if (!$this->featured_image) {
+        if (! $this->featured_image) {
             return null;
         }
 
@@ -155,7 +155,7 @@ class Page extends Model
         }
 
         // Return storage URL
-        return asset('storage/' . $this->featured_image);
+        return asset('storage/'.$this->featured_image);
     }
 
     /**
@@ -164,11 +164,11 @@ class Page extends Model
     public function getExcerpt(int $length = 150): string
     {
         $content = strip_tags($this->content);
-        
+
         if (strlen($content) <= $length) {
             return $content;
         }
-        
-        return substr($content, 0, $length) . '...';
+
+        return substr($content, 0, $length).'...';
     }
 }

@@ -12,23 +12,24 @@ use Illuminate\Support\Facades\Log;
 class GoogleOAuthService
 {
     protected GoogleClient $client;
+
     protected ?MailSetting $settings;
 
     public function __construct()
     {
-        $this->client = new GoogleClient();
+        $this->client = new GoogleClient;
         $this->client->setAccessType('offline');
         $this->client->setPrompt('consent');
         $this->client->setIncludeGrantedScopes(true);
         $this->client->addScope(Gmail::GMAIL_SEND);
-        $this->client->setRedirectUri(config('app.url') . '/oauth/google/callback');
+        $this->client->setRedirectUri(config('app.url').'/oauth/google/callback');
 
         $this->settings = MailSetting::getActiveSettings();
     }
 
     public function setupClient(): self
     {
-        if (!$this->settings || !$this->settings->oauth_mode_enabled) {
+        if (! $this->settings || ! $this->settings->oauth_mode_enabled) {
             return $this;
         }
 
@@ -38,13 +39,14 @@ class GoogleOAuthService
             try {
                 $this->client->setAuthConfig($jsonPath);
             } catch (\Exception $e) {
-                Log::error("Failed to load Google OAuth credentials from JSON: " . $e->getMessage());
+                Log::error('Failed to load Google OAuth credentials from JSON: '.$e->getMessage());
+
                 return $this;
             }
-        } elseif (!empty($this->settings->google_client_id) && !empty($this->settings->google_client_secret)) {
+        } elseif (! empty($this->settings->google_client_id) && ! empty($this->settings->google_client_secret)) {
             $this->client->setClientId($this->settings->google_client_id);
             $this->client->setClientSecret($this->settings->google_client_secret);
-            if (!empty($this->settings->google_redirect_uri)) {
+            if (! empty($this->settings->google_redirect_uri)) {
                 $this->client->setRedirectUri($this->settings->google_redirect_uri);
             }
         }
@@ -57,16 +59,17 @@ class GoogleOAuthService
         $token = $this->settings?->getValidAccessToken();
 
         // Refresh if expired and we have a refresh token
-        if (!$token && $this->settings?->google_refresh_token) {
+        if (! $token && $this->settings?->google_refresh_token) {
             try {
                 $this->setupClient();
                 $newToken = $this->client->fetchAccessTokenWithRefreshToken($this->settings->google_refresh_token);
                 if (isset($newToken['access_token'])) {
                     $this->storeTokenData($newToken);
+
                     return $newToken['access_token'];
                 }
             } catch (\Exception $e) {
-                Log::error("Failed to refresh Google OAuth token: " . $e->getMessage());
+                Log::error('Failed to refresh Google OAuth token: '.$e->getMessage());
             }
         }
 
@@ -81,6 +84,7 @@ class GoogleOAuthService
     public function getAuthUrl(): string
     {
         $this->setupClient();
+
         return $this->client->createAuthUrl();
     }
 
@@ -88,24 +92,27 @@ class GoogleOAuthService
     {
         try {
             $this->setupClient();
+
             return $this->client->fetchAccessTokenWithAuthCode($code);
         } catch (\Exception $e) {
-            Log::error("Failed to fetch token with code: " . $e->getMessage());
+            Log::error('Failed to fetch token with code: '.$e->getMessage());
+
             return [];
         }
     }
 
     public function applyToMailer(): void
     {
-        if (!$this->settings || !$this->settings->oauth_mode_enabled) {
+        if (! $this->settings || ! $this->settings->oauth_mode_enabled) {
             return;
         }
 
         $this->setupClient();
         $accessToken = $this->getAccessToken();
 
-        if (!$accessToken) {
-            Log::warning("No valid Google OAuth token found");
+        if (! $accessToken) {
+            Log::warning('No valid Google OAuth token found');
+
             return;
         }
 
@@ -120,13 +127,14 @@ class GoogleOAuthService
             Config::set('mail.mailers.smtp.username', $this->settings->username);
         }
 
-        Log::info("Google OAuth SMTP settings applied successfully.");
+        Log::info('Google OAuth SMTP settings applied successfully.');
     }
 
     public function isConfigured(): bool
     {
         $this->setupClient();
-        return !empty($this->client->getClientId()) && !empty($this->client->getClientSecret());
+
+        return ! empty($this->client->getClientId()) && ! empty($this->client->getClientSecret());
     }
 
     public function hasValidToken(): bool
@@ -136,7 +144,7 @@ class GoogleOAuthService
 
     protected function getJsonPath(): ?string
     {
-        if (!empty($this->settings->google_json_path) && File::exists($this->settings->google_json_path)) {
+        if (! empty($this->settings->google_json_path) && File::exists($this->settings->google_json_path)) {
             return $this->settings->google_json_path;
         }
 

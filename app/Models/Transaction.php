@@ -42,18 +42,26 @@ class Transaction extends Model
      * Transaction statuses
      */
     const STATUS_PENDING = 'pending';
+
     const STATUS_COMPLETED = 'completed';
+
     const STATUS_FAILED = 'failed';
+
     const STATUS_REFUNDED = 'refunded';
+
     const STATUS_CANCELLED = 'cancelled';
 
     /**
      * Payment methods
      */
     const METHOD_CREDIT_CARD = 'credit_card';
+
     const METHOD_BANK_TRANSFER = 'bank_transfer';
+
     const METHOD_PAYPAL = 'paypal';
+
     const METHOD_APPLE_PAY = 'apple_pay';
+
     const METHOD_GOOGLE_PAY = 'google_pay';
 
     /**
@@ -71,7 +79,7 @@ class Transaction extends Model
     {
         return $this->belongsTo(Order::class);
     }
-    
+
     /**
      * Get transactions with a specific status.
      */
@@ -79,7 +87,7 @@ class Transaction extends Model
     {
         return $query->where('status', $status);
     }
-    
+
     /**
      * Get successful transactions.
      */
@@ -87,7 +95,7 @@ class Transaction extends Model
     {
         return $query->where('status', self::STATUS_COMPLETED);
     }
-    
+
     /**
      * Get failed transactions.
      */
@@ -95,13 +103,14 @@ class Transaction extends Model
     {
         return $query->where('status', self::STATUS_FAILED);
     }
-    
+
     /**
      * Format the amount with currency symbol.
      */
     public function formattedAmount(): string
     {
         $symbol = $this->currency === 'ILS' ? '₪' : ($this->currency === 'USD' ? '$' : '€');
-        return $symbol . number_format($this->amount, 2);
+
+        return $symbol.number_format($this->amount, 2);
     }
 }

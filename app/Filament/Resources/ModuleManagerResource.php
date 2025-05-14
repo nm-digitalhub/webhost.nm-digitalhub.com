@@ -4,18 +4,16 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ModuleManagerResource\Pages;
 use App\Models\ModuleManager;
-use App\Services\ModuleScanner;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Carbon;
 
 /**
  * ModuleManagerResource
- * 
+ *
  * A resource for managing and viewing all Filament components in the application.
  * Provides a unified interface for Resources, Pages, Widgets, and Livewire components.
  */
@@ -24,10 +22,13 @@ class ModuleManagerResource extends Resource
     protected static ?string $model = ModuleManager::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-cube-transparent';
+
     protected static ?string $navigationGroup = 'ניהול מערכת';
+
     protected static ?string $modelLabel = 'רכיבי מערכת';
+
     protected static ?string $pluralModelLabel = 'רכיבי מערכת';
-    
+
     /**
      * Get the resource's navigation sort
      * Position this early in navigation to make it easily accessible
@@ -44,7 +45,7 @@ class ModuleManagerResource extends Resource
 
     /**
      * Define the form schema
-     * 
+     *
      * This form is mostly informational since we're not creating/editing actual records
      * but rather viewing and managing existing components
      */
@@ -58,51 +59,51 @@ class ModuleManagerResource extends Resource
                             ->label('שם הרכיב')
                             ->required()
                             ->disabled(),
-                            
+
                         Forms\Components\Select::make('type')
                             ->label('סוג')
                             ->options([
                                 'resources' => 'Resource',
                                 'pages' => 'Page',
                                 'widgets' => 'Widget',
-                                'livewire' => 'Livewire Component'
+                                'livewire' => 'Livewire Component',
                             ])
                             ->required()
                             ->disabled(),
-                            
+
                         Forms\Components\TextInput::make('class')
                             ->label('מחלקה מלאה')
                             ->disabled(),
-                            
+
                         Forms\Components\TextInput::make('path')
                             ->label('נתיב קובץ')
                             ->disabled(),
                     ])->columns(2),
-                    
+
                 Forms\Components\Section::make('סטטוס ומצב')
                     ->schema([
                         Forms\Components\Toggle::make('exists')
                             ->label('קיים פיזית')
                             ->disabled(),
-                            
+
                         Forms\Components\Toggle::make('is_active')
                             ->label('פעיל')
                             ->disabled(),
-                            
+
                         Forms\Components\Toggle::make('is_generated')
                             ->label('נוצר אוטומטית')
                             ->disabled(),
-                            
+
                         Forms\Components\TextInput::make('last_modified')
                             ->label('עודכן לאחרונה')
                             ->disabled(),
                     ])->columns(2),
-                
+
                 Forms\Components\Section::make('מידע נוסף')
                     ->schema([
                         Forms\Components\KeyValue::make('metadata')
-                            ->label('מידע ומאפיינים נוספים')
-                    ])
+                            ->label('מידע ומאפיינים נוספים'),
+                    ]),
             ]);
     }
 
@@ -117,16 +118,16 @@ class ModuleManagerResource extends Resource
                     ->label('שם הרכיב')
                     ->searchable()
                     ->sortable(),
-                    
+
                 Tables\Columns\BadgeColumn::make('type')
                     ->label('סוג')
                     ->colors([
                         'primary' => 'resources',
                         'success' => 'pages',
                         'warning' => 'widgets',
-                        'danger' => 'livewire'
+                        'danger' => 'livewire',
                     ])
-                    ->formatStateUsing(fn (string $state): string => match($state) {
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
                         'resources' => 'Resource',
                         'pages' => 'Page',
                         'widgets' => 'Widget',
@@ -135,28 +136,28 @@ class ModuleManagerResource extends Resource
                     })
                     ->searchable()
                     ->sortable(),
-                    
+
                 Tables\Columns\TextColumn::make('path')
                     ->label('נתיב')
                     ->searchable()
                     ->limit(40)
-                    ->tooltip(fn($record) => $record['path']),
-                    
+                    ->tooltip(fn ($record) => $record['path']),
+
                 Tables\Columns\IconColumn::make('exists')
                     ->label('קיים')
                     ->boolean(),
-                    
+
                 Tables\Columns\IconColumn::make('is_active')
                     ->label('פעיל')
                     ->boolean(),
-                    
+
                 Tables\Columns\BadgeColumn::make('source')
                     ->label('מקור')
                     ->colors([
                         'success' => 'מחולל',
-                        'secondary' => 'ידני'
+                        'secondary' => 'ידני',
                     ]),
-                    
+
                 Tables\Columns\TextColumn::make('last_modified')
                     ->label('עודכן לאחרונה')
                     ->dateTime('d/m/Y H:i')
@@ -170,18 +171,18 @@ class ModuleManagerResource extends Resource
                         'resources' => 'Resource',
                         'pages' => 'Page',
                         'widgets' => 'Widget',
-                        'livewire' => 'Livewire'
+                        'livewire' => 'Livewire',
                     ]),
-                    
+
                 Tables\Filters\TernaryFilter::make('is_generated')
                     ->label('נוצר אוטומטית'),
-                    
+
                 Tables\Filters\TernaryFilter::make('exists')
                     ->label('קיים פיזית'),
-                    
+
                 Tables\Filters\TernaryFilter::make('is_active')
                     ->label('פעיל'),
-                    
+
                 Tables\Filters\Filter::make('last_modified')
                     ->label('עודכן לאחרונה')
                     ->form([
@@ -190,7 +191,7 @@ class ModuleManagerResource extends Resource
                         Forms\Components\DatePicker::make('updated_until')
                             ->label('עד תאריך'),
                     ])
-                    ->query(fn(Builder $query, array $data): Builder => $query
+                    ->query(fn (Builder $query, array $data): Builder => $query
                         ->when(
                             $data['updated_from'],
                             fn (Builder $query, $date): Builder => $query->whereDate('last_modified', '>=', $date),
@@ -206,14 +207,14 @@ class ModuleManagerResource extends Resource
                     ->icon('heroicon-o-eye')
                     ->url(fn (array $record): string => $record['edit_url'] ?? '#')
                     ->openUrlInNewTab(),
-                    
+
                 Tables\Actions\Action::make('edit_in_generator')
                     ->label('ערוך במחולל')
                     ->icon('heroicon-o-pencil-square')
                     ->url(fn (array $record): string => $record['generator_url'] ?? '#')
                     ->openUrlInNewTab()
                     ->visible(fn (array $record): bool => $record['is_generated'] ?? false),
-                    
+
                 Tables\Actions\Action::make('view_code')
                     ->label('צפה בקוד')
                     ->icon('heroicon-o-code-bracket')

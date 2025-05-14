@@ -4,11 +4,11 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 
 class CleanupFilamentClasses extends Command
 {
     protected $signature = 'filament:cleanup-classes';
+
     protected $description = 'Cleanup and validate Filament-related classes';
 
     public function handle()
@@ -36,8 +36,9 @@ class CleanupFilamentClasses extends Command
     {
         $panelProviderPath = app_path('Providers/Filament/AdminPanelProvider.php');
 
-        if (!File::exists($panelProviderPath)) {
+        if (! File::exists($panelProviderPath)) {
             $this->warn("AdminPanelProvider not found at: {$panelProviderPath}");
+
             return;
         }
 
@@ -45,19 +46,19 @@ class CleanupFilamentClasses extends Command
 
         // Check for duplicate PHP tags or class declarations
         if (substr_count($content, '<?php') > 1 || substr_count($content, 'class AdminPanelProvider') > 1) {
-            $this->error("Duplicate PHP tags or class declarations in AdminPanelProvider");
+            $this->error('Duplicate PHP tags or class declarations in AdminPanelProvider');
 
             // Create a fixed version
             $fixedContent = $this->fixPanelProviderContent($content);
 
             // Create a backup
-            $backupPath = $panelProviderPath . '.bak';
+            $backupPath = $panelProviderPath.'.bak';
             File::copy($panelProviderPath, $backupPath);
             $this->info("Created backup at {$backupPath}");
 
             // Save the fixed version
             File::put($panelProviderPath, $fixedContent);
-            $this->info("Fixed AdminPanelProvider");
+            $this->info('Fixed AdminPanelProvider');
         }
     }
 
@@ -79,7 +80,7 @@ class CleanupFilamentClasses extends Command
 
             // Create new content with merged panel method
             $newContent = "<?php\n\nnamespace {$firstMatch[1]};\n\n";
-            $newContent .= implode("\n", $allImports) . "\n\n";
+            $newContent .= implode("\n", $allImports)."\n\n";
             $newContent .= "class AdminPanelProvider extends PanelProvider\n{\n";
             $newContent .= "    public function panel(Panel \$panel): Panel\n    {\n";
             $newContent .= "        return \$panel\n";
@@ -124,7 +125,7 @@ class CleanupFilamentClasses extends Command
             $newContent .= "            ->sidebarCollapsibleOnDesktop(true);\n";
             $newContent .= "    }\n";
 
-            return $newContent . "}\n";
+            return $newContent."}\n";
         }
 
         // If regex didn't match, just remove duplicate PHP tags and namespaces
@@ -137,8 +138,9 @@ class CleanupFilamentClasses extends Command
     {
         $pagesDir = app_path('Filament/Pages');
 
-        if (!File::isDirectory($pagesDir)) {
+        if (! File::isDirectory($pagesDir)) {
             $this->warn("Filament Pages directory not found: {$pagesDir}");
+
             return;
         }
 
@@ -163,8 +165,9 @@ class CleanupFilamentClasses extends Command
     {
         $resourcesDir = app_path('Filament/Resources');
 
-        if (!File::isDirectory($resourcesDir)) {
+        if (! File::isDirectory($resourcesDir)) {
             $this->warn("Filament Resources directory not found: {$resourcesDir}");
+
             return;
         }
 
@@ -189,8 +192,9 @@ class CleanupFilamentClasses extends Command
     {
         $widgetsDir = app_path('Filament/Widgets');
 
-        if (!File::isDirectory($widgetsDir)) {
+        if (! File::isDirectory($widgetsDir)) {
             $this->warn("Filament Widgets directory not found: {$widgetsDir}");
+
             return;
         }
 

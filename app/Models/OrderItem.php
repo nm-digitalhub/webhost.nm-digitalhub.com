@@ -52,22 +52,24 @@ class OrderItem extends Model
     {
         return $this->belongsTo(Product::class);
     }
-    
+
     /**
      * Format the price with currency symbol.
      */
     public function formattedPrice(): string
     {
         $symbol = $this->order->currency === 'ILS' ? '₪' : ($this->order->currency === 'USD' ? '$' : '€');
-        return $symbol . number_format($this->price, 2);
+
+        return $symbol.number_format($this->price, 2);
     }
-    
+
     /**
      * Format the total with currency symbol.
      */
     public function formattedTotal(): string
     {
         $symbol = $this->order->currency === 'ILS' ? '₪' : ($this->order->currency === 'USD' ? '$' : '€');
-        return $symbol . number_format($this->total, 2);
+
+        return $symbol.number_format($this->total, 2);
     }
 }

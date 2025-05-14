@@ -21,7 +21,7 @@ class SupportNew extends Component
         $this->validate([
             'subject' => 'required|string|min:3|max:100',
             'message' => 'required|string|min:10',
-            'priority' => 'required|in:low,medium,high'
+            'priority' => 'required|in:low,medium,high',
         ]);
 
         // Ticket creation logic will go here

@@ -7,7 +7,9 @@ use Livewire\Component;
 class DomainCheck extends Component
 {
     public $domainName = '';
+
     public $searchResults = [];
+
     public $isSearching = false;
 
     protected $rules = [

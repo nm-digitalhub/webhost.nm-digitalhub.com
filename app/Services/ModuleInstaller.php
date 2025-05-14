@@ -2,20 +2,19 @@
 
 namespace App\Services;
 
-use App\Models\Module;
-use App\Models\Cart;
-use App\Models\CartItem;
-use App\Models\Coupon;
-use App\Models\Page;
-use App\Models\Product;
-use App\Filament\Resources\ProductResource;
 use App\Filament\Resources\CartResource;
 use App\Filament\Resources\CouponResource;
 use App\Filament\Resources\PageResource;
+use App\Filament\Resources\ProductResource;
+use App\Models\Cart;
+use App\Models\Coupon;
+use App\Models\Module;
+use App\Models\Page;
+use App\Models\Product;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 class ModuleInstaller
@@ -23,11 +22,11 @@ class ModuleInstaller
     /**
      * Install a client panel module.
      *
-     * @param string $name The name of the module
-     * @param string $slug The slug for the module
-     * @param string $icon The icon class or name
-     * @param string $type The module type (section, page, link)
-     * @param array $config Additional configuration
+     * @param  string  $name  The name of the module
+     * @param  string  $slug  The slug for the module
+     * @param  string  $icon  The icon class or name
+     * @param  string  $type  The module type (section, page, link)
+     * @param  array  $config  Additional configuration
      */
     public function installClientPanelModule(string $name, string $slug, string $icon, string $type = 'page', array $config = []): array
     {
@@ -79,7 +78,7 @@ class ModuleInstaller
         } catch (\Exception $e) {
             return [
                 'success' => false,
-                'message' => "Failed to install client module '{$name}': " . $e->getMessage(),
+                'message' => "Failed to install client module '{$name}': ".$e->getMessage(),
                 'exception' => $e,
             ];
         }
@@ -103,7 +102,7 @@ class ModuleInstaller
                 ]
             );
 
-            if (!$section['success']) {
+            if (! $section['success']) {
                 return $section;
             }
 
@@ -119,7 +118,7 @@ class ModuleInstaller
                     'description' => 'View and manage support tickets',
                     'metadata' => [
                         'parent_section' => 'support-section',
-                        'features' => ['create_ticket', 'view_tickets', 'reply_to_tickets']
+                        'features' => ['create_ticket', 'view_tickets', 'reply_to_tickets'],
                     ],
                 ]
             );
@@ -136,7 +135,7 @@ class ModuleInstaller
                     'description' => 'Browse knowledge base articles',
                     'metadata' => [
                         'parent_section' => 'support-section',
-                        'features' => ['search_articles', 'view_articles', 'rate_articles']
+                        'features' => ['search_articles', 'view_articles', 'rate_articles'],
                     ],
                 ]
             );
@@ -169,7 +168,7 @@ class ModuleInstaller
         } catch (\Exception $e) {
             return [
                 'success' => false,
-                'message' => 'Failed to install Support module for client panel: ' . $e->getMessage(),
+                'message' => 'Failed to install Support module for client panel: '.$e->getMessage(),
                 'exception' => $e,
             ];
         }
@@ -193,7 +192,7 @@ class ModuleInstaller
                 ]
             );
 
-            if (!$section['success']) {
+            if (! $section['success']) {
                 return $section;
             }
 
@@ -209,7 +208,7 @@ class ModuleInstaller
                     'description' => 'View and pay invoices',
                     'metadata' => [
                         'parent_section' => 'billing-section',
-                        'features' => ['view_invoices', 'download_invoices', 'pay_invoices']
+                        'features' => ['view_invoices', 'download_invoices', 'pay_invoices'],
                     ],
                 ]
             );
@@ -226,7 +225,7 @@ class ModuleInstaller
                     'description' => 'Manage payment methods',
                     'metadata' => [
                         'parent_section' => 'billing-section',
-                        'features' => ['add_payment_method', 'edit_payment_method', 'delete_payment_method']
+                        'features' => ['add_payment_method', 'edit_payment_method', 'delete_payment_method'],
                     ],
                 ]
             );
@@ -243,7 +242,7 @@ class ModuleInstaller
                     'description' => 'Manage your subscriptions',
                     'metadata' => [
                         'parent_section' => 'billing-section',
-                        'features' => ['view_subscriptions', 'cancel_subscription', 'change_plan']
+                        'features' => ['view_subscriptions', 'cancel_subscription', 'change_plan'],
                     ],
                 ]
             );
@@ -261,7 +260,7 @@ class ModuleInstaller
         } catch (\Exception $e) {
             return [
                 'success' => false,
-                'message' => 'Failed to install Billing module for client panel: ' . $e->getMessage(),
+                'message' => 'Failed to install Billing module for client panel: '.$e->getMessage(),
                 'exception' => $e,
             ];
         }
@@ -284,7 +283,7 @@ class ModuleInstaller
                     'route_name' => 'client.domains',
                     'description' => 'Manage your domain names',
                     'metadata' => [
-                        'features' => ['register_domain', 'transfer_domain', 'manage_dns', 'whois_privacy']
+                        'features' => ['register_domain', 'transfer_domain', 'manage_dns', 'whois_privacy'],
                     ],
                 ]
             );
@@ -301,7 +300,7 @@ class ModuleInstaller
                     'description' => 'Search for available domain names',
                     'metadata' => [
                         'parent' => 'domains',
-                        'features' => ['bulk_search', 'suggestions', 'premium_domains']
+                        'features' => ['bulk_search', 'suggestions', 'premium_domains'],
                     ],
                 ]
             );
@@ -318,7 +317,7 @@ class ModuleInstaller
                     'description' => 'Manage DNS records for your domains',
                     'metadata' => [
                         'parent' => 'domains',
-                        'features' => ['a_records', 'cname_records', 'mx_records', 'txt_records']
+                        'features' => ['a_records', 'cname_records', 'mx_records', 'txt_records'],
                     ],
                 ]
             );
@@ -335,7 +334,7 @@ class ModuleInstaller
         } catch (\Exception $e) {
             return [
                 'success' => false,
-                'message' => 'Failed to install Domains module for client panel: ' . $e->getMessage(),
+                'message' => 'Failed to install Domains module for client panel: '.$e->getMessage(),
                 'exception' => $e,
             ];
         }
@@ -356,14 +355,14 @@ class ModuleInstaller
             }
 
             // 1. Run migrations
-            if (!Schema::hasTable('products')) {
+            if (! Schema::hasTable('products')) {
                 Artisan::call('migrate', [
-                    '--path' => 'database/migrations/2025_05_06_093159_create_products_table.php'
+                    '--path' => 'database/migrations/2025_05_06_093159_create_products_table.php',
                 ]);
             }
 
             // 2. Create Filament Resource if it doesn't exist already
-            if (!class_exists(ProductResource::class)) {
+            if (! class_exists(ProductResource::class)) {
                 $this->createFilamentResource('Product');
             }
 
@@ -396,7 +395,7 @@ class ModuleInstaller
         } catch (\Exception $e) {
             return [
                 'success' => false,
-                'message' => 'Failed to install Product module: ' . $e->getMessage(),
+                'message' => 'Failed to install Product module: '.$e->getMessage(),
                 'exception' => $e,
             ];
         }
@@ -417,13 +416,13 @@ class ModuleInstaller
             }
 
             // 1. Check for dependencies
-            if (!$this->isModuleInstalled('product') || !$this->isModuleInstalled('cart')) {
+            if (! $this->isModuleInstalled('product') || ! $this->isModuleInstalled('cart')) {
                 // Install dependencies first
-                if (!$this->isModuleInstalled('product')) {
+                if (! $this->isModuleInstalled('product')) {
                     $this->installProductModule();
                 }
-                
-                if (!$this->isModuleInstalled('cart')) {
+
+                if (! $this->isModuleInstalled('cart')) {
                     $this->installCartModule();
                 }
             }
@@ -460,7 +459,7 @@ class ModuleInstaller
         } catch (\Exception $e) {
             return [
                 'success' => false,
-                'message' => 'Failed to install Checkout module: ' . $e->getMessage(),
+                'message' => 'Failed to install Checkout module: '.$e->getMessage(),
                 'exception' => $e,
             ];
         }
@@ -481,25 +480,25 @@ class ModuleInstaller
             }
 
             // 1. Install dependencies
-            if (!$this->isModuleInstalled('product')) {
+            if (! $this->isModuleInstalled('product')) {
                 $this->installProductModule();
             }
 
             // 2. Run migrations
-            if (!Schema::hasTable('carts')) {
+            if (! Schema::hasTable('carts')) {
                 Artisan::call('migrate', [
-                    '--path' => 'database/migrations/2025_05_08_000002_create_carts_table.php'
+                    '--path' => 'database/migrations/2025_05_08_000002_create_carts_table.php',
                 ]);
             }
 
-            if (!Schema::hasTable('cart_items')) {
+            if (! Schema::hasTable('cart_items')) {
                 Artisan::call('migrate', [
-                    '--path' => 'database/migrations/2025_05_08_000003_create_cart_items_table.php'
+                    '--path' => 'database/migrations/2025_05_08_000003_create_cart_items_table.php',
                 ]);
             }
 
             // 3. Create Filament Resource
-            if (!class_exists(CartResource::class)) {
+            if (! class_exists(CartResource::class)) {
                 $this->createFilamentResource('Cart');
             }
 
@@ -535,7 +534,7 @@ class ModuleInstaller
         } catch (\Exception $e) {
             return [
                 'success' => false,
-                'message' => 'Failed to install Cart module: ' . $e->getMessage(),
+                'message' => 'Failed to install Cart module: '.$e->getMessage(),
                 'exception' => $e,
             ];
         }
@@ -556,14 +555,14 @@ class ModuleInstaller
             }
 
             // 1. Run migrations
-            if (!Schema::hasTable('coupons')) {
+            if (! Schema::hasTable('coupons')) {
                 Artisan::call('migrate', [
-                    '--path' => 'database/migrations/2025_05_08_000004_create_coupons_table.php'
+                    '--path' => 'database/migrations/2025_05_08_000004_create_coupons_table.php',
                 ]);
             }
 
             // 2. Create Filament Resource
-            if (!class_exists(CouponResource::class)) {
+            if (! class_exists(CouponResource::class)) {
                 $this->createFilamentResource('Coupon');
             }
 
@@ -596,7 +595,7 @@ class ModuleInstaller
         } catch (\Exception $e) {
             return [
                 'success' => false,
-                'message' => 'Failed to install Coupon module: ' . $e->getMessage(),
+                'message' => 'Failed to install Coupon module: '.$e->getMessage(),
                 'exception' => $e,
             ];
         }
@@ -617,14 +616,14 @@ class ModuleInstaller
             }
 
             // 1. Run migrations
-            if (!Schema::hasTable('pages')) {
+            if (! Schema::hasTable('pages')) {
                 Artisan::call('migrate', [
-                    '--path' => 'database/migrations/2025_05_08_000005_create_pages_table.php'
+                    '--path' => 'database/migrations/2025_05_08_000005_create_pages_table.php',
                 ]);
             }
 
             // 2. Create Filament Resource
-            if (!class_exists(PageResource::class)) {
+            if (! class_exists(PageResource::class)) {
                 $this->createFilamentResource('Page');
             }
 
@@ -660,7 +659,7 @@ class ModuleInstaller
         } catch (\Exception $e) {
             return [
                 'success' => false,
-                'message' => 'Failed to install Page Editor module: ' . $e->getMessage(),
+                'message' => 'Failed to install Page Editor module: '.$e->getMessage(),
                 'exception' => $e,
             ];
         }
@@ -683,41 +682,41 @@ class ModuleInstaller
     {
         $resourceName = "{$modelName}Resource";
         $resourcePath = app_path("Filament/Resources/{$resourceName}.php");
-        
+
         // Skip if resource already exists
         if (File::exists($resourcePath)) {
             return;
         }
-        
+
         // Use Generator to create the resource
         $generator = app(GeneratorService::class);
-        
+
         // Create a dummy generator model to pass to the generator service
         $generatorModel = new \App\Models\Generator([
             'name' => $resourceName,
             'type' => 'resource',
-            'namespace' => "App\\Filament\\Resources",
+            'namespace' => 'App\\Filament\\Resources',
             'label' => $modelName,
             'icon' => $this->getIconForModel($modelName),
             'group' => 'ניהול מערכת',
             'target_path' => $resourcePath,
         ]);
-        
+
         // Generate the resource
         $generator->generate($generatorModel, true);
-        
+
         // Also create directory for Pages
         $pagesDir = app_path("Filament/Resources/{$resourceName}/Pages");
-        if (!File::exists($pagesDir)) {
+        if (! File::exists($pagesDir)) {
             File::makeDirectory($pagesDir, 0755, true);
-            
+
             // Create basic pages (List, Create, Edit)
             $this->createResourcePage($resourceName, $modelName, 'List');
             $this->createResourcePage($resourceName, $modelName, 'Create');
             $this->createResourcePage($resourceName, $modelName, 'Edit');
         }
     }
-    
+
     /**
      * Create a resource page.
      */
@@ -727,17 +726,17 @@ class ModuleInstaller
         if ($pageType === 'Edit' || $pageType === 'Create') {
             $pageName = "{$pageType}{$modelName}";
         }
-        
+
         $pagePath = app_path("Filament/Resources/{$resourceName}/Pages/{$pageName}.php");
-        
+
         // Skip if page already exists
         if (File::exists($pagePath)) {
             return;
         }
-        
+
         // Create page file
         $generator = app(GeneratorService::class);
-        
+
         // Create a dummy generator model for the page
         $generatorModel = new \App\Models\Generator([
             'name' => $pageName,
@@ -745,11 +744,11 @@ class ModuleInstaller
             'namespace' => "App\\Filament\\Resources\\{$resourceName}\\Pages",
             'target_path' => $pagePath,
         ]);
-        
+
         // Generate the page
         $generator->generate($generatorModel, true);
     }
-    
+
     /**
      * Get an appropriate icon for a model.
      */
@@ -762,36 +761,36 @@ class ModuleInstaller
             'Page' => 'heroicon-o-document-text',
             'Module' => 'heroicon-o-cube',
         ];
-        
+
         return $icons[$modelName] ?? 'heroicon-o-rectangle-stack';
     }
-    
+
     /**
      * Create cart-related views.
      */
     private function createCartViews(): void
     {
         $viewsDir = resource_path('views/cart');
-        
-        if (!File::exists($viewsDir)) {
+
+        if (! File::exists($viewsDir)) {
             File::makeDirectory($viewsDir, 0755, true);
-            
+
             // Create basic cart views
             $this->createView($viewsDir, 'index.blade.php', $this->getCartIndexTemplate());
             $this->createView($viewsDir, 'mini-cart.blade.php', $this->getCartMiniTemplate());
         }
     }
-    
+
     /**
      * Create checkout-related views.
      */
     private function createCheckoutViews(): void
     {
         $viewsDir = resource_path('views/checkout');
-        
-        if (!File::exists($viewsDir)) {
+
+        if (! File::exists($viewsDir)) {
             File::makeDirectory($viewsDir, 0755, true);
-            
+
             // Create checkout views
             $this->createView($viewsDir, 'index.blade.php', $this->getCheckoutIndexTemplate());
             $this->createView($viewsDir, 'review.blade.php', $this->getCheckoutReviewTemplate());
@@ -799,34 +798,34 @@ class ModuleInstaller
             $this->createView($viewsDir, 'success.blade.php', $this->getCheckoutSuccessTemplate());
         }
     }
-    
+
     /**
      * Create page-related views.
      */
     private function createPageViews(): void
     {
         $viewsDir = resource_path('views/pages');
-        
-        if (!File::exists($viewsDir)) {
+
+        if (! File::exists($viewsDir)) {
             File::makeDirectory($viewsDir, 0755, true);
-            
+
             // Create basic page views
             $this->createView($viewsDir, 'show.blade.php', $this->getPageShowTemplate());
         }
     }
-    
+
     /**
      * Create a view file.
      */
     private function createView(string $directory, string $filename, string $content): void
     {
         $filePath = "{$directory}/{$filename}";
-        
-        if (!File::exists($filePath)) {
+
+        if (! File::exists($filePath)) {
             File::put($filePath, $content);
         }
     }
-    
+
     /**
      * Ensure routes exist.
      */
@@ -834,16 +833,16 @@ class ModuleInstaller
     {
         $routesPath = base_path('routes/web.php');
         $routesContent = File::get($routesPath);
-        
+
         // Only add routes if they don't already exist
-        if (!Str::contains($routesContent, "Route::prefix('{$routePrefix}')")) {
+        if (! Str::contains($routesContent, "Route::prefix('{$routePrefix}')")) {
             $routeStub = $this->getRouteStubForPrefix($routePrefix);
-            
+
             // Append to web.php
-            File::append($routesPath, "\n" . $routeStub);
+            File::append($routesPath, "\n".$routeStub);
         }
     }
-    
+
     /**
      * Get route stub for a given prefix.
      */
@@ -858,7 +857,7 @@ class ModuleInstaller
             default => '',
         };
     }
-    
+
     /**
      * Get product routes.
      */
@@ -872,7 +871,7 @@ Route::prefix('products')->name('products.')->group(function () {
 });
 EOT;
     }
-    
+
     /**
      * Get cart routes.
      */
@@ -891,7 +890,7 @@ Route::prefix('cart')->name('cart.')->group(function () {
 });
 EOT;
     }
-    
+
     /**
      * Get checkout routes.
      */
@@ -914,7 +913,7 @@ Route::prefix('checkout')->name('checkout.')->group(function () {
 });
 EOT;
     }
-    
+
     /**
      * Get coupon routes.
      */
@@ -932,7 +931,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin/coupons')->name('admin.coupo
 });
 EOT;
     }
-    
+
     /**
      * Get page routes.
      */
@@ -953,7 +952,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin/pages')->name('admin.pages.'
 });
 EOT;
     }
-    
+
     /**
      * Get cart index template.
      */
@@ -1092,7 +1091,7 @@ EOT;
 @endsection
 EOT;
     }
-    
+
     /**
      * Get mini cart template.
      */
@@ -1148,7 +1147,7 @@ EOT;
 </div>
 EOT;
     }
-    
+
     /**
      * Get checkout index template.
      */
@@ -1329,7 +1328,7 @@ EOT;
 @endsection
 EOT;
     }
-    
+
     /**
      * Get checkout review template.
      */
@@ -1496,7 +1495,7 @@ EOT;
 @endsection
 EOT;
     }
-    
+
     /**
      * Get checkout payment template.
      */
@@ -1632,7 +1631,7 @@ EOT;
 @endsection
 EOT;
     }
-    
+
     /**
      * Get checkout success template.
      */
@@ -1695,7 +1694,7 @@ EOT;
 @endsection
 EOT;
     }
-    
+
     /**
      * Get page show template.
      */

@@ -49,9 +49,10 @@ class MailSetting extends Model
 
     public function getPasswordAttribute($value)
     {
-        if (!empty($value)) {
+        if (! empty($value)) {
             return Crypt::decryptString($value);
         }
+
         return $value;
     }
 
@@ -64,9 +65,10 @@ class MailSetting extends Model
 
     public function getGoogleClientSecretAttribute($value)
     {
-        if (!empty($value)) {
+        if (! empty($value)) {
             return Crypt::decryptString($value);
         }
+
         return $value;
     }
 
@@ -110,14 +112,14 @@ class MailSetting extends Model
             ],
         ];
 
-        if (!empty($this->reply_to_address)) {
+        if (! empty($this->reply_to_address)) {
             $config['reply_to'] = [
                 'address' => $this->reply_to_address,
                 'name' => $this->reply_to_name ?? $this->from_name,
             ];
         } elseif ($this->use_no_reply) {
             $config['reply_to'] = [
-                'address' => 'noreply@' . parse_url((string) config('app.url'), PHP_URL_HOST),
+                'address' => 'noreply@'.parse_url((string) config('app.url'), PHP_URL_HOST),
                 'name' => 'No Reply',
             ];
         }

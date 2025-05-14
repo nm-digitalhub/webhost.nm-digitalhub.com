@@ -12,8 +12,11 @@ class Users extends Component
     protected $paginationTheme = 'tailwind';
 
     public $search = '';
+
     public $role = '';
+
     public $sortField = 'created_at';
+
     public $sortDirection = 'desc';
 
     protected $queryString = [

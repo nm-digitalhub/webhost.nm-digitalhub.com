@@ -10,6 +10,7 @@ class AutomatedProjectFixer extends Command
     protected $signature = 'project:fix
                             {--backup : Create backups of all modified files}
                             {--stage=all : Specify which stage to run (components, views, resources, all)}';
+
     protected $description = 'Run automated fixes for Laravel 12 and Filament 3 compliance';
 
     public function handle()
@@ -56,7 +57,7 @@ class AutomatedProjectFixer extends Command
         // Run the Livewire component fixer
         $this->call('livewire:fix-components');
 
-        $this->info("Stage 1 completed: Livewire components have been fixed.");
+        $this->info('Stage 1 completed: Livewire components have been fixed.');
     }
 
     private function runStage2ViewFixes()
@@ -66,7 +67,7 @@ class AutomatedProjectFixer extends Command
         // Run the Blade view fixer
         $this->call('views:fix-blade');
 
-        $this->info("Stage 2 completed: Blade views have been fixed.");
+        $this->info('Stage 2 completed: Blade views have been fixed.');
     }
 
     private function runStage3ResourceFixes()
@@ -79,7 +80,7 @@ class AutomatedProjectFixer extends Command
         // Run checks on Filament resources
         $this->call('filament:check-resources');
 
-        $this->info("Stage 3 completed: Filament resources and panel integration have been fixed.");
+        $this->info('Stage 3 completed: Filament resources and panel integration have been fixed.');
     }
 
     private function runCleanupTasks()
@@ -87,14 +88,14 @@ class AutomatedProjectFixer extends Command
         $this->info("\n=== Final Stage: Cleaning up and optimizing ===");
 
         // Clear all caches
-        $this->info("Clearing Laravel caches...");
+        $this->info('Clearing Laravel caches...');
         Artisan::call('optimize:clear');
         $this->info(Artisan::output());
 
         // Dump autoload
-        $this->info("Running composer dump-autoload...");
+        $this->info('Running composer dump-autoload...');
         exec('composer dump-autoload');
 
-        $this->info("Cleanup tasks completed.");
+        $this->info('Cleanup tasks completed.');
     }
 }

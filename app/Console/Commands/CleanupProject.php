@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Artisan;
 class CleanupProject extends Command
 {
     protected $signature = 'project:cleanup';
+
     protected $description = 'Perform full project cleanup and validation';
 
     public function handle()

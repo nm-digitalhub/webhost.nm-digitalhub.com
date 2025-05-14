@@ -11,20 +11,29 @@ class Settings extends Component
 
     // General Settings
     public $company_name = 'NM-DigitalHUB';
+
     public $company_address = '';
+
     public $company_email = '';
+
     public $company_phone = '';
+
     public $company_vat = '';
 
     // System Defaults
     public $default_language = 'en';
+
     public $default_currency = 'USD';
+
     public $date_format = 'Y-m-d';
 
     // Appearance Settings
     public $color_scheme = 'blue';
+
     public $default_theme = 'system';
+
     public $direction = 'rtl';
+
     public $logo;
 
     protected $rules = [

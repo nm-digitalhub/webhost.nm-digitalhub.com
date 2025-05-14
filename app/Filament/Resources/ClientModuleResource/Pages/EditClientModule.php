@@ -20,7 +20,7 @@ class EditClientModule extends EditRecord
                 ->color(fn (): string => $this->record->enabled ? 'danger' : 'success')
                 ->icon(fn (): string => $this->record->enabled ? 'heroicon-o-x-circle' : 'heroicon-o-check-circle')
                 ->action(function (): void {
-                    $this->record->update(['enabled' => !$this->record->enabled]);
+                    $this->record->update(['enabled' => ! $this->record->enabled]);
                     $this->refreshFormData(['enabled']);
                     $this->notify('success', $this->record->enabled ? 'המודול הופעל בהצלחה' : 'המודול הושבת בהצלחה');
                 }),

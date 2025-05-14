@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\ModuleManagerResource\Pages;
 
-use Filament\Resources\Pages\CreateRecord;
 use App\Filament\Resources\ModuleManagerResource;
+use Filament\Resources\Pages\CreateRecord;
 
 class CreateModuleManager extends CreateRecord
 {

@@ -10,6 +10,7 @@ class CheckPHPSyntax extends Command
 {
     protected $signature = 'check:php-syntax
                            {--fix : Attempt to fix syntax issues automatically}';
+
     protected $description = 'Check PHP syntax in all project files';
 
     protected $errorFiles = [];
@@ -25,7 +26,7 @@ class CheckPHPSyntax extends Command
 
         // Report results
         if (count($this->errorFiles) > 0) {
-            $this->error('Found ' . count($this->errorFiles) . ' files with syntax errors:');
+            $this->error('Found '.count($this->errorFiles).' files with syntax errors:');
 
             foreach ($this->errorFiles as $file => $error) {
                 $this->warn(" - {$file}");
@@ -37,20 +38,21 @@ class CheckPHPSyntax extends Command
                 }
             }
 
-            if (!$this->option('fix')) {
+            if (! $this->option('fix')) {
                 $this->info('Run with --fix option to attempt automatic fixes');
             }
 
             return 1;
         } else {
             $this->info('All PHP files have valid syntax!');
+
             return 0;
         }
     }
 
     private function checkDirectory($directory)
     {
-        if (!File::isDirectory($directory)) {
+        if (! File::isDirectory($directory)) {
             return;
         }
 
@@ -76,7 +78,7 @@ class CheckPHPSyntax extends Command
         $process = new Process(['php', '-l', $file]);
         $process->run();
 
-        if (!$process->isSuccessful()) {
+        if (! $process->isSuccessful()) {
             $error = trim($process->getErrorOutput());
             // Extract just the error message, not the full output
             if (preg_match('/Parse error:\s*(.*?)\s*in/', $error, $matches)) {
@@ -103,19 +105,18 @@ class CheckPHPSyntax extends Command
                 $fixed = true;
                 $this->info("Fixed missing closing braces in {$file}");
             }
-        }
-        elseif (Str::contains($error, 'unexpected') && Str::contains($error, 'expecting')) {
+        } elseif (Str::contains($error, 'unexpected') && Str::contains($error, 'expecting')) {
             // Fix missing semicolons (common issue)
             if (Str::contains($error, 'expecting ";"')) {
                 // Try to find the line with the error
                 if (preg_match('/on line (\d+)/', $error, $matches)) {
-                    $lineNumber = (int)$matches[1];
+                    $lineNumber = (int) $matches[1];
                     $lines = explode("\n", $content);
 
                     if (isset($lines[$lineNumber - 1])) {
                         $line = $lines[$lineNumber - 1];
-                        if (!Str::endsWith(trim($line), ';') && !Str::endsWith(trim($line), '{') && !Str::endsWith(trim($line), '}')) {
-                            $lines[$lineNumber - 1] = rtrim($line) . ';';
+                        if (! Str::endsWith(trim($line), ';') && ! Str::endsWith(trim($line), '{') && ! Str::endsWith(trim($line), '}')) {
+                            $lines[$lineNumber - 1] = rtrim($line).';';
                             $content = implode("\n", $lines);
                             $fixed = true;
                             $this->info("Fixed missing semicolon on line {$lineNumber} in {$file}");
@@ -128,7 +129,7 @@ class CheckPHPSyntax extends Command
         // Save fixed content if we made a fix
         if ($fixed) {
             // Make a backup
-            File::put($file . '.syntax-error.bak', File::get($file));
+            File::put($file.'.syntax-error.bak', File::get($file));
 
             // Save the fixed version
             File::put($file, $content);

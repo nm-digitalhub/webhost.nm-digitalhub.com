@@ -27,11 +27,11 @@ return new class extends Migration
     {
         Schema::table('mail_settings', function (Blueprint $table) {
             $table->dropColumn([
-                'reply_to_address', 
-                'reply_to_name', 
-                'use_no_reply', 
+                'reply_to_address',
+                'reply_to_name',
+                'use_no_reply',
                 'default_language',
-                'signature'
+                'signature',
             ]);
         });
     }

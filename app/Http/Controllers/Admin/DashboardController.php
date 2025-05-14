@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\User;
-use App\Models\Service;
 use App\Models\Invoice;
+use App\Models\Service;
 use App\Models\Ticket;
+use App\Models\User;
 
 class DashboardController extends Controller
 {
@@ -33,15 +32,15 @@ class DashboardController extends Controller
 
         // Get recent customers
         $recentCustomers = User::where('type', 'client')
-                            ->orderBy('created_at', 'desc')
-                            ->take(5)
-                            ->get();
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
 
         // Get recent invoices
         $recentInvoices = Invoice::with('user')
-                          ->orderBy('created_at', 'desc')
-                          ->take(5)
-                          ->get();
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
 
         return view('admin.dashboard', ['userCount' => $userCount, 'activeServices' => $activeServices, 'totalRevenue' => $totalRevenue, 'pendingRevenue' => $pendingRevenue, 'openTickets' => $openTickets, 'recentCustomers' => $recentCustomers, 'recentInvoices' => $recentInvoices]);
     }

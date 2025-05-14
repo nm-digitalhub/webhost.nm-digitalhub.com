@@ -35,8 +35,9 @@ class SetupAdminRole extends Command
         // מציאת המשתמש
         $user = User::where('email', $email)->first();
 
-        if (!$user) {
+        if (! $user) {
             $this->error("User with email {$email} not found!");
+
             return 1;
         }
 

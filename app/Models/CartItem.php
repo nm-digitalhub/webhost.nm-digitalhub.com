@@ -64,6 +64,7 @@ class CartItem extends Model
     public function formattedSubtotal(): string
     {
         $symbol = $this->cart->currency === 'ILS' ? '₪' : ($this->cart->currency === 'USD' ? '$' : '€');
-        return $symbol . number_format($this->getSubtotal(), 2);
+
+        return $symbol.number_format($this->getSubtotal(), 2);
     }
 }

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Artisan;
 class RunAllFixers extends Command
 {
     protected $signature = 'fix:all';
+
     protected $description = 'Run all fixers to repair the Laravel project';
 
     public function handle()
@@ -26,7 +27,7 @@ class RunAllFixers extends Command
         $this->runFixer('livewire:fix-namespaces', 'Fixing Livewire namespaces');
 
         // Clear all caches
-        $this->info("\n" . str_repeat('-', 50));
+        $this->info("\n".str_repeat('-', 50));
         $this->info('Clearing all caches');
         $this->info(str_repeat('-', 50));
 
@@ -48,7 +49,7 @@ class RunAllFixers extends Command
         // Check for any remaining PHP syntax errors
         $this->runFixer('check:php-syntax', 'Checking for remaining PHP syntax errors');
 
-        $this->info("\n" . str_repeat('=', 50));
+        $this->info("\n".str_repeat('=', 50));
         $this->info('ALL FIXERS COMPLETED');
         $this->info(str_repeat('=', 50));
         $this->info('If you still have issues, you may need to manually fix some files.');
@@ -58,7 +59,7 @@ class RunAllFixers extends Command
 
     private function runFixer($command, $description)
     {
-        $this->info("\n" . str_repeat('-', 50));
+        $this->info("\n".str_repeat('-', 50));
         $this->info($description);
         $this->info(str_repeat('-', 50));
 

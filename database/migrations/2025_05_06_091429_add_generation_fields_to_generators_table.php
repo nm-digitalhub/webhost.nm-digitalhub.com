@@ -51,7 +51,7 @@ return new class extends Migration
                 'label',
                 'preview_before_generate',
                 'confirm_overwrite',
-                'target_path'
+                'target_path',
             ]);
         });
     }

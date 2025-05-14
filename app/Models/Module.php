@@ -41,7 +41,7 @@ class Module extends Model
      */
     public function isInstalled(): bool
     {
-        return !is_null($this->installed_at);
+        return ! is_null($this->installed_at);
     }
 
     /**

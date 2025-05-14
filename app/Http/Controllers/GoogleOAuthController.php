@@ -16,12 +16,14 @@ class GoogleOAuthController extends Controller
     {
         $service = app(GoogleOAuthService::class)->setupClient();
 
-        if (!$service->isConfigured()) {
+        if (! $service->isConfigured()) {
             Log::error('Google OAuth is not properly configured');
+
             return Redirect::back()->with('error', 'Google OAuth is not properly configured.');
         }
 
         $authUrl = $service->getAuthUrl();
+
         return Redirect::away($authUrl);
     }
 
@@ -34,6 +36,7 @@ class GoogleOAuthController extends Controller
 
         if (empty($code)) {
             Log::error('No authorization code received from Google');
+
             return Redirect::route('filament.admin.resources.mail-settings.index')
                 ->with('error', 'Google OAuth authentication failed: No authorization code received.');
         }
@@ -41,8 +44,9 @@ class GoogleOAuthController extends Controller
         $service = app(GoogleOAuthService::class)->setupClient();
         $token = $service->fetchAccessTokenWithAuthCode($code);
 
-        if (empty($token) || !isset($token['access_token'])) {
+        if (empty($token) || ! isset($token['access_token'])) {
             Log::error('Failed to exchange authorization code for token', $token);
+
             return Redirect::route('filament.admin.resources.mail-settings.index')
                 ->with('error', 'Google OAuth authentication failed: Could not retrieve access token.');
         }
@@ -51,6 +55,7 @@ class GoogleOAuthController extends Controller
         $service->storeTokenData($token);
 
         Log::info('Google OAuth authentication successful');
+
         return Redirect::route('filament.admin.resources.mail-settings.index')
             ->with('success', 'החיבור לחשבון Gmail בוצע בהצלחה. תוכל כעת לשלוח מיילים דרך חשבונך.');
     }

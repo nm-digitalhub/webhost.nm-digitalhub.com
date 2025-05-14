@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 
 class DomainController extends Controller
 {
@@ -20,18 +19,18 @@ class DomainController extends Controller
         ]);
 
         $domain = $request->input('name');
-        
+
         // Sanitize domain name
         $domain = strtolower(trim((string) $domain));
-        
+
         // Add .com if no TLD is specified
-        if (!str_contains($domain, '.')) {
+        if (! str_contains($domain, '.')) {
             $domain .= '.com';
         }
 
         // Simulate domain check (in a real app this would check with a domain registrar API)
         $available = random_int(0, 1) > 0.2; // 80% chance domain is available for this demo
-        
+
         $price = 12.99;
         if (str_ends_with($domain, '.io')) {
             $price = 39.99;
@@ -64,17 +63,17 @@ class DomainController extends Controller
 
         // Generate suggestions with different TLDs and prefixes/suffixes
         $suggestions = [];
-        
+
         $tlds = ['.com', '.net', '.org', '.io', '.co'];
         $prefixes = ['get', 'my', 'the', 'try'];
         $suffixes = ['app', 'hub', 'site', 'online'];
 
         // Add TLD variations
         foreach ($tlds as $tld) {
-            if (!str_ends_with($domain, $tld)) {
-                $suggestion = $name . $tld;
+            if (! str_ends_with($domain, $tld)) {
+                $suggestion = $name.$tld;
                 $price = 12.99;
-                
+
                 if ($tld === '.io') {
                     $price = 39.99;
                 } elseif ($tld === '.co') {
@@ -82,37 +81,38 @@ class DomainController extends Controller
                 } elseif ($tld === '.net') {
                     $price = 14.99;
                 }
-                
+
                 $suggestions[] = [
                     'domain' => $suggestion,
                     'available' => random_int(0, 1) > 0.3, // 70% chance it's available
-                    'price' => $price
+                    'price' => $price,
                 ];
             }
         }
 
         // Add prefix variations (with .com)
         foreach ($prefixes as $prefix) {
-            $suggestion = $prefix . $name . '.com';
+            $suggestion = $prefix.$name.'.com';
             $suggestions[] = [
                 'domain' => $suggestion,
                 'available' => random_int(0, 1) > 0.2, // 80% chance it's available
-                'price' => 12.99
+                'price' => 12.99,
             ];
         }
 
         // Add suffix variations (with .com)
         foreach ($suffixes as $suffix) {
-            $suggestion = $name . $suffix . '.com';
+            $suggestion = $name.$suffix.'.com';
             $suggestions[] = [
                 'domain' => $suggestion,
                 'available' => random_int(0, 1) > 0.2, // 80% chance it's available
-                'price' => 12.99
+                'price' => 12.99,
             ];
         }
 
         // Shuffle and limit to 5 suggestions
         shuffle($suggestions);
+
         return array_slice($suggestions, 0, 5);
     }
 }

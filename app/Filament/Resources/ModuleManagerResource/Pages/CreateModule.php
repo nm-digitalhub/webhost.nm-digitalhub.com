@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\ModuleManagerResource\Pages;
 
 use App\Filament\Resources\ModuleManagerResource;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateModule extends CreateRecord

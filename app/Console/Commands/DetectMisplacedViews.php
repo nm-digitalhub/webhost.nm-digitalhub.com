@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\File;
 class DetectMisplacedViews extends Command
 {
     protected $signature = 'views:detect-misplaced';
+
     protected $description = 'Detect PHP files that might be Blade views';
 
     public function handle()
@@ -43,7 +44,7 @@ class DetectMisplacedViews extends Command
         if (File::isDirectory($filamentResourcesDir)) {
             foreach (File::allFiles($filamentResourcesDir) as $file) {
                 if ($file->getExtension() === 'php' &&
-                    !str_contains($file->getPathname(), '/Pages/') &&
+                    ! str_contains($file->getPathname(), '/Pages/') &&
                     (str_contains($file->getFilename(), 'List') ||
                      str_contains($file->getFilename(), 'Create') ||
                      str_contains($file->getFilename(), 'Edit'))) {
@@ -63,7 +64,7 @@ class DetectMisplacedViews extends Command
                         $pageName = $file->getFilename();
                         $correctPath = app_path("Filament/Resources/{$resourceName}/Pages/{$pageName}");
 
-                        $this->info("Suggested action: mkdir -p " . dirname($correctPath));
+                        $this->info('Suggested action: mkdir -p '.dirname($correctPath));
                         $this->info("Suggested action: mv {$file->getPathname()} {$correctPath}");
                     }
                 }
@@ -73,7 +74,7 @@ class DetectMisplacedViews extends Command
         if ($suspiciousFiles === []) {
             $this->info('No misplaced view files detected.');
         } else {
-            $this->info(count($suspiciousFiles) . ' suspicious files found.');
+            $this->info(count($suspiciousFiles).' suspicious files found.');
         }
 
         return 0;
@@ -87,7 +88,8 @@ class DetectMisplacedViews extends Command
         foreach (['List', 'Create', 'Edit', 'View'] as $prefix) {
             if (str_starts_with($filename, $prefix)) {
                 $remainder = substr($filename, strlen($prefix), -4); // Remove .php
-                return $remainder . 'Resource';
+
+                return $remainder.'Resource';
             }
         }
 

@@ -4,11 +4,11 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 
 class FixDuplicatePhpTags extends Command
 {
     protected $signature = 'fix:duplicate-php-tags';
+
     protected $description = 'Fix files with duplicate PHP opening tags and class declarations';
 
     public function handle()
@@ -45,15 +45,15 @@ class FixDuplicatePhpTags extends Command
                         $className = $matches[2];
 
                         // Check how many class declarations we have with the same name
-                        preg_match_all('/class\s+' . $className . '\s+/s', (string) $content, $classMatches);
+                        preg_match_all('/class\s+'.$className.'\s+/s', (string) $content, $classMatches);
 
                         if (count($classMatches[0]) > 1) {
                             // This is more complex - we need manual intervention
                             $this->error("Multiple class '{$className}' declarations found in {$file->getPathname()}");
-                            $this->info("Please manually merge the class implementations");
+                            $this->info('Please manually merge the class implementations');
 
                             // Create a backup
-                            $backupPath = $file->getPathname() . '.bak';
+                            $backupPath = $file->getPathname().'.bak';
                             File::copy($file->getPathname(), $backupPath);
                             $this->info("Created backup at {$backupPath}");
                         }
@@ -65,10 +65,10 @@ class FixDuplicatePhpTags extends Command
                     $phpTagCount = substr_count((string) $content, '<?php');
                     if ($phpTagCount > 2) {
                         $this->error("Found {$phpTagCount} PHP tags in: {$file->getPathname()}");
-                        $this->info("This requires manual intervention to fix properly.");
+                        $this->info('This requires manual intervention to fix properly.');
 
                         // Create a backup
-                        $backupPath = $file->getPathname() . '.bak';
+                        $backupPath = $file->getPathname().'.bak';
                         File::copy($file->getPathname(), $backupPath);
                         $this->info("Created backup at {$backupPath}");
 
@@ -90,7 +90,7 @@ class FixDuplicatePhpTags extends Command
         if ($fixedFiles === []) {
             $this->info('No files with duplicate PHP tags or class declarations found.');
         } else {
-            $this->info(count($fixedFiles) . ' files fixed.');
+            $this->info(count($fixedFiles).' files fixed.');
         }
 
         return 0;

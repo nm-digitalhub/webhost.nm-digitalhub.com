@@ -15,7 +15,7 @@ class IsClient
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!auth()->check() || !auth()->user()->hasRole('client')) {
+        if (! auth()->check() || ! auth()->user()->hasRole('client')) {
             return redirect()->route('dashboard')->with('error', 'אזור זה מוגבל ללקוחות בלבד.');
         }
 

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Filament\Pages;
 
 use Filament\Pages\Page;
@@ -33,17 +32,18 @@ class Dashboard extends Page
         return 'dashboard';
     }
 }
+
 namespace App\Filament\Pages;
 
-use Illuminate\Contracts\View\View;
+use App\Filament\Widgets\LatestActivityWidget;
+use App\Filament\Widgets\ModulesStatsWidget;
+use App\Filament\Widgets\SystemHealthWidget;
+use App\Filament\Widgets\SystemResourcesWidget;
+use App\Filament\Widgets\UsersStatsWidget;
 use Filament\Pages\Dashboard as BaseDashboard;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
-use App\Filament\Widgets\UsersStatsWidget;
-use App\Filament\Widgets\ModulesStatsWidget;
-use App\Filament\Widgets\SystemResourcesWidget;
-use App\Filament\Widgets\LatestActivityWidget;
-use App\Filament\Widgets\SystemHealthWidget;
+use Illuminate\Contracts\View\View;
 
 class Dashboard extends BaseDashboard
 {

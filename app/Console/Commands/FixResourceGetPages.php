@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 class FixResourceGetPages extends Command
 {
     protected $signature = 'filament:fix-get-pages';
+
     protected $description = 'Fix Filament Resource getPages() method implementation';
 
     public function handle()
@@ -22,15 +23,16 @@ class FixResourceGetPages extends Command
         $fixedFiles = 0;
 
         foreach ($resourceDirs as $resourceDir) {
-            if (!File::isDirectory($resourceDir)) {
+            if (! File::isDirectory($resourceDir)) {
                 $this->warn("Directory not found: {$resourceDir}");
+
                 continue;
             }
 
             $resourceFiles = File::files($resourceDir);
 
             foreach ($resourceFiles as $file) {
-                if (!Str::endsWith($file->getFilename(), 'Resource.php')) {
+                if (! Str::endsWith($file->getFilename(), 'Resource.php')) {
                     continue;
                 }
 
@@ -45,7 +47,7 @@ class FixResourceGetPages extends Command
                     $namespace = $this->getNamespace($content);
                     if ($namespace) {
                         $pagesUse = "use {$namespace}\\{$resourceName}\\Pages;";
-                        if (!Str::contains($content, $pagesUse)) {
+                        if (! Str::contains($content, $pagesUse)) {
                             $content = preg_replace(
                                 '/(namespace\s+[^;]+;\s+)/m',
                                 "$1\n{$pagesUse}\n",

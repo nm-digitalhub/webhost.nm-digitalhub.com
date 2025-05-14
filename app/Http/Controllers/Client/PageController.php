@@ -19,12 +19,12 @@ class PageController extends Controller
         $page = ClientPage::where('slug', $slug)->first();
 
         // If page doesn't exist, return 404
-        if (!$page) {
+        if (! $page) {
             abort(404);
         }
 
         // Check if the page is visible to the current user
-        if (!$page->isVisibleToUser($request->user())) {
+        if (! $page->isVisibleToUser($request->user())) {
             abort(403, 'You do not have permission to view this page.');
         }
 
@@ -36,7 +36,7 @@ class PageController extends Controller
         $viewPath = "client.pages.{$layout}";
 
         // Check if custom view exists, otherwise use default
-        if (!view()->exists($viewPath)) {
+        if (! view()->exists($viewPath)) {
             $viewPath = 'client.pages.default';
         }
 

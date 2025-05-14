@@ -54,10 +54,15 @@ class Order extends Model
      * Order statuses
      */
     const STATUS_PENDING = 'pending';
+
     const STATUS_PROCESSING = 'processing';
+
     const STATUS_COMPLETED = 'completed';
+
     const STATUS_CANCELLED = 'cancelled';
+
     const STATUS_REFUNDED = 'refunded';
+
     const STATUS_FAILED = 'failed';
 
     /**
@@ -83,7 +88,7 @@ class Order extends Model
     {
         return $this->hasMany(Transaction::class);
     }
-    
+
     /**
      * Get the latest transaction for this order.
      */
@@ -91,16 +96,17 @@ class Order extends Model
     {
         return $this->transactions()->latest()->first();
     }
-    
+
     /**
      * Format the total with currency symbol.
      */
     public function formattedTotal(): string
     {
         $symbol = $this->currency === 'ILS' ? '₪' : ($this->currency === 'USD' ? '$' : '€');
-        return $symbol . number_format($this->total, 2);
+
+        return $symbol.number_format($this->total, 2);
     }
-    
+
     /**
      * Get orders with a specific status.
      */
@@ -108,7 +114,7 @@ class Order extends Model
     {
         return $query->where('status', $status);
     }
-    
+
     /**
      * Get orders for a specific user.
      */
@@ -116,7 +122,7 @@ class Order extends Model
     {
         return $query->where('user_id', $userId);
     }
-    
+
     /**
      * Generate a unique order number.
      */
@@ -125,15 +131,15 @@ class Order extends Model
         $prefix = 'NM';
         $timestamp = now()->format('Ymd');
         $random = str_pad(mt_rand(1, 9999), 4, '0', STR_PAD_LEFT);
-        
-        $orderNumber = $prefix . $timestamp . $random;
-        
+
+        $orderNumber = $prefix.$timestamp.$random;
+
         // Ensure uniqueness
         while (self::where('order_number', $orderNumber)->exists()) {
             $random = str_pad(mt_rand(1, 9999), 4, '0', STR_PAD_LEFT);
-            $orderNumber = $prefix . $timestamp . $random;
+            $orderNumber = $prefix.$timestamp.$random;
         }
-        
+
         return $orderNumber;
     }
 }

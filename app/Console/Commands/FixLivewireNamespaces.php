@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\File;
 class FixLivewireNamespaces extends Command
 {
     protected $signature = 'livewire:fix-namespaces';
+
     protected $description = 'Fix Livewire component namespaces and ensure proper structure';
 
     public function handle()
@@ -26,7 +27,7 @@ class FixLivewireNamespaces extends Command
 
             // Back up files first
             $backupDir = app_path('Livewire/Admin/backup');
-            if (!File::isDirectory($backupDir)) {
+            if (! File::isDirectory($backupDir)) {
                 File::makeDirectory($backupDir, 0755, true);
             }
 
@@ -43,7 +44,7 @@ class FixLivewireNamespaces extends Command
                 $targetPath = app_path("Livewire/Admin/{$fileName}");
 
                 // Only copy if not already exists to avoid conflicts
-                if (!File::exists($targetPath)) {
+                if (! File::exists($targetPath)) {
                     $contents = File::get($file->getPathname());
                     $contents = str_replace(
                         "namespace {$legacyNamespace}\\Admin;",
@@ -96,7 +97,7 @@ class FixLivewireNamespaces extends Command
                 $relativePath = strtolower(str_replace('\\', '/', $namespace));
                 $viewPath = resource_path("views/livewire/{$relativePath}/{$kebabCase}.blade.php");
 
-                if (!File::exists($viewPath)) {
+                if (! File::exists($viewPath)) {
                     $this->warn("Missing blade template: livewire/{$relativePath}/{$kebabCase}.blade.php");
                 }
             }

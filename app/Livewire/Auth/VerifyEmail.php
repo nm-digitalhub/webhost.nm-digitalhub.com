@@ -17,6 +17,7 @@ class VerifyEmail extends Component
         $this->dispatch('resent');
 
         session()->flash('resent');
+
         return null;
     }
 

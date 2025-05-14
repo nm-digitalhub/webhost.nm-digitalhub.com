@@ -51,9 +51,13 @@ class Product extends Model
      * Product types
      */
     const TYPE_HOSTING = 'hosting';
+
     const TYPE_DOMAIN = 'domain';
+
     const TYPE_VPS = 'vps';
+
     const TYPE_ADDON = 'addon';
+
     const TYPE_SERVICE = 'service';
 
     /**
@@ -71,7 +75,7 @@ class Product extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
-    
+
     /**
      * Get active products.
      */
@@ -79,7 +83,7 @@ class Product extends Model
     {
         return $query->where('is_active', true);
     }
-    
+
     /**
      * Get featured products.
      */
@@ -87,7 +91,7 @@ class Product extends Model
     {
         return $query->where('is_featured', true);
     }
-    
+
     /**
      * Get products of a specific type.
      */
@@ -95,29 +99,31 @@ class Product extends Model
     {
         return $query->where('type', $type);
     }
-    
+
     /**
      * Format the price with currency symbol.
      */
     public function formattedPrice(): string
     {
         $symbol = $this->currency === 'ILS' ? '₪' : ($this->currency === 'USD' ? '$' : '€');
-        return $symbol . number_format($this->price, 2);
+
+        return $symbol.number_format($this->price, 2);
     }
-    
+
     /**
      * Format the sale price with currency symbol.
      */
     public function formattedSalePrice(): string
     {
-        if (!$this->sale_price) {
+        if (! $this->sale_price) {
             return '';
         }
-        
+
         $symbol = $this->currency === 'ILS' ? '₪' : ($this->currency === 'USD' ? '$' : '€');
-        return $symbol . number_format($this->sale_price, 2);
+
+        return $symbol.number_format($this->sale_price, 2);
     }
-    
+
     /**
      * Get the effective price (sale price if available, otherwise regular price).
      */
@@ -125,7 +131,7 @@ class Product extends Model
     {
         return ($this->sale_price && $this->sale_price < $this->price) ? $this->sale_price : $this->price;
     }
-    
+
     /**
      * Check if the product is on sale.
      */
@@ -133,16 +139,16 @@ class Product extends Model
     {
         return $this->sale_price && $this->sale_price < $this->price;
     }
-    
+
     /**
      * Calculate the discount percentage.
      */
     public function discountPercentage(): ?int
     {
-        if (!$this->isOnSale()) {
+        if (! $this->isOnSale()) {
             return null;
         }
-        
-        return (int)(100 - (($this->sale_price / $this->price) * 100));
+
+        return (int) (100 - (($this->sale_price / $this->price) * 100));
     }
 }

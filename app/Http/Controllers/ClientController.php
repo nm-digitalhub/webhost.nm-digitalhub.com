@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
@@ -15,7 +14,7 @@ class ClientController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     /**
      * הצגת דשבורד למשתמש
      */
@@ -120,7 +119,7 @@ class ClientController extends Controller
     {
         return view('client.invoices');
     }
-    
+
     /**
      * דף פרופיל משתמש
      */
@@ -136,7 +135,7 @@ class ClientController extends Controller
     {
         return view('client.payment-methods');
     }
-    
+
     /**
      * דף הגדרות משתמש
      */
@@ -161,18 +160,18 @@ class ClientController extends Controller
         // For now, we'll just return a success response
         return response()->json([
             'success' => true,
-            'message' => 'Auto-renewal setting updated successfully.'
+            'message' => 'Auto-renewal setting updated successfully.',
         ]);
     }
-    
+
     /**
      * הצגת מודולים של הלקוח
      */
-    public function showModules() 
+    public function showModules()
     {
         return view('client.modules');
     }
-    
+
     /**
      * הצגת מסך סטטיסטיקה
      */
@@ -180,7 +179,7 @@ class ClientController extends Controller
     {
         return view('client.statistics');
     }
-    
+
     /**
      * הצגת דף מותאם
      */
@@ -190,7 +189,7 @@ class ClientController extends Controller
         // For now, just render a generic page view
         return view('client.pages.show', ['slug' => $slug]);
     }
-    
+
     /**
      * נתונים לדוגמה לדומיינים (גרסה ישנה)
      */
@@ -209,7 +208,7 @@ class ClientController extends Controller
             ],
         ]);
     }
-    
+
     /**
      * נתונים לדוגמה לחשבוניות (גרסה ישנה)
      */

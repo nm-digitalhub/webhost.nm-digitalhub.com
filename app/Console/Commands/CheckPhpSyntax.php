@@ -8,6 +8,7 @@ use Symfony\Component\Process\Process;
 class CheckPhpSyntax extends Command
 {
     protected $signature = 'check:php-syntax';
+
     protected $description = 'Check PHP syntax in all project files';
 
     public function handle()
@@ -30,7 +31,7 @@ class CheckPhpSyntax extends Command
                 $path,
                 '-type', 'f',
                 '-name', '*.php',
-                '-exec', 'php', '-l', '{}', ';'
+                '-exec', 'php', '-l', '{}', ';',
             ]);
 
             $process->run();
@@ -48,9 +49,11 @@ class CheckPhpSyntax extends Command
 
         if ($errors === []) {
             $this->info('No PHP syntax errors found!');
+
             return 0;
         } else {
-            $this->error(count($errors) . ' syntax errors found.');
+            $this->error(count($errors).' syntax errors found.');
+
             return 1;
         }
     }

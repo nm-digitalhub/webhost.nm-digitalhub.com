@@ -8,10 +8,15 @@ use Livewire\Component;
 class Dashboard extends Component
 {
     public $activeDomains;
+
     public $activeHosting;
+
     public $activeVps;
+
     public $pendingInvoices;
+
     public $domains;
+
     public $invoices;
 
     public function mount()

@@ -12,8 +12,11 @@ class Invoices extends Component
     protected $paginationTheme = 'tailwind';
 
     public $search = '';
+
     public $status = '';
+
     public $sortField = 'created_at';
+
     public $sortDirection = 'desc';
 
     protected $queryString = [

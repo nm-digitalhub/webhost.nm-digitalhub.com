@@ -15,7 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\GenerateUiMapCommand::class,
     ];
-    
+
     /**
      * Define the application's command schedule.
      *

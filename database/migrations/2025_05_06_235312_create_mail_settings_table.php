@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(false);
             $table->timestamps();
         });
-        
+
         // Insert default settings
         DB::table('mail_settings')->insert([
             'driver' => 'smtp',

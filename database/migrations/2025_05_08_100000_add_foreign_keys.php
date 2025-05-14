@@ -8,7 +8,7 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     * 
+     *
      * This migration adds foreign key constraints that couldn't be added earlier
      * due to table creation order dependencies.
      */
@@ -16,13 +16,13 @@ return new class extends Migration
     {
         // Add products.plan_id foreign key now that plans table exists
         Schema::table('products', function (Blueprint $table) {
-            if (Schema::hasColumn('products', 'plan_id') && 
-                Schema::hasTable('plans') && 
-                !$this->hasForeignKey('products', 'products_plan_id_foreign')) {
+            if (Schema::hasColumn('products', 'plan_id') &&
+                Schema::hasTable('plans') &&
+                ! $this->hasForeignKey('products', 'products_plan_id_foreign')) {
                 $table->foreign('plan_id')
-                      ->references('id')
-                      ->on('plans')
-                      ->onDelete('set null');
+                    ->references('id')
+                    ->on('plans')
+                    ->onDelete('set null');
             }
         });
     }
@@ -38,7 +38,7 @@ return new class extends Migration
             }
         });
     }
-    
+
     /**
      * Helper method to check if a foreign key exists
      */
@@ -51,7 +51,8 @@ return new class extends Migration
                 AND TABLE_SCHEMA = DATABASE() 
                 AND TABLE_NAME = '{$table}' 
                 AND CONSTRAINT_NAME = '{$foreignKey}'");
-            return !empty($schema);
+
+            return ! empty($schema);
         } catch (\Exception) {
             return false;
         }

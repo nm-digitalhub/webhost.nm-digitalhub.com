@@ -35,33 +35,33 @@ class ClientPanelProvider extends ServiceProvider
         // Add dynamic client modules to client layout
         View::composer('layouts.client', function ($view) {
             $user = Auth::user();
-            
+
             // Get all enabled client modules
             $modules = ClientModule::enabled()
                 ->with('pages')
                 ->ordered()
                 ->get()
-                ->filter(fn($module) => $module->isVisibleToUser($user));
-            
+                ->filter(fn ($module) => $module->isVisibleToUser($user));
+
             // Get additional page menu items
             $menuPages = ClientPage::published()
                 ->inMenu()
                 ->ordered()
                 ->get()
-                ->filter(fn($page) => $page->isVisibleToUser($user));
-            
+                ->filter(fn ($page) => $page->isVisibleToUser($user));
+
             $view->with('clientModules', $modules);
             $view->with('menuPages', $menuPages);
         });
-        
+
         // Register a blade directive for checking impersonation status
-        Blade::directive('impersonating', fn() => "<?php if(app(\\App\\Services\\ImpersonationService::class)->isImpersonating()): ?>");
-        
-        Blade::directive('endimpersonating', fn() => "<?php endif; ?>");
-        
+        Blade::directive('impersonating', fn () => '<?php if(app(\\App\\Services\\ImpersonationService::class)->isImpersonating()): ?>');
+
+        Blade::directive('endimpersonating', fn () => '<?php endif; ?>');
+
         // Register a blade directive for showing content only to users with certain roles
-        Blade::directive('role', fn($expression) => "<?php if(auth()->check() && auth()->user()->hasRole({$expression})): ?>");
-        
-        Blade::directive('endrole', fn() => "<?php endif; ?>");
+        Blade::directive('role', fn ($expression) => "<?php if(auth()->check() && auth()->user()->hasRole({$expression})): ?>");
+
+        Blade::directive('endrole', fn () => '<?php endif; ?>');
     }
 }

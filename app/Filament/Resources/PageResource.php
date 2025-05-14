@@ -5,48 +5,46 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PageResource\Pages;
 use App\Models\Page;
 use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\KeyValue;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Str;
-use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\Tabs;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Toggle;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\KeyValue;
-use Filament\Tables\Filters\SelectFilter;
-use Filament\Tables\Filters\TernaryFilter;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
 
 class PageResource extends Resource
 {
     protected static ?string $model = Page::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
-    
+
     protected static ?string $navigationGroup = 'Content';
-    
+
     protected static ?int $navigationSort = 1;
-    
+
     public static function getNavigationLabel(): string
     {
         return __('Page Editor');
     }
-    
+
     public static function getPluralModelLabel(): string
     {
         return __('Pages');
     }
-    
+
     public static function getModelLabel(): string
     {
         return __('Page');
@@ -64,14 +62,13 @@ class PageResource extends Resource
                                     ->required()
                                     ->maxLength(255)
                                     ->live(onBlur: true)
-                                    ->afterStateUpdated(fn (Set $set, ?string $state) => 
-                                        $set('slug', Str::slug($state))),
-                                    
+                                    ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state))),
+
                                 TextInput::make('slug')
                                     ->required()
                                     ->maxLength(255)
                                     ->unique(ignoreRecord: true),
-                                    
+
                                 Select::make('type')
                                     ->options([
                                         'standard' => 'Standard',
@@ -79,13 +76,13 @@ class PageResource extends Resource
                                         'domains' => 'Domains Page',
                                         'hosting' => 'Hosting Page',
                                         'vps' => 'VPS Page',
-                                        'cloud' => 'Cloud Page', 
+                                        'cloud' => 'Cloud Page',
                                         'legal' => 'Legal Page',
                                     ])
                                     ->required()
                                     ->default('standard')
                                     ->reactive(),
-                                    
+
                                 Select::make('language')
                                     ->options([
                                         'en' => 'English',
@@ -93,17 +90,17 @@ class PageResource extends Resource
                                     ])
                                     ->required()
                                     ->default('en'),
-                                
+
                                 Select::make('parent_id')
                                     ->label('Parent Page')
                                     ->relationship('parent', 'title')
                                     ->searchable()
                                     ->nullable(),
-                                    
+
                                 TextInput::make('order')
                                     ->integer()
                                     ->default(0),
-                                    
+
                                 Select::make('layout')
                                     ->options([
                                         'default' => 'Default',
@@ -112,7 +109,7 @@ class PageResource extends Resource
                                         'sidebar-left' => 'Sidebar Left',
                                     ])
                                     ->default('default'),
-                                    
+
                                 FileUpload::make('featured_image')
                                     ->directory('pages/featured')
                                     ->image()
@@ -121,7 +118,7 @@ class PageResource extends Resource
                                     ->nullable(),
                             ])
                             ->columns(2),
-                        
+
                         Tabs::make('Content')
                             ->tabs([
                                 Tabs\Tab::make('Main Content')
@@ -146,7 +143,7 @@ class PageResource extends Resource
                                             ])
                                             ->nullable(),
                                     ]),
-                                    
+
                                 Tabs\Tab::make('Structured Content')
                                     ->schema([
                                         KeyValue::make('metadata')
@@ -157,19 +154,19 @@ class PageResource extends Resource
                                             ->nullable()
                                             ->helperText('Use this section to add structured content that will be rendered in the page template'),
                                     ]),
-                                    
+
                                 Tabs\Tab::make('SEO')
                                     ->schema([
                                         TextInput::make('meta_title')
                                             ->maxLength(70)
                                             ->nullable()
                                             ->helperText('Max 70 characters'),
-                                            
+
                                         Textarea::make('meta_description')
                                             ->maxLength(160)
                                             ->nullable()
                                             ->helperText('Max 160 characters'),
-                                            
+
                                         TextInput::make('meta_keywords')
                                             ->maxLength(255)
                                             ->nullable()
@@ -178,7 +175,7 @@ class PageResource extends Resource
                             ]),
                     ])
                     ->columnSpan(['lg' => 3]),
-                
+
                 Forms\Components\Group::make()
                     ->schema([
                         Section::make('Status')
@@ -188,15 +185,15 @@ class PageResource extends Resource
                                     ->default(false)
                                     ->helperText('Make the page publicly accessible'),
                             ]),
-                            
+
                         Section::make('Preview')
                             ->schema([
                                 Forms\Components\Placeholder::make('preview_link')
                                     ->content(function ($record) {
-                                        if (!$record || !$record->exists) {
+                                        if (! $record || ! $record->exists) {
                                             return 'Save the page to preview';
                                         }
-                                        
+
                                         return view('filament.components.page-preview-link', [
                                             'url' => $record->getUrl(),
                                         ]);
@@ -216,11 +213,11 @@ class PageResource extends Resource
                 Tables\Columns\TextColumn::make('title')
                     ->searchable()
                     ->sortable(),
-                    
+
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable()
                     ->sortable(),
-                    
+
                 Tables\Columns\BadgeColumn::make('type')
                     ->colors([
                         'primary' => 'standard',
@@ -228,15 +225,15 @@ class PageResource extends Resource
                         'info' => fn ($state) => in_array($state, ['domains', 'hosting', 'vps', 'cloud']),
                         'warning' => 'legal',
                     ]),
-                    
+
                 Tables\Columns\TextColumn::make('language')
                     ->sortable(),
-                    
+
                 Tables\Columns\IconColumn::make('is_published')
                     ->label('Published')
                     ->boolean()
                     ->sortable(),
-                    
+
                 Tables\Columns\TextColumn::make('updated_at')
                     ->label('Last Updated')
                     ->dateTime()
@@ -250,19 +247,19 @@ class PageResource extends Resource
                         'domains' => 'Domains Page',
                         'hosting' => 'Hosting Page',
                         'vps' => 'VPS Page',
-                        'cloud' => 'Cloud Page', 
+                        'cloud' => 'Cloud Page',
                         'legal' => 'Legal Page',
                     ]),
-                    
+
                 SelectFilter::make('language')
                     ->options([
                         'en' => 'English',
                         'he' => 'Hebrew (עברית)',
                     ]),
-                    
+
                 TernaryFilter::make('is_published')
                     ->label('Published'),
-                    
+
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
@@ -278,14 +275,14 @@ class PageResource extends Resource
                 ]),
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
             //
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -294,7 +291,7 @@ class PageResource extends Resource
             'edit' => Pages\EditPage::route('/{record}/edit'),
         ];
     }
-    
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()

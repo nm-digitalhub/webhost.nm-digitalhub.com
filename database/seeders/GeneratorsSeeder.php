@@ -113,7 +113,7 @@ class GeneratorsSeeder extends Seeder
             'timestamps' => true,
             'soft_deletes' => false,
             'relations' => [
-                ['type' => 'belongsTo', 'model' => 'App\\Models\\Category', 'foreignKey' => 'category_id', 'localKey' => 'id', 'description' => 'Product category']
+                ['type' => 'belongsTo', 'model' => 'App\\Models\\Category', 'foreignKey' => 'category_id', 'localKey' => 'id', 'description' => 'Product category'],
             ],
             'group' => 'Commerce',
             'icon' => 'heroicon-o-shopping-bag',

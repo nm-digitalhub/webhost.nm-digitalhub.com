@@ -7,9 +7,13 @@ use Livewire\Component;
 class HostingNew extends Component
 {
     public $selectedPlan;
+
     public $billingCycle = 'monthly';
+
     public $domainOption = 'new';
+
     public $domain = '';
+
     public $configurations = [];
 
     public function mount()
@@ -75,6 +79,7 @@ class HostingNew extends Component
             ->layout('layouts.client');
     }
 }
+
 namespace App\Http\Livewire\Client;
 
 use Livewire\Component;
@@ -82,13 +87,14 @@ use Livewire\Component;
 class HostingNew extends Component
 {
     public $plan = '';
+
     public $domain = '';
 
     public function createHosting()
     {
         $this->validate([
             'plan' => 'required',
-            'domain' => 'required|string'
+            'domain' => 'required|string',
         ]);
 
         // Hosting creation logic will go here

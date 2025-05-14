@@ -2,15 +2,12 @@
 
 namespace App\Providers;
 
-use Filament\Support\Facades\FilamentView;
-use Filament\Support\Facades\FilamentAsset;
-use Filament\Support\Assets\Js;
-use Filament\Support\Assets\Css;
-use Illuminate\Support\ServiceProvider;
-use Filament\Support\Facades\FilamentColor;
-use Filament\Http\Middleware\Authenticate;
-use Illuminate\Contracts\View\View;
 use Filament\Panel;
+use Filament\Support\Assets\Css;
+use Filament\Support\Facades\FilamentAsset;
+use Filament\Support\Facades\FilamentView;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\ServiceProvider;
 
 class FilamentServiceProvider extends ServiceProvider
 {
@@ -34,7 +31,7 @@ class FilamentServiceProvider extends ServiceProvider
 
         // Add custom RTL styles
         FilamentAsset::register([
-            Css::make('custom-rtl', __DIR__ . '/../../resources/css/filament-rtl.css'),
+            Css::make('custom-rtl', __DIR__.'/../../resources/css/filament-rtl.css'),
         ]);
 
         // Affect all views rendered by Filament

@@ -1,0 +1,21 @@
+<?php
+
+namespace Filament;
+
+class Panel
+{
+    public function rtl(bool $condition = true): static
+    {
+        return $this;
+    }
+
+    public function rtlWhen(\Closure|bool $condition = true): static
+    {
+        return $this;
+    }
+
+    public function direction(string $direction): static
+    {
+        return $this;
+    }
+}

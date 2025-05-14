@@ -1,0 +1,4 @@
+services:
+    - class: PHPStan\Rules\Classes\ClassNameRule
+      tags:
+        - phpstan.rules.rule

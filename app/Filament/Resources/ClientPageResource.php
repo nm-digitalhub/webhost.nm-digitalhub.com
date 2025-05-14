@@ -6,13 +6,13 @@ use App\Filament\Resources\ClientPageResource\Pages;
 use App\Models\ClientPage;
 use App\Models\Role;
 use Filament\Forms;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
-use Filament\Forms\Components\RichEditor;
 
 class ClientPageResource extends Resource
 {
@@ -42,8 +42,8 @@ class ClientPageResource extends Resource
                                     ->live()
                                     ->afterStateUpdated(function (string $state, callable $set) {
                                         $set('slug', Str::slug($state));
-                                        
-                                        if (!$set('meta_title')) {
+
+                                        if (! $set('meta_title')) {
                                             $set('meta_title', $state);
                                         }
                                     }),
@@ -59,7 +59,7 @@ class ClientPageResource extends Resource
                                     ->relationship('module', 'name')
                                     ->searchable()
                                     ->preload(),
-                                
+
                                 Forms\Components\Select::make('layout')
                                     ->label('תבנית')
                                     ->options([
@@ -86,43 +86,43 @@ class ClientPageResource extends Resource
                                     ->fileAttachmentsDirectory('uploads')
                                     ->columnSpanFull(),
                             ]),
-                            
+
                         Forms\Components\Tabs\Tab::make('seo')
                             ->label('קידום אתרים')
                             ->schema([
                                 Forms\Components\TextInput::make('meta_title')
                                     ->label('כותרת Meta')
                                     ->maxLength(255),
-                                
+
                                 Forms\Components\Textarea::make('meta_description')
                                     ->label('תיאור Meta')
                                     ->maxLength(255),
-                                
+
                                 Forms\Components\TextInput::make('meta_keywords')
                                     ->label('מילות מפתח Meta')
                                     ->maxLength(255),
                             ]),
-                            
+
                         Forms\Components\Tabs\Tab::make('menu')
                             ->label('תפריט')
                             ->schema([
                                 Forms\Components\Toggle::make('show_in_menu')
                                     ->label('הצג בתפריט')
                                     ->default(false),
-                                
+
                                 Forms\Components\TextInput::make('menu_position')
                                     ->label('מיקום בתפריט')
                                     ->numeric()
                                     ->default(0)
                                     ->visible(fn (Forms\Get $get): bool => $get('show_in_menu')),
-                                
+
                                 Forms\Components\TextInput::make('menu_icon')
                                     ->label('אייקון תפריט')
                                     ->helperText('שם האייקון של Heroicon (למשל: heroicon-o-document-text)')
                                     ->maxLength(255)
                                     ->visible(fn (Forms\Get $get): bool => $get('show_in_menu')),
                             ]),
-                            
+
                         Forms\Components\Tabs\Tab::make('visibility')
                             ->label('הרשאות')
                             ->schema([
@@ -139,11 +139,11 @@ class ClientPageResource extends Resource
                                 Forms\Components\CheckboxList::make('role_restrictions')
                                     ->label('הגבלת תפקידים')
                                     ->helperText('בחר את התפקידים שיכולים לצפות בעמוד זה')
-                                    ->options(fn() => Role::all()->pluck('name', 'name')->toArray())
+                                    ->options(fn () => Role::all()->pluck('name', 'name')->toArray())
                                     ->columns(2)
                                     ->visible(fn (Forms\Get $get): bool => $get('visibility') === 'role_restricted'),
                             ]),
-                            
+
                         Forms\Components\Tabs\Tab::make('advanced')
                             ->label('מתקדם')
                             ->schema([
@@ -151,7 +151,7 @@ class ClientPageResource extends Resource
                                     ->label('עמוד דינמי')
                                     ->default(true)
                                     ->helperText('האם העמוד מוגש דינמית או מוגש מקובץ Blade קיים?'),
-                                
+
                                 Forms\Components\KeyValue::make('metadata')
                                     ->label('מטא-דאטה')
                                     ->keyLabel('מפתח')
@@ -171,11 +171,11 @@ class ClientPageResource extends Resource
                     ->label('כותרת')
                     ->searchable()
                     ->sortable(),
-                
+
                 Tables\Columns\TextColumn::make('slug')
                     ->label('Slug')
                     ->searchable(),
-                
+
                 Tables\Columns\BadgeColumn::make('status')
                     ->label('סטטוס')
                     ->colors([
@@ -183,7 +183,7 @@ class ClientPageResource extends Resource
                         'warning' => 'draft',
                         'danger' => 'archived',
                     ]),
-                
+
                 Tables\Columns\BadgeColumn::make('visibility')
                     ->label('גישה')
                     ->colors([
@@ -191,21 +191,21 @@ class ClientPageResource extends Resource
                         'secondary' => 'private',
                         'warning' => 'role_restricted',
                     ]),
-                
+
                 Tables\Columns\IconColumn::make('show_in_menu')
                     ->label('בתפריט')
                     ->boolean(),
-                
+
                 Tables\Columns\TextColumn::make('module.name')
                     ->label('מודול')
                     ->sortable(),
-                
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('נוצר בתאריך')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(true),
-                
+
                 Tables\Columns\TextColumn::make('updated_at')
                     ->label('עודכן בתאריך')
                     ->dateTime()
@@ -220,7 +220,7 @@ class ClientPageResource extends Resource
                         'draft' => 'טיוטה',
                         'archived' => 'בארכיון',
                     ]),
-                
+
                 Tables\Filters\SelectFilter::make('visibility')
                     ->label('גישה')
                     ->options([
@@ -228,13 +228,13 @@ class ClientPageResource extends Resource
                         'private' => 'פרטי',
                         'role_restricted' => 'מוגבל לתפקידים',
                     ]),
-                
+
                 Tables\Filters\SelectFilter::make('module_id')
                     ->label('מודול')
                     ->relationship('module', 'name'),
-                
+
                 Tables\Filters\TernaryFilter::make('show_in_menu')
-                    ->label('מוצג בתפריט')
+                    ->label('מוצג בתפריט'),
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
@@ -251,21 +251,21 @@ class ClientPageResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                    
+
                     Tables\Actions\BulkAction::make('publish')
                         ->label('פרסם')
                         ->icon('heroicon-o-check-circle')
                         ->action(function (Builder $query): void {
                             $query->update(['status' => 'published']);
                         }),
-                    
+
                     Tables\Actions\BulkAction::make('set_draft')
                         ->label('הפוך לטיוטה')
                         ->icon('heroicon-o-document')
                         ->action(function (Builder $query): void {
                             $query->update(['status' => 'draft']);
                         }),
-                    
+
                     Tables\Actions\BulkAction::make('archive')
                         ->label('העבר לארכיון')
                         ->icon('heroicon-o-archive-box')

@@ -6,20 +6,19 @@ use App\Models\ImpersonationLog;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Http\Request;
 
 class ImpersonationService
 {
     /**
      * Start impersonating a user
      *
-     * @param User $user The user to impersonate
-     * @param string|null $reason Reason for impersonation (optional)
+     * @param  User  $user  The user to impersonate
+     * @param  string|null  $reason  Reason for impersonation (optional)
      */
     public function impersonate(User $user, ?string $reason = null): bool
     {
         // Check if the current user can impersonate
-        if (!$this->canImpersonate()) {
+        if (! $this->canImpersonate()) {
             return false;
         }
 
@@ -57,7 +56,7 @@ class ImpersonationService
     public function stopImpersonating(): bool
     {
         // Check if we are impersonating
-        if (!$this->isImpersonating()) {
+        if (! $this->isImpersonating()) {
             return false;
         }
 
@@ -83,6 +82,7 @@ class ImpersonationService
         $admin = User::find($adminId);
         if ($admin) {
             Auth::login($admin);
+
             return true;
         }
 
@@ -102,11 +102,12 @@ class ImpersonationService
      */
     public function getImpersonator(): ?User
     {
-        if (!$this->isImpersonating()) {
+        if (! $this->isImpersonating()) {
             return null;
         }
 
         $adminId = Session::get('impersonator_id');
+
         return User::find($adminId);
     }
 
@@ -117,8 +118,8 @@ class ImpersonationService
     {
         // Only allow impersonation for users with specific permissions
         return Auth::check() && (
-            Auth::user()->hasRole('Super-Admin') || 
-            Auth::user()->hasRole('Admin') || 
+            Auth::user()->hasRole('Super-Admin') ||
+            Auth::user()->hasRole('Admin') ||
             Auth::user()->can('impersonate-users')
         );
     }

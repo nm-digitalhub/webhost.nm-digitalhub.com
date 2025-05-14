@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\File;
 class FixPhpTags extends Command
 {
     protected $signature = 'fix:php-tags';
+
     protected $description = 'Fix files with duplicate PHP opening tags';
 
     public function handle()
@@ -46,7 +47,7 @@ class FixPhpTags extends Command
         if ($fixedFiles === []) {
             $this->info('No files with duplicate PHP tags found.');
         } else {
-            $this->info(count($fixedFiles) . ' files fixed.');
+            $this->info(count($fixedFiles).' files fixed.');
         }
 
         return 0;

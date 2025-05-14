@@ -2,10 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Services\ModuleScanner;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * ModuleManager Model
@@ -86,16 +85,16 @@ class ModuleManager extends Model
      */
     public static function getModuleScanner(): ModuleScanner
     {
-        if (!self::$moduleScanner instanceof \App\Services\ModuleScanner) {
+        if (! self::$moduleScanner instanceof \App\Services\ModuleScanner) {
             self::$moduleScanner = app(ModuleScanner::class);
         }
-        
+
         return self::$moduleScanner;
     }
 
     /**
      * Get all records from the module scanner
-     * 
+     *
      * This method acts as a replacement for the typical Eloquent query builder.
      * It returns all components found by the scanner, formatted as ModuleManager instances.
      */
@@ -103,7 +102,7 @@ class ModuleManager extends Model
     {
         // Scan for all components
         $components = self::getModuleScanner()->scan();
-        
+
         // Flatten the components array
         $flattenedComponents = [];
         foreach ($components as $typeComponents) {
@@ -111,11 +110,11 @@ class ModuleManager extends Model
                 $flattenedComponents[] = $component;
             }
         }
-        
+
         // Convert to ModuleManager instances
-        return collect($flattenedComponents)->map(fn($component) => new self($component));
+        return collect($flattenedComponents)->map(fn ($component) => new self($component));
     }
-    
+
     /**
      * Create a query builder for the model.
      *
@@ -128,7 +127,7 @@ class ModuleManager extends Model
     {
         // Get all components
         $components = self::getModuleScanner()->scan();
-        
+
         // Flatten components
         $flattenedComponents = [];
         foreach ($components as $typeComponents) {
@@ -136,9 +135,9 @@ class ModuleManager extends Model
                 $flattenedComponents[] = $component;
             }
         }
-        
+
         // Create a new instance to avoid static context issues
-        $instance = new static();
+        $instance = new static;
 
         // Get a new query builder from the instance
         $builder = $instance->newQuery();
@@ -146,34 +145,34 @@ class ModuleManager extends Model
         // This provides compatibility with Filament's table system
         return $builder;
     }
-    
+
     /**
      * Get a subset of components by type
-     * 
-     * @param string $type The component type to filter by
+     *
+     * @param  string  $type  The component type to filter by
      * @return \Illuminate\Support\Collection
      */
     public static function getByType(string $type)
     {
         $components = self::getModuleScanner()->scan();
-        
-        if (!isset($components[$type])) {
+
+        if (! isset($components[$type])) {
             return collect();
         }
-        
-        return collect($components[$type])->map(fn($component) => new self($component));
+
+        return collect($components[$type])->map(fn ($component) => new self($component));
     }
-    
+
     /**
      * Re-scan components from the filesystem
-     * 
+     *
      * @return array The updated components
      */
     public static function rescanComponents(): array
     {
         return self::getModuleScanner()->scan();
     }
-    
+
     /**
      * Get the path to the component's file
      */
@@ -181,24 +180,25 @@ class ModuleManager extends Model
     {
         return $this->path ? base_path($this->path) : null;
     }
-    
+
     /**
      * Override newEloquentBuilder to provide our custom query functionality
      */
     public function newEloquentBuilder($query)
     {
         // This method is required for Filament's table filters to work properly
-        return new class($query) extends Builder {
+        return new class($query) extends Builder
+        {
             public function __construct($query)
             {
                 parent::__construct($query);
             }
-            
+
             public function get($columns = ['*'])
             {
                 return ModuleManager::all();
             }
-            
+
             public function paginate($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null, $total = null)
             {
                 $collection = ModuleManager::all();
@@ -214,35 +214,35 @@ class ModuleManager extends Model
                     $page,
                     [
                         'path' => \Illuminate\Pagination\Paginator::resolveCurrentPath(),
-                        'pageName' => $pageName
+                        'pageName' => $pageName,
                     ]
                 );
             }
-            
+
             public function where($column, $operator = null, $value = null, $boolean = 'and')
             {
                 // This method allows filtering (e.g., by type)
                 if (is_callable($column)) {
                     return $this;
                 }
-                
+
                 if ($operator === null && $value === null) {
                     return $this;
                 }
-                
+
                 if ($value === null) {
                     $value = $operator;
                     $operator = '=';
                 }
-                
+
                 return $this;
             }
         };
     }
-    
+
     /**
      * Handle dynamic method calls
-     * 
+     *
      * This allows us to intercept and handle methods that might be called by Filament but
      * don't make sense for our virtual model.
      */
@@ -252,7 +252,7 @@ class ModuleManager extends Model
         if (method_exists(parent::class, $method)) {
             return parent::__call($method, $parameters);
         }
-        
+
         // Otherwise, return a safe default
         return null;
     }

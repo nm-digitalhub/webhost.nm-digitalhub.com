@@ -2,11 +2,11 @@
 
 namespace App\Providers\Filament;
 
+use App\View\Components\KpiSummaryBar;
 use Filament\Support\Assets\Css;
 use Filament\Support\Facades\FilamentAsset;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
-use App\View\Components\KpiSummaryBar;
+use Illuminate\Support\ServiceProvider;
 
 class ThemeServiceProvider extends ServiceProvider
 {
@@ -25,7 +25,7 @@ class ThemeServiceProvider extends ServiceProvider
     {
         // Register custom theme CSS
         FilamentAsset::register([
-            Css::make('nm-digitalhub-theme', __DIR__ . '/../../../resources/css/filament/theme/theme.css'),
+            Css::make('nm-digitalhub-theme', __DIR__.'/../../../resources/css/filament/theme/theme.css'),
         ]);
 
         // Register custom components

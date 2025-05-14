@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 class FixFilamentResources extends Command
 {
     protected $signature = 'filament:fix-resources';
+
     protected $description = 'Fix Filament resources to comply with Filament 3 standards';
 
     public function handle()
@@ -29,13 +30,14 @@ class FixFilamentResources extends Command
     private function fixResourceGetPages()
     {
         $resourcesDir = app_path('Filament/Resources');
-        if (!File::isDirectory($resourcesDir)) {
+        if (! File::isDirectory($resourcesDir)) {
             $this->warn("Resources directory not found: {$resourcesDir}");
+
             return;
         }
 
         $resourceFiles = File::glob("{$resourcesDir}/*.php");
-        $this->info("Processing " . count($resourceFiles) . " resources");
+        $this->info('Processing '.count($resourceFiles).' resources');
 
         foreach ($resourceFiles as $filePath) {
             $content = File::get($filePath);
@@ -84,7 +86,7 @@ class FixFilamentResources extends Command
             // Save changes if any were made
             if ($content !== $originalContent) {
                 // Create backup
-                File::put($filePath . '.bak', $originalContent);
+                File::put($filePath.'.bak', $originalContent);
                 $this->info("Created backup of {$fileName}");
 
                 // Save changes
@@ -97,8 +99,9 @@ class FixFilamentResources extends Command
     private function checkPanelConfiguration()
     {
         $panelProviderPath = app_path('Providers/Filament/AdminPanelProvider.php');
-        if (!File::exists($panelProviderPath)) {
+        if (! File::exists($panelProviderPath)) {
             $this->warn("AdminPanelProvider not found at: {$panelProviderPath}");
+
             return;
         }
 
@@ -107,7 +110,7 @@ class FixFilamentResources extends Command
 
         // Check for deprecated rtl() method
         if (Str::contains($content, '->rtl(')) {
-            $this->info("Found deprecated ->rtl() method in AdminPanelProvider");
+            $this->info('Found deprecated ->rtl() method in AdminPanelProvider');
 
             // Replace with direction() method using locale-based direction
             $content = preg_replace(
@@ -117,7 +120,7 @@ class FixFilamentResources extends Command
             );
 
             // Ensure App facade is imported
-            if (!Str::contains($content, 'use Illuminate\Support\Facades\App;')) {
+            if (! Str::contains($content, 'use Illuminate\Support\Facades\App;')) {
                 $content = preg_replace(
                     '/namespace[^;]+;\s+/',
                     "$0\nuse Illuminate\Support\Facades\App;\n",
@@ -125,26 +128,26 @@ class FixFilamentResources extends Command
                 );
             }
 
-            $this->info("Replaced rtl() with direction() in AdminPanelProvider");
+            $this->info('Replaced rtl() with direction() in AdminPanelProvider');
         }
 
         // Check for string paths in resource registration
         if (Str::contains($content, ["->resources(['", "->resources(['"]) ||
             preg_match('/->resources\(\[\s*[\'"]/', $content)) {
 
-            $this->warn("Found string-based resource paths in AdminPanelProvider.");
+            $this->warn('Found string-based resource paths in AdminPanelProvider.');
             $this->info("Consider using ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\\\Filament\\\\Resources') instead.");
         }
 
         // Save changes if any were made
         if ($content !== $originalContent) {
             // Create backup
-            File::put($panelProviderPath . '.bak', $originalContent);
-            $this->info("Created backup of AdminPanelProvider.php");
+            File::put($panelProviderPath.'.bak', $originalContent);
+            $this->info('Created backup of AdminPanelProvider.php');
 
             // Save changes
             File::put($panelProviderPath, $content);
-            $this->info("Updated AdminPanelProvider.php");
+            $this->info('Updated AdminPanelProvider.php');
         }
     }
 }

@@ -2,34 +2,37 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\Ticket;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\Ticket;
-use Livewire\Attributes\Url;
 
 /**
  * Class Tickets
- * @package App\Livewire\Admin
  */
 class Tickets extends Component
 {
-    use WithPagination;
     use AuthorizesRequests;
+    use WithPagination;
 
     /**
      * Ticket status constants
      */
     public const STATUS_OPEN = 'open';
+
     public const STATUS_CLOSED = 'closed';
+
     public const STATUS_PENDING = 'pending';
 
     /**
      * Ticket priority constants
      */
     public const PRIORITY_LOW = 'low';
+
     public const PRIORITY_MEDIUM = 'medium';
+
     public const PRIORITY_HIGH = 'high';
 
     /**
@@ -68,16 +71,17 @@ class Tickets extends Component
     {
         $tickets = Ticket::query()
             ->when($this->search, function (Builder $query) {
-                $searchTerm = '%' . $this->search . '%';
-                return $query->where(function(Builder $q) use ($searchTerm) {
+                $searchTerm = '%'.$this->search.'%';
+
+                return $query->where(function (Builder $q) use ($searchTerm) {
                     $q->where('subject', 'like', $searchTerm)
-                      ->orWhereHas('user', function (Builder $userQuery) use ($searchTerm) {
-                          $userQuery->where('name', 'like', $searchTerm);
-                      });
+                        ->orWhereHas('user', function (Builder $userQuery) use ($searchTerm) {
+                            $userQuery->where('name', 'like', $searchTerm);
+                        });
                 });
             })
-            ->when($this->status, fn(Builder $query) => $query->where('status', $this->status))
-            ->when($this->priority, fn(Builder $query) => $query->where('priority', $this->priority))
+            ->when($this->status, fn (Builder $query) => $query->where('status', $this->status))
+            ->when($this->priority, fn (Builder $query) => $query->where('priority', $this->priority))
             ->latest()
             ->paginate(10);
 

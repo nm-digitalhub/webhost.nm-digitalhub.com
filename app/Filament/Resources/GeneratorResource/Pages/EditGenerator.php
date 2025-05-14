@@ -5,7 +5,6 @@ namespace App\Filament\Resources\GeneratorResource\Pages;
 use App\Filament\Resources\GeneratorResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
-use Filament\Notifications\Notification;
 
 class EditGenerator extends EditRecord
 {
@@ -20,7 +19,7 @@ class EditGenerator extends EditRecord
                 ->color('success')
                 ->url(fn () => static::getResource()::getUrl('generate', ['record' => $this->getRecord()]))
                 ->successNotificationTitle('פעולה הושלמה בהצלחה'),
-                
+
             Actions\DeleteAction::make(),
         ];
     }

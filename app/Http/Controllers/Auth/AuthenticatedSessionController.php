@@ -30,13 +30,13 @@ class AuthenticatedSessionController extends Controller
 
         // ניתוב מותאם אישית לפי תפקיד
         $user = $request->user();
-        
+
         if ($user->hasRole('admin')) {
             return redirect()->intended(route('admin.dashboard'));
         } elseif ($user->hasRole('client')) {
             return redirect()->intended(route('client.dashboard'));
         }
-    
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 

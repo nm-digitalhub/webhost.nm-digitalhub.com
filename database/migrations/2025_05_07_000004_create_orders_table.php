@@ -21,7 +21,7 @@ return new class extends Migration
             $table->decimal('tax', 10, 2)->default(0);
             $table->decimal('discount', 10, 2)->default(0);
             $table->string('currency')->default('ILS');
-            
+
             // Billing Information
             $table->string('billing_name')->nullable();
             $table->string('billing_email')->nullable();
@@ -31,7 +31,7 @@ return new class extends Migration
             $table->string('billing_state')->nullable();
             $table->string('billing_zip')->nullable();
             $table->string('billing_country')->nullable();
-            
+
             $table->text('notes')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();

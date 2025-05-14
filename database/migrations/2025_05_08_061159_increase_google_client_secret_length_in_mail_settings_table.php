@@ -10,11 +10,11 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-{
-    Schema::table('mail_settings', function (Blueprint $table) {
-        $table->text('google_client_secret')->nullable()->change();
-    });
-}
+    {
+        Schema::table('mail_settings', function (Blueprint $table) {
+            $table->text('google_client_secret')->nullable()->change();
+        });
+    }
 
     /**
      * Reverse the migrations.

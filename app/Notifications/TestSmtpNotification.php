@@ -3,8 +3,8 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
 class TestSmtpNotification extends Notification
 {
@@ -19,7 +19,7 @@ class TestSmtpNotification extends Notification
     {
         return (new MailMessage)
             ->subject('בדיקת SMTP - NM-DigitalHUB')
-            ->greeting('שלום ' . $notifiable->name)
+            ->greeting('שלום '.$notifiable->name)
             ->line('זהו מייל בדיקה מהמערכת NM-DigitalHUB.')
             ->line('אם קיבלת מייל זה – ההגדרות שלך תקינות!')
             ->line('תודה, צוות NM-DigitalHUB');

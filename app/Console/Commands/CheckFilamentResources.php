@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -9,6 +11,7 @@ use Illuminate\Support\Str;
 class CheckFilamentResources extends Command
 {
     protected $signature = 'filament:check-resources';
+
     protected $description = 'Check Filament resources for compliance with Filament 3 standards';
 
     public function handle()
@@ -68,15 +71,15 @@ class CheckFilamentResources extends Command
 
         // Output issues
         if (count($issues) > 0) {
-            $this->info("\nFound " . count($issues) . " issues that need attention:");
+            $this->info("\nFound " . count($issues) . ' issues that need attention:');
 
             foreach ($issues as $index => $issue) {
-                $this->warn(($index + 1) . ". " . $issue);
+                $this->warn(($index + 1) . '. ' . $issue);
             }
 
             $this->info("\nPlease fix these issues manually or run the appropriate fix commands.");
         } else {
-            $this->info("No issues found! Your Filament resources are compliant with Filament 3 standards.");
+            $this->info('No issues found! Your Filament resources are compliant with Filament 3 standards.');
         }
 
         return 0;
@@ -97,11 +100,11 @@ class CheckFilamentResources extends Command
         }
 
         // Check for proper form() and table() methods
-        if (Str::contains($content, 'public static function form(Form $form)') && !Str::contains($content, '->schema([')) {
+        if (Str::contains($content, 'public static function form(Form $form)') && ! Str::contains($content, '->schema([')) {
             $issues[] = "File {$fileName} might be missing ->schema([]) in form() method";
         }
 
-        if (Str::contains($content, 'public static function table(Table $table)') && !Str::contains($content, '->columns([')) {
+        if (Str::contains($content, 'public static function table(Table $table)') && ! Str::contains($content, '->columns([')) {
             $issues[] = "File {$fileName} might be missing ->columns([]) in table() method";
         }
 
@@ -114,14 +117,14 @@ class CheckFilamentResources extends Command
         $fileName = basename($filePath);
 
         // Check for proper namespace
-        if (!Str::contains($content, 'namespace App\\Filament\\Pages;')) {
+        if (! Str::contains($content, 'namespace App\\Filament\\Pages;')) {
             $issues[] = "File {$fileName} might have incorrect namespace";
         }
 
         // Check for form() method if it's a form page
         if (Str::contains($content, 'extends Page') &&
             Str::contains($content, 'HasForms') &&
-            !Str::contains($content, 'protected function getFormSchema()')) {
+            ! Str::contains($content, 'protected function getFormSchema()')) {
             $issues[] = "File {$fileName} uses HasForms but might be missing getFormSchema() method";
         }
 
@@ -134,14 +137,14 @@ class CheckFilamentResources extends Command
         $fileName = basename($filePath);
 
         // Check for proper namespace
-        if (!Str::contains($content, 'namespace App\\Filament\\Widgets;')) {
+        if (! Str::contains($content, 'namespace App\\Filament\\Widgets;')) {
             $issues[] = "File {$fileName} might have incorrect namespace";
         }
 
         // Check for proper widget type declaration
         if (Str::contains($content, 'extends Widget') &&
-            !Str::contains($content, 'protected static string $view') &&
-            !Str::contains($content, 'protected function getView()')) {
+            ! Str::contains($content, 'protected static string $view') &&
+            ! Str::contains($content, 'protected function getView()')) {
             $issues[] = "File {$fileName} extends Widget but doesn't define static \$view property or getView() method";
         }
 

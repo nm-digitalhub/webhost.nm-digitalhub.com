@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -19,17 +21,17 @@ class GenerationLog extends Model
         'file_path',
         'overwritten',
     ];
-    
+
     protected $casts = [
         'params' => 'array',
         'overwritten' => 'boolean',
     ];
-    
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-    
+
     public function generator()
     {
         return $this->belongsTo(Generator::class);

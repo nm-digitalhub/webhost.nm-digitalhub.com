@@ -1,11 +1,12 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
+declare(strict_types=1);
 
-return new class extends Migration
-{
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -15,7 +16,7 @@ return new class extends Migration
         $adminEmail = 'admin@nm-digitalhub.com';
 
         $existingAdmin = DB::table('users')->where('email', $adminEmail)->first();
-        if (!$existingAdmin) {
+        if (! $existingAdmin) {
             $userId = DB::table('users')->insertGetId([
                 'name' => 'Admin',
                 'email' => $adminEmail,
@@ -29,7 +30,7 @@ return new class extends Migration
 
         // צור תפקיד admin אם לא קיים
         $role = DB::table('roles')->where('name', 'admin')->first();
-        if (!$role) {
+        if (! $role) {
             $roleId = DB::table('roles')->insertGetId([
                 'name' => 'admin',
                 'guard_name' => 'web',
@@ -47,7 +48,7 @@ return new class extends Migration
             ['model_id', '=', $userId],
         ])->exists();
 
-        if (!$alreadyLinked) {
+        if (! $alreadyLinked) {
             DB::table('model_has_roles')->insert([
                 'role_id' => $roleId,
                 'model_type' => \App\Models\User::class,

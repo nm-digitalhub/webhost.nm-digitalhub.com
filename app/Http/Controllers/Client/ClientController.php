@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Client;
+declare(strict_types=1);
+
+namespace App\Http\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\ClientModule;
@@ -12,8 +14,6 @@ class ClientController extends Controller
 {
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -33,7 +33,7 @@ class ClientController extends Controller
             'activeDomains' => 3,
             'activeHostingPlans' => 2,
             'activeVpsServers' => 1,
-            'pendingInvoices' => 1
+            'pendingInvoices' => 1,
         ];
 
         // Mock data for client services
@@ -43,43 +43,43 @@ class ClientController extends Controller
                 'name' => 'example.com',
                 'status' => 'active',
                 'expires' => now()->addMonths(9),
-                'auto_renewal' => true
+                'auto_renewal' => true,
             ],
             [
                 'type' => 'domain',
                 'name' => 'mywebsite.net',
                 'status' => 'active',
                 'expires' => now()->addMonths(6),
-                'auto_renewal' => false
+                'auto_renewal' => false,
             ],
             [
                 'type' => 'domain',
                 'name' => 'mybusiness.org',
                 'status' => 'active',
                 'expires' => now()->addMonths(11),
-                'auto_renewal' => true
+                'auto_renewal' => true,
             ],
             [
                 'type' => 'hosting',
                 'name' => 'Premium Hosting',
                 'status' => 'active',
                 'expires' => now()->addMonths(8),
-                'auto_renewal' => true
+                'auto_renewal' => true,
             ],
             [
                 'type' => 'hosting',
                 'name' => 'Basic Hosting',
                 'status' => 'active',
                 'expires' => now()->addMonths(2),
-                'auto_renewal' => true
+                'auto_renewal' => true,
             ],
             [
                 'type' => 'vps',
                 'name' => 'Standard VPS',
                 'status' => 'active',
                 'expires' => now()->addMonths(5),
-                'auto_renewal' => true
-            ]
+                'auto_renewal' => true,
+            ],
         ];
 
         // Mock data for recent invoices
@@ -89,22 +89,22 @@ class ClientController extends Controller
                 'date' => now()->subDays(7),
                 'amount' => 89.97,
                 'status' => 'paid',
-                'currency' => 'USD'
+                'currency' => 'USD',
             ],
             [
                 'number' => 'INV-2023-118',
                 'date' => now()->subDays(14),
                 'amount' => 39.99,
                 'status' => 'paid',
-                'currency' => 'USD'
+                'currency' => 'USD',
             ],
             [
                 'number' => 'INV-2023-142',
                 'date' => now()->subDays(2),
                 'amount' => 12.99,
                 'status' => 'pending',
-                'currency' => 'USD'
-            ]
+                'currency' => 'USD',
+            ],
         ];
 
         return view('client.dashboard', ['stats' => $stats, 'services' => $services, 'recentInvoices' => $recentInvoices]);
@@ -126,7 +126,7 @@ class ClientController extends Controller
                 'status' => 'active',
                 'auto_renewal' => true,
                 'nameservers' => ['ns1.nmdigitalhub.com', 'ns2.nmdigitalhub.com'],
-                'dns_records' => 12
+                'dns_records' => 12,
             ],
             [
                 'name' => 'mywebsite.net',
@@ -135,7 +135,7 @@ class ClientController extends Controller
                 'status' => 'active',
                 'auto_renewal' => false,
                 'nameservers' => ['ns1.nmdigitalhub.com', 'ns2.nmdigitalhub.com'],
-                'dns_records' => 8
+                'dns_records' => 8,
             ],
             [
                 'name' => 'mybusiness.org',
@@ -144,8 +144,8 @@ class ClientController extends Controller
                 'status' => 'active',
                 'auto_renewal' => true,
                 'nameservers' => ['ns1.nmdigitalhub.com', 'ns2.nmdigitalhub.com'],
-                'dns_records' => 5
-            ]
+                'dns_records' => 5,
+            ],
         ];
 
         return view('client.domains', ['domains' => $domains]);
@@ -170,13 +170,13 @@ class ClientController extends Controller
                 'auto_renewal' => true,
                 'disk_usage' => [
                     'used' => 6.2, // GB
-                    'total' => 100 // GB
+                    'total' => 100, // GB
                 ],
                 'bandwidth_usage' => [
                     'used' => 45.7, // GB
-                    'total' => 1000 // GB
+                    'total' => 1000, // GB
                 ],
-                'domains' => ['example.com', 'mywebsite.net']
+                'domains' => ['example.com', 'mywebsite.net'],
             ],
             [
                 'name' => 'Basic Hosting',
@@ -188,14 +188,14 @@ class ClientController extends Controller
                 'auto_renewal' => true,
                 'disk_usage' => [
                     'used' => 1.8, // GB
-                    'total' => 50 // GB
+                    'total' => 50, // GB
                 ],
                 'bandwidth_usage' => [
                     'used' => 28.3, // GB
-                    'total' => 500 // GB
+                    'total' => 500, // GB
                 ],
-                'domains' => ['mybusiness.org']
-            ]
+                'domains' => ['mybusiness.org'],
+            ],
         ];
 
         return view('client.hosting', ['hostingPlans' => $hostingPlans]);
@@ -223,15 +223,15 @@ class ClientController extends Controller
                     'cpu' => 4, // cores
                     'ram' => 8, // GB
                     'storage' => 100, // GB
-                    'bandwidth' => 3 // TB
+                    'bandwidth' => 3, // TB
                 ],
                 'usage' => [
                     'cpu' => 28, // percentage
                     'ram' => 45, // percentage
                     'storage' => 37, // percentage
-                    'bandwidth' => 18 // percentage
-                ]
-            ]
+                    'bandwidth' => 18, // percentage
+                ],
+            ],
         ];
 
         return view('client.vps', ['vpsServers' => $vpsServers]);
@@ -256,18 +256,18 @@ class ClientController extends Controller
                 'items' => [
                     [
                         'description' => 'Domain Renewal - example.com',
-                        'amount' => 12.99
+                        'amount' => 12.99,
                     ],
                     [
                         'description' => 'Domain Renewal - mywebsite.net',
-                        'amount' => 14.99
+                        'amount' => 14.99,
                     ],
                     [
                         'description' => 'Premium Hosting - Monthly',
-                        'amount' => 61.99
-                    ]
+                        'amount' => 61.99,
+                    ],
                 ],
-                'currency' => 'USD'
+                'currency' => 'USD',
             ],
             [
                 'number' => 'INV-2023-118',
@@ -279,10 +279,10 @@ class ClientController extends Controller
                 'items' => [
                     [
                         'description' => 'Standard VPS - Monthly',
-                        'amount' => 39.99
-                    ]
+                        'amount' => 39.99,
+                    ],
                 ],
-                'currency' => 'USD'
+                'currency' => 'USD',
             ],
             [
                 'number' => 'INV-2023-142',
@@ -294,11 +294,11 @@ class ClientController extends Controller
                 'items' => [
                     [
                         'description' => 'Domain Registration - mybusiness.org',
-                        'amount' => 12.99
-                    ]
+                        'amount' => 12.99,
+                    ],
                 ],
-                'currency' => 'USD'
-            ]
+                'currency' => 'USD',
+            ],
         ];
 
         return view('client.invoices', ['invoices' => $invoices]);
@@ -318,20 +318,20 @@ class ClientController extends Controller
                 'brand' => 'Visa',
                 'last_four' => '4242',
                 'expiry' => '05/25',
-                'default' => true
+                'default' => true,
             ],
             [
                 'type' => 'credit_card',
                 'brand' => 'Mastercard',
                 'last_four' => '8210',
                 'expiry' => '11/24',
-                'default' => false
+                'default' => false,
             ],
             [
                 'type' => 'paypal',
                 'email' => 'client@example.com',
-                'default' => false
-            ]
+                'default' => false,
+            ],
         ];
 
         return view('client.payment-methods', ['paymentMethods' => $paymentMethods]);
@@ -354,11 +354,11 @@ class ClientController extends Controller
                 'city' => 'New York',
                 'state' => 'NY',
                 'postal_code' => '10001',
-                'country' => 'United States'
+                'country' => 'United States',
             ],
             'company' => 'Example Corp',
             'vat_number' => 'US123456789',
-            'created_at' => now()->subYears(1)
+            'created_at' => now()->subYears(1),
         ];
 
         return view('client.profile', ['user' => $user]);
@@ -378,18 +378,18 @@ class ClientController extends Controller
                 'email_domain_expiry' => true,
                 'email_hosting_expiry' => true,
                 'email_vps_expiry' => true,
-                'email_promotions' => false
+                'email_promotions' => false,
             ],
             'currency' => 'USD',
             'language' => app()->getLocale(),
-            'timezone' => 'America/New_York'
+            'timezone' => 'America/New_York',
         ];
 
         // Available currencies for selection
         $currencies = [
             'USD' => 'US Dollar',
             'EUR' => 'Euro',
-            'NIS' => 'Israeli Shekel'
+            'NIS' => 'Israeli Shekel',
         ];
 
         // Available timezones for selection (simplified list)
@@ -400,7 +400,7 @@ class ClientController extends Controller
             'America/Los_Angeles' => 'Pacific Time (US & Canada)',
             'Asia/Jerusalem' => 'Jerusalem',
             'Europe/London' => 'London',
-            'Europe/Paris' => 'Paris'
+            'Europe/Paris' => 'Paris',
         ];
 
         return view('client.settings', ['settings' => $settings, 'currencies' => $currencies, 'timezones' => $timezones]);
@@ -416,7 +416,7 @@ class ClientController extends Controller
         $request->validate([
             'service_type' => 'required|string|in:domain,hosting,vps',
             'service_id' => 'required',
-            'auto_renewal' => 'required|boolean'
+            'auto_renewal' => 'required|boolean',
         ]);
 
         // In a real application, you would update the auto-renewal status in the database
@@ -426,7 +426,7 @@ class ClientController extends Controller
             'success' => $success,
             'message' => $success
                 ? 'Auto-renewal setting updated successfully.'
-                : 'Failed to update auto-renewal setting.'
+                : 'Failed to update auto-renewal setting.',
         ]);
     }
 
@@ -438,7 +438,7 @@ class ClientController extends Controller
     public function updateCurrency(Request $request)
     {
         $request->validate([
-            'currency' => 'required|string|in:USD,EUR,NIS'
+            'currency' => 'required|string|in:USD,EUR,NIS',
         ]);
 
         // In a real application, you would update the user's currency preference in the database
@@ -458,18 +458,18 @@ class ClientController extends Controller
         $page = ClientPage::where('slug', $slug)
             ->where('status', 'published')
             ->firstOrFail();
-        
+
         // Check if user has access to this page
-        if (!$page->isVisibleToUser(Auth::user())) {
+        if (! $page->isVisibleToUser(Auth::user())) {
             abort(403, 'You do not have permission to view this page.');
         }
-        
+
         // Get the associated module if any
         $module = $page->module;
-        
+
         // Get the layout view based on page layout or default
         $layout = $page->layout ?: 'default';
-        
+
         return view("client.pages.{$layout}", ['page' => $page, 'module' => $module]);
     }
 
@@ -482,18 +482,18 @@ class ClientController extends Controller
     {
         // Get all enabled client modules
         $modules = ClientModule::where('enabled', true)
-            ->orderBy('position', 'asc')
+            ->orderBy('position')
             ->get();
-        
+
         // Get pages that show in menu
         $menuPages = ClientPage::where('show_in_menu', true)
             ->where('status', 'published')
-            ->orderBy('menu_position', 'asc')
+            ->orderBy('menu_position')
             ->get();
-        
+
         return view('client.modules', ['modules' => $modules, 'menuPages' => $menuPages]);
     }
-    
+
     /**
      * Show the client statistics page.
      *
@@ -509,34 +509,34 @@ class ClientController extends Controller
                 'expiring_soon' => 1,
                 'traffic' => [
                     'labels' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                    'data' => [1250, 1980, 1680, 2190, 2340, 2900]
-                ]
+                    'data' => [1250, 1980, 1680, 2190, 2340, 2900],
+                ],
             ],
             'hosting' => [
                 'total' => 2,
                 'disk_usage' => [
                     'used' => 8,
-                    'total' => 150
+                    'total' => 150,
                 ],
                 'bandwidth_usage' => [
                     'used' => 74,
-                    'total' => 1500
+                    'total' => 1500,
                 ],
-                'uptime' => 99.98
+                'uptime' => 99.98,
             ],
             'vps' => [
                 'total' => 1,
                 'cpu_usage' => [
                     'labels' => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                    'data' => [25, 38, 42, 35, 45, 25, 30]
+                    'data' => [25, 38, 42, 35, 45, 25, 30],
                 ],
                 'ram_usage' => [
                     'labels' => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                    'data' => [40, 45, 50, 42, 65, 55, 45]
-                ]
-            ]
+                    'data' => [40, 45, 50, 42, 65, 55, 45],
+                ],
+            ],
         ];
-        
+
         return view('client.statistics', ['stats' => $stats]);
     }
 }

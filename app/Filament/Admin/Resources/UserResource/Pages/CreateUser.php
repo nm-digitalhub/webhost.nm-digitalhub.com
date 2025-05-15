@@ -1,18 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Admin\Resources\UserResource\Pages;
 
 use App\Filament\Admin\Resources\UserResource;
 use App\Notifications\NewUserWelcomeNotification;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class CreateUser extends CreateRecord
 {
     protected static string $resource = UserResource::class;
-    
+
     /**
      * Handle the data before creating the record
      */
@@ -25,10 +26,10 @@ class CreateUser extends CreateRecord
         } else {
             $this->plainPassword = $data['password'];
         }
-        
+
         return $data;
     }
-    
+
     /**
      * Handle after the record was created
      */
@@ -36,14 +37,14 @@ class CreateUser extends CreateRecord
     {
         // Get the created user
         $user = $this->record;
-        
+
         // Get form data
         $data = $this->data;
-        
+
         // Send welcome email with password if toggled on
         if (($data['send_welcome_email'] ?? true) === true) {
             $user->notify(new NewUserWelcomeNotification($this->plainPassword));
-            
+
             // Add notification
             \Filament\Notifications\Notification::make()
                 ->title('אימייל ברוכים הבאים נשלח')

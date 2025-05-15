@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Middleware;
+declare(strict_types=1);
+
+namespace App\Http\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
@@ -17,7 +19,7 @@ class RoleMiddleware
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
         // אם המשתמש לא מחובר, החזר לדף ההתחברות
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return redirect()->route('login');
         }
 

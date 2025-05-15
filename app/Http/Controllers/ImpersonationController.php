@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+declare(strict_types=1);
 
+namespace App\Http\Http\Controllers;
+
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\ImpersonationService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 
 class ImpersonationController extends Controller
 {
@@ -19,13 +21,13 @@ class ImpersonationController extends Controller
     /**
      * Start impersonating a user
      *
-     * @param int $userId
+     * @param  int  $userId
      * @return \Illuminate\Http\RedirectResponse
      */
     public function impersonate(Request $request, $userId)
     {
         // Ensure user has permission to impersonate
-        if (!$this->impersonationService->canImpersonate()) {
+        if (! $this->impersonationService->canImpersonate()) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -36,7 +38,7 @@ class ImpersonationController extends Controller
         $reason = $request->input('reason');
         $success = $this->impersonationService->impersonate($user, $reason);
 
-        if (!$success) {
+        if (! $success) {
             return redirect()->back()->with('error', 'Failed to impersonate user.');
         }
 
@@ -53,7 +55,7 @@ class ImpersonationController extends Controller
     {
         $success = $this->impersonationService->stopImpersonating();
 
-        if (!$success) {
+        if (! $success) {
             return redirect()->back()->with('error', 'Not currently impersonating any user.');
         }
 
@@ -69,11 +71,12 @@ class ImpersonationController extends Controller
     public function activeSessions()
     {
         // Only super admins can see active sessions
-        if (!auth()->user()->hasRole('Super-Admin')) {
+        if (! auth()->user()->hasRole('Super-Admin')) {
             abort(403);
         }
 
         $sessions = $this->impersonationService->getActiveImpersonations();
+
         return view('admin.impersonation.sessions', ['sessions' => $sessions]);
     }
 
@@ -85,7 +88,7 @@ class ImpersonationController extends Controller
     public function endAllSessions()
     {
         // Only super admins can end all sessions
-        if (!auth()->user()->hasRole('Super-Admin')) {
+        if (! auth()->user()->hasRole('Super-Admin')) {
             abort(403);
         }
 

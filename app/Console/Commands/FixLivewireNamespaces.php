@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -8,11 +10,12 @@ use Illuminate\Support\Facades\File;
 class FixLivewireNamespaces extends Command
 {
     protected $signature = 'livewire:fix-namespaces';
-    protected $description = 'Fix Livewire component namespaces and ensure proper structure';
+
+    protected $description = 'Fix namespace issues in Livewire components';
 
     public function handle()
     {
-        $this->info('Checking Livewire component structure...');
+        $this->info('Fixing namespace issues in Livewire components...');
 
         // Determine correct namespace based on Livewire version
         $correctNamespace = 'App\\Livewire';
@@ -26,7 +29,7 @@ class FixLivewireNamespaces extends Command
 
             // Back up files first
             $backupDir = app_path('Livewire/Admin/backup');
-            if (!File::isDirectory($backupDir)) {
+            if (! File::isDirectory($backupDir)) {
                 File::makeDirectory($backupDir, 0755, true);
             }
 
@@ -43,7 +46,7 @@ class FixLivewireNamespaces extends Command
                 $targetPath = app_path("Livewire/Admin/{$fileName}");
 
                 // Only copy if not already exists to avoid conflicts
-                if (!File::exists($targetPath)) {
+                if (! File::exists($targetPath)) {
                     $contents = File::get($file->getPathname());
                     $contents = str_replace(
                         "namespace {$legacyNamespace}\\Admin;",
@@ -62,28 +65,111 @@ class FixLivewireNamespaces extends Command
             File::deleteDirectory(app_path('Livewire/Admin/Admin'));
         }
 
-        // Fix namespaces in all component files
-        $this->info('Fixing component namespaces...');
-        foreach (File::allFiles(app_path('Livewire')) as $file) {
-            if ($file->getExtension() === 'php') {
-                $contents = File::get($file->getPathname());
-                $originalContents = $contents;
+        // Fix namespaces in Admin components
+        $this->fixNamespacesInDirectory(app_path('Livewire/Admin'));
 
-                $contents = str_replace(
-                    "namespace {$legacyNamespace}\\",
-                    "namespace {$correctNamespace}\\",
-                    $contents
-                );
-
-                if ($contents !== $originalContents) {
-                    File::put($file->getPathname(), $contents);
-                    $this->info("Fixed namespace in: {$file->getRelativePathname()}");
-                }
-            }
-        }
+        // Fix namespaces in Client components
+        $this->fixNamespacesInDirectory(app_path('Livewire/Client'));
 
         // Verify blade templates exist
-        $this->info('Checking blade templates...');
+        $this->checkForMissingBladeTemplates();
+
+        $this->info('Namespace fixes completed successfully!');
+
+        return 0;
+    }
+
+    private function fixNamespacesInDirectory(string $directory)
+    {
+        if (! File::isDirectory($directory)) {
+            $this->warn("Directory not found: {$directory}");
+
+            return;
+        }
+
+        $files = File::files($directory);
+        $this->info('Processing ' . count($files) . " files in {$directory}");
+
+        foreach ($files as $file) {
+            if ($file->getExtension() !== 'php') {
+                continue;
+            }
+
+            $content = File::get($file->getPathname());
+            $originalContent = $content;
+            $fileName = $file->getFilename();
+            $expectedNamespace = 'App\\Livewire\\' . basename($directory);
+
+            // Check for incorrect namespaces like App\Http\Livewire
+            if (preg_match('/namespace\s+App\\\\Http\\\\Livewire/', $content)) {
+                $this->info("Found incorrect namespace in {$fileName}");
+
+                // Replace the incorrect namespace
+                $content = preg_replace(
+                    '/namespace\s+App\\\\Http\\\\Livewire(\\\\[^;]+)?;/i',
+                    "namespace {$expectedNamespace};",
+                    $content
+                );
+
+                $this->info("Fixed namespace in {$fileName}");
+            }
+            // Check for missing namespace or other incorrect namespace
+            elseif (! preg_match('/namespace\s+' . preg_quote($expectedNamespace) . ';/', $content)) {
+                // Extract any existing namespace
+                if (preg_match('/namespace\s+([^;]+);/', $content, $matches)) {
+                    $content = str_replace(
+                        "namespace {$matches[1]};",
+                        "namespace {$expectedNamespace};",
+                        $content
+                    );
+                    $this->info("Corrected namespace in {$fileName} from {$matches[1]} to {$expectedNamespace}");
+                } else {
+                    // If no namespace found, add it after the PHP tag
+                    $content = preg_replace(
+                        '/^<\?php\s+/s',
+                        "<?php\n\nnamespace {$expectedNamespace};\n\n",
+                        $content
+                    );
+                    $this->info("Added namespace to {$fileName}");
+                }
+            }
+
+            // Check for class name matching file name
+            $className = $file->getFilenameWithoutExtension();
+            if (! preg_match('/class\s+' . preg_quote($className) . '\s+extends\s+Component/i', (string) $content)) {
+                $this->warn("Class name might not match file name in {$fileName}");
+
+                // If we can detect the actual class name, we can fix it
+                if (preg_match('/class\s+([a-zA-Z0-9_]+)\s+extends\s+Component/i', (string) $content, $matches)) {
+                    $actualClassName = $matches[1];
+                    if ($actualClassName !== $className) {
+                        $content = str_replace(
+                            "class {$actualClassName} extends Component",
+                            "class {$className} extends Component",
+                            $content
+                        );
+                        $this->info("Fixed class name in {$fileName} from {$actualClassName} to {$className}");
+                    }
+                }
+            }
+
+            // Save changes if any were made
+            if ($content !== $originalContent) {
+                // Create backup
+                File::put($file->getPathname() . '.bak', $originalContent);
+                $this->info("Created backup of {$fileName}");
+
+                // Save changes
+                File::put($file->getPathname(), $content);
+                $this->info("Updated {$fileName}");
+            }
+        }
+    }
+
+    private function checkForMissingBladeTemplates()
+    {
+        $this->info('Checking for missing blade templates...');
+
         foreach (File::allFiles(app_path('Livewire')) as $file) {
             if ($file->getExtension() === 'php') {
                 $className = $file->getFilenameWithoutExtension();
@@ -96,12 +182,10 @@ class FixLivewireNamespaces extends Command
                 $relativePath = strtolower(str_replace('\\', '/', $namespace));
                 $viewPath = resource_path("views/livewire/{$relativePath}/{$kebabCase}.blade.php");
 
-                if (!File::exists($viewPath)) {
+                if (! File::exists($viewPath)) {
                     $this->warn("Missing blade template: livewire/{$relativePath}/{$kebabCase}.blade.php");
                 }
             }
         }
-
-        $this->info('Completed fixing Livewire component structure.');
     }
 }

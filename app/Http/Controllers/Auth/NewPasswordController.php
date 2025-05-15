@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -41,7 +41,7 @@ class NewPasswordController extends Controller
         // database. Otherwise we will parse the error and return the response.
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
-            function (User $user) use ($request) {
+            function (User $user) {
                 $user->forceFill([
                     'password' => Hash::make($request->password),
                     'remember_token' => Str::random(60),
@@ -58,5 +58,10 @@ class NewPasswordController extends Controller
                     ? redirect()->route('login')->with('status', __($status))
                     : back()->withInput($request->only('email'))
                         ->withErrors(['email' => __($status)]);
+    }
+
+    public function update(Request $request, PasswordBroker $broker, string $token)
+    {
+        // ...existing code...
     }
 }

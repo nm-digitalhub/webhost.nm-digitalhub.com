@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -27,11 +28,11 @@ return new class extends Migration
     {
         Schema::table('mail_settings', function (Blueprint $table) {
             $table->dropColumn([
-                'reply_to_address', 
-                'reply_to_name', 
-                'use_no_reply', 
+                'reply_to_address',
+                'reply_to_name',
+                'use_no_reply',
                 'default_language',
-                'signature'
+                'signature',
             ]);
         });
     }

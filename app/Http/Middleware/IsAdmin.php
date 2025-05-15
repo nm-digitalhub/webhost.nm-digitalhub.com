@@ -1,28 +1,8 @@
 <?php
-<?php
 
-namespace App\Http\Middleware;
+declare(strict_types=1);
 
-use Closure;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Symfony\Component\HttpFoundation\Response;
-
-class IsAdmin
-{
-    /**
-     * Handle an incoming request.
-     */
-    public function handle(Request $request, Closure $next): Response
-    {
-        if (Auth::check() && Auth::user()->isAdmin()) {
-            return $next($request);
-        }
-
-        return redirect()->route('login');
-    }
-}
-namespace App\Http\Middleware;
+namespace App\Http\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
@@ -37,7 +17,7 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!auth()->check() || !auth()->user()->hasRole('admin')) {
+        if (! auth()->check() || ! auth()->user()->hasRole('admin')) {
             return redirect()->route('dashboard')->with('error', 'אזור זה מוגבל למנהלים בלבד.');
         }
 

@@ -1,0 +1,72 @@
+namespace App\Http\Controllers\Auth;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\LoginRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
+
+class AuthenticatedSessionController extends Controller
+{
+    /**
+     * Display the login view.
+     */
+    public function create(): View
+    {
+        return view('auth.login');
+    }
+
+    /**
+     * Handle an incoming authentication request.
+     */
+    public function store(LoginRequest $request): RedirectResponse
+    {
+        // Authenticate the user
+        $request->authenticate();
+
+        // Regenerate session to prevent session fixation
+        $request->session()->regenerate();
+
+        // Get the authenticated user
+        $user = $request->user();
+
+        // Redirect based on role
+        try {
+            if ($user->hasRole('admin')) {
+                // If user is admin, redirect to admin dashboard
+                return redirect()->intended(route('admin.dashboard'));
+            } elseif ($user->hasRole('client')) {
+                // If user is client, redirect to client dashboard
+                return redirect()->intended(route('client.dashboard'));
+            } else {
+                // In case the role is not recognized, fall back to a default dashboard
+                return redirect()->intended(route('dashboard'));
+            }
+        } catch (\Exception $e) {
+            // Log any errors with role checking
+            logger()->error('Role check failed: ' . $e->getMessage());
+
+            // Optionally, redirect to a default page or show an error message
+            return redirect()->route('login')->withErrors(['login' => 'There was an issue with your login. Please try again.']);
+        }
+    }
+
+    /**
+     * Destroy an authenticated session.
+     */
+    public function destroy(Request $request): RedirectResponse
+    {
+        // Log out the user
+        Auth::guard('web')->logout();
+
+        // Invalidate the session
+        $request->session()->invalidate();
+
+        // Regenerate CSRF token
+        $request->session()->regenerateToken();
+
+        // Redirect to home page
+        return redirect('/');
+    }
+}

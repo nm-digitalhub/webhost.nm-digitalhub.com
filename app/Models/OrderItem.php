@@ -1,15 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class OrderItem extends Model
 {
-    use HasFactory;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -52,22 +51,24 @@ class OrderItem extends Model
     {
         return $this->belongsTo(Product::class);
     }
-    
+
     /**
      * Format the price with currency symbol.
      */
     public function formattedPrice(): string
     {
         $symbol = $this->order->currency === 'ILS' ? '₪' : ($this->order->currency === 'USD' ? '$' : '€');
+
         return $symbol . number_format($this->price, 2);
     }
-    
+
     /**
      * Format the total with currency symbol.
      */
     public function formattedTotal(): string
     {
         $symbol = $this->order->currency === 'ILS' ? '₪' : ($this->order->currency === 'USD' ? '$' : '€');
+
         return $symbol . number_format($this->total, 2);
     }
 }

@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers\Filament;
 
+use App\View\Components\KpiSummaryBar;
 use Filament\Support\Assets\Css;
 use Filament\Support\Facades\FilamentAsset;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
-use App\View\Components\KpiSummaryBar;
+use Illuminate\Support\ServiceProvider;
 
 class ThemeServiceProvider extends ServiceProvider
 {

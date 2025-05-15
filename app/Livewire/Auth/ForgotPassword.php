@@ -1,13 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire\Auth;
 
-use Livewire\Component;
 use Illuminate\Support\Facades\Password;
+use Livewire\Component;
 
 class ForgotPassword extends Component
 {
     public $email = '';
+
     public $emailSentMessage = false;
 
     protected $rules = [

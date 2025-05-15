@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -8,6 +10,7 @@ use Illuminate\Support\Facades\File;
 class DetectMisplacedViews extends Command
 {
     protected $signature = 'views:detect-misplaced';
+
     protected $description = 'Detect PHP files that might be Blade views';
 
     public function handle()
@@ -26,7 +29,6 @@ class DetectMisplacedViews extends Command
                     str_contains($content, '<html') ||
                     str_contains($content, '{{') ||
                     str_contains($content, '@if')) {
-
                     $suspiciousFiles[] = $file->getPathname();
                     $this->warn("Potential view file saved as PHP: {$file->getPathname()}");
 
@@ -43,18 +45,16 @@ class DetectMisplacedViews extends Command
         if (File::isDirectory($filamentResourcesDir)) {
             foreach (File::allFiles($filamentResourcesDir) as $file) {
                 if ($file->getExtension() === 'php' &&
-                    !str_contains($file->getPathname(), '/Pages/') &&
+                    ! str_contains($file->getPathname(), '/Pages/') &&
                     (str_contains($file->getFilename(), 'List') ||
                      str_contains($file->getFilename(), 'Create') ||
                      str_contains($file->getFilename(), 'Edit'))) {
-
                     $content = File::get($file->getPathname());
 
                     // Check if the file extends a Page class
                     if (str_contains($content, 'extends ListRecords') ||
                         str_contains($content, 'extends CreateRecord') ||
                         str_contains($content, 'extends EditRecord')) {
-
                         $suspiciousFiles[] = $file->getPathname();
                         $this->warn("Filament Page file in wrong location: {$file->getPathname()}");
 
@@ -63,7 +63,7 @@ class DetectMisplacedViews extends Command
                         $pageName = $file->getFilename();
                         $correctPath = app_path("Filament/Resources/{$resourceName}/Pages/{$pageName}");
 
-                        $this->info("Suggested action: mkdir -p " . dirname($correctPath));
+                        $this->info('Suggested action: mkdir -p ' . dirname($correctPath));
                         $this->info("Suggested action: mv {$file->getPathname()} {$correctPath}");
                     }
                 }
@@ -87,6 +87,7 @@ class DetectMisplacedViews extends Command
         foreach (['List', 'Create', 'Edit', 'View'] as $prefix) {
             if (str_starts_with($filename, $prefix)) {
                 $remainder = substr($filename, strlen($prefix), -4); // Remove .php
+
                 return $remainder . 'Resource';
             }
         }

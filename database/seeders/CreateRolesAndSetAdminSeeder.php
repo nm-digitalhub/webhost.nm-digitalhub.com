@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 use App\Models\User;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class CreateRolesAndSetAdminSeeder extends Seeder
 {
@@ -20,7 +22,7 @@ class CreateRolesAndSetAdminSeeder extends Seeder
             'Super-Admin',
             'Admin',
             'Support',
-            'Client'
+            'Client',
         ];
 
         foreach ($roles as $role) {
@@ -51,24 +53,24 @@ class CreateRolesAndSetAdminSeeder extends Seeder
 
         // Give all permissions to Super-Admin
         $superAdminRole->syncPermissions(Permission::all());
-        
+
         // Give most permissions to Admin
         $adminRole->syncPermissions(Permission::whereNotIn('name', ['manage-billing'])->get());
-        
+
         // Give support-related permissions to Support
         $supportRole->syncPermissions(['view-dashboard', 'view-support', 'create-tickets']);
-        
+
         // Give client permissions
         $clientRole->syncPermissions(['view-dashboard', 'create-tickets']);
 
         // Find or create admin user
         $user = User::where('email', 'admin@nm-digitalhub.com')->first();
 
-        if (!$user) {
+        if (! $user) {
             $user = User::create([
                 'name' => 'KALFA Netanel Mevorach',
                 'email' => 'admin@nm-digitalhub.com',
-                'password' => Hash::make('13579Net!!@!!')
+                'password' => Hash::make('13579Net!!@!!'),
             ]);
             $this->command->info('Admin user created successfully.');
         } else {
@@ -81,7 +83,7 @@ class CreateRolesAndSetAdminSeeder extends Seeder
         // Set is_admin flag to true
         $user->is_admin = true;
         $user->save();
-        
+
         // Clear any previous roles and assign Admin role
         $user->syncRoles(['Admin']);
 

@@ -1,19 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire\Admin;
 
 use Livewire\Component;
-use Livewire\WithPagination;
 
 class Domains extends Component
 {
-    use WithPagination;
-
     protected $paginationTheme = 'tailwind';
 
     public $search = '';
+
     public $status = '';
+
     public $sortField = 'created_at';
+
     public $sortDirection = 'desc';
 
     protected $queryString = [
@@ -46,8 +48,8 @@ class Domains extends Component
 
     public function mount()
     {
-        // הפעולה הזו מופעלת בעת טעינת הקומפוננטה
-        // ניתן לבצע כאן אתחול של נתונים במידת הצורך
+        // Actions performed when the component is loaded
+        // Initialize data as needed
     }
 
     public function render()
@@ -63,6 +65,6 @@ class Domains extends Component
 
         return view('livewire.admin.domains', [
             'domains' => $domains,
-        ])->layout('livewire.admin.layout');
+        ]);
     }
 }

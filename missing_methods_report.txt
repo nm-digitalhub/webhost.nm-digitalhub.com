@@ -1,0 +1,23 @@
+== דו"ח מחלקות שחסרות להן מתודות ==
+
+חסרה מתודה getPages.txt:
+
+חסרה מתודה getRelations.txt:
+
+חסרה מתודה getWidgets.txt:
+app/Filament/Resources/<?php.php
+
+חסרה מתודה isEmailVerificationRequired.txt:
+app/Filament/Resources/PageResource.php
+app/Filament/Resources/ClientPageResource.php
+app/Filament/Resources/ClientModuleResource.php
+app/Filament/Resources/<?php.php
+app/Filament/Resources/MailTemplateResource.php
+app/Filament/Resources/ProductResource.php
+app/Filament/Resources/GeneratorResource.php
+app/Filament/Resources/GenerationLogResource.php
+app/Filament/Resources/ModuleManagerResource.php
+app/Filament/Resources/MailSettingResource.php
+app/Filament/Resources/UserResource.php
+
+חסרה מתודה methods_report.txt:

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
 
     /*
@@ -15,7 +17,7 @@ return [
     */
 
     'default' => env('MAIL_MAILER', 'log'),
-    
+
     /*
     |--------------------------------------------------------------------------
     | Google OAuth Configuration
@@ -26,7 +28,7 @@ return [
     | authentication or the Gmail API for sending emails.
     |
     */
-    
+
     'google_oauth_mode' => env('GOOGLE_OAUTH_MODE', false),
     'google_oauth_json_path' => env('GOOGLE_OAUTH_JSON_PATH', null),
     'gmail_api_mode' => env('GMAIL_API_MODE', false),

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -8,6 +10,7 @@ use Illuminate\Support\Facades\Artisan;
 class RunAllFixers extends Command
 {
     protected $signature = 'fix:all';
+
     protected $description = 'Run all fixers to repair the Laravel project';
 
     public function handle()

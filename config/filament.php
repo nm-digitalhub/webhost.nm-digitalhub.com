@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
 
     /*
@@ -52,7 +54,7 @@ return [
     'dark_mode' => true,
 
     'layout' => [
-        'direction' => 'rtl',
+        // Direction is now dynamically set in the AdminPanelProvider
         'max_content_width' => '7xl',
         'sidebar' => [
             'collapsed_by_default' => false,

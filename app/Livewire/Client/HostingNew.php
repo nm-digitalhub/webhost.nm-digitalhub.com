@@ -1,17 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire\Client;
 
 use Livewire\Component;
 
 class HostingNew extends Component
 {
+    // הגדרת משתנים
     public $selectedPlan;
+
     public $billingCycle = 'monthly';
+
     public $domainOption = 'new';
+
     public $domain = '';
+
     public $configurations = [];
 
+    // אתחול קונפיגורציות החבילות
     public function mount()
     {
         $this->configurations = [
@@ -42,19 +50,22 @@ class HostingNew extends Component
         ];
     }
 
+    // פונקציה לבחירת תוכנית
     public function selectPlan($plan)
     {
         $this->selectedPlan = $plan;
     }
 
+    // פונקציה לקביעת מחזור החיוב
     public function setBillingCycle($cycle)
     {
         $this->billingCycle = $cycle;
     }
 
+    // פונקציה למקום הזמנת אחסון
     public function placeOrder()
     {
-        // Validate input
+        // אימות קלט
         $this->validate([
             'selectedPlan' => 'required|in:basic,premium,business',
             'billingCycle' => 'required|in:monthly,annually',
@@ -62,38 +73,24 @@ class HostingNew extends Component
             'domain' => 'required_if:domainOption,new,existing',
         ]);
 
-        // Process the order
-        // This would connect to a payment processor and create the hosting account
+        // תהליך ביצוע ההזמנה (לוגיקה לתשלום והזמנת אחסון)
 
-        // Redirect to confirmation page
+        // הפנייה לדף אישור
         // return redirect()->route('client.hosting.confirmation', ['orderId' => $orderId]);
     }
 
-    public function render()
-    {
-        return view('livewire.client.hosting-new')
-            ->layout('layouts.client');
-    }
-}
-namespace App\Http\Livewire\Client;
-
-use Livewire\Component;
-
-class HostingNew extends Component
-{
-    public $plan = '';
-    public $domain = '';
-
+    // פונקציה להוספת אתר חדש (הייתה במחלקה השנייה)
     public function createHosting()
     {
         $this->validate([
             'plan' => 'required',
-            'domain' => 'required|string'
+            'domain' => 'required|string',
         ]);
 
-        // Hosting creation logic will go here
+        // לוגיקה להקמת אחסון תתווסף כאן
     }
 
+    // פונקציה להציג את התצוגה של Livewire
     public function render()
     {
         return view('livewire.client.hosting-new')

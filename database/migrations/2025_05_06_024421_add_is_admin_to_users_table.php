@@ -1,22 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            if (!Schema::hasColumn('users', 'is_admin')) {
+            if (! Schema::hasColumn('users', 'is_admin')) {
                 $table->boolean('is_admin')
-                      ->default(false)
-                      ->after('email_verified_at')
-                      ->comment('User is admin (Filament access)');
+                    ->default(false)
+                    ->after('email_verified_at')
+                    ->comment('User is admin (Filament access)');
             }
         });
     }

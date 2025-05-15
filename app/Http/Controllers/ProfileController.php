@@ -1,7 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+declare(strict_types=1);
 
+namespace App\Http\Http\Controllers;
+
+use App\Http\Controllers\Controller;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -57,17 +60,17 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
-            
-                /**
-                 * Log the user out of the application.
-                 */
-                public function logout(Request $request): RedirectResponse
-                {
-                    Auth::logout();
-            
-                    $request->session()->invalidate();
-                    $request->session()->regenerateToken();
-            
-                    return Redirect::to('/');
-                }
+
+    /**
+     * Log the user out of the application.
+     */
+    public function logout(Request $request): RedirectResponse
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return Redirect::to('/');
+    }
 }

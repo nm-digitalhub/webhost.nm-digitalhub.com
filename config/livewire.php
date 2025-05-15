@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 return [
     'class_namespace' => 'App\\Livewire',
     'view_path' => resource_path('views/livewire'),

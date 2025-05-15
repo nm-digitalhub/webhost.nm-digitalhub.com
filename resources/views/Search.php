@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Livewire;
 
 use Livewire\Component;
@@ -18,7 +20,7 @@ class Search extends Component
         // לוגיקת חיפוש - יכולה להיות מנוהלת כאן במקום בקונטרולר
 
         return view('livewire.search', [
-            'query' => $this->query
+            'query' => $this->query,
         ]);
     }
 }

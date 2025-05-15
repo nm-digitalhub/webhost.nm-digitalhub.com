@@ -1,19 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire\Auth;
 
-use Livewire\Component;
-use Illuminate\Support\Str;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Support\Str;
+use Livewire\Component;
 
 class ResetPassword extends Component
 {
     public $token;
+
     public $email;
+
     public $password = '';
+
     public $password_confirmation = '';
 
     protected $rules = [
@@ -56,6 +61,7 @@ class ResetPassword extends Component
         }
 
         $this->addError('email', __($status));
+
         return null;
     }
 

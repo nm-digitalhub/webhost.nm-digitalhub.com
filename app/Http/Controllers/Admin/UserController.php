@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+declare(strict_types=1);
+
+namespace App\Http\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\User;
-use Spatie\Permission\Models\Role;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -18,7 +20,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::orderBy('created_at', 'desc')->paginate(10);
+        $users = User::orderByDesc('created_at')->paginate(10);
+
         return view('admin.users.index', ['users' => $users]);
     }
 
@@ -30,6 +33,7 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::all();
+
         return view('admin.users.create', ['roles' => $roles]);
     }
 
@@ -55,7 +59,7 @@ class UserController extends Controller
             'type' => $request->type,
         ]);
 
-        if($request->roles) {
+        if ($request->roles) {
             $user->assignRole($request->roles);
         }
 
@@ -80,6 +84,7 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $roles = Role::all();
+
         return view('admin.users.edit', ['user' => $user, 'roles' => $roles]);
     }
 
@@ -123,6 +128,7 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
+
         return redirect()->route('admin.users.index')->with('success', 'משתמש נמחק בהצלחה!');
     }
 
@@ -134,6 +140,7 @@ class UserController extends Controller
     public function roles()
     {
         $roles = Role::withCount('users')->get();
+
         return view('admin.users.roles', ['roles' => $roles]);
     }
 }

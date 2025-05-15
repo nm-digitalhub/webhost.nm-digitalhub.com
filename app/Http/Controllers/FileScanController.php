@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+declare(strict_types=1);
 
-use Illuminate\Http\Request;
+namespace App\Http\Http\Controllers;
+
+use App\Http\Controllers\Controller;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 

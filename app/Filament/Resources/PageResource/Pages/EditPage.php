@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources\PageResource\Pages;
 
 use App\Filament\Resources\PageResource;
@@ -17,7 +19,7 @@ class EditPage extends EditRecord
             Actions\RestoreAction::make(),
         ];
     }
-    
+
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');

@@ -1,14 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
-     * 
+     *
      * Optimized version with:
      * - Added string length limits to name fields
      * - Preserved all original functionality from Spatie package
@@ -30,7 +31,7 @@ return new class extends Migration
             throw new \Exception('Error: team_foreign_key not configured.');
         }
 
-        if (!Schema::hasTable($tableNames['permissions'])) {
+        if (! Schema::hasTable($tableNames['permissions'])) {
             Schema::create($tableNames['permissions'], function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->string('name', 125);
@@ -40,7 +41,7 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable($tableNames['roles'])) {
+        if (! Schema::hasTable($tableNames['roles'])) {
             Schema::create($tableNames['roles'], function (Blueprint $table) use ($teams, $columnNames) {
                 $table->bigIncrements('id');
                 if ($teams || config('permission.testing')) {
@@ -58,7 +59,7 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable($tableNames['model_has_permissions'])) {
+        if (! Schema::hasTable($tableNames['model_has_permissions'])) {
             Schema::create($tableNames['model_has_permissions'], function (Blueprint $table) use ($tableNames, $columnNames, $pivotPermission, $teams) {
                 $table->unsignedBigInteger($pivotPermission);
                 $table->string('model_type', 125);
@@ -80,7 +81,7 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable($tableNames['model_has_roles'])) {
+        if (! Schema::hasTable($tableNames['model_has_roles'])) {
             Schema::create($tableNames['model_has_roles'], function (Blueprint $table) use ($tableNames, $columnNames, $pivotRole, $teams) {
                 $table->unsignedBigInteger($pivotRole);
                 $table->string('model_type', 125);
@@ -102,7 +103,7 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable($tableNames['role_has_permissions'])) {
+        if (! Schema::hasTable($tableNames['role_has_permissions'])) {
             Schema::create($tableNames['role_has_permissions'], function (Blueprint $table) use ($tableNames, $pivotPermission, $pivotRole) {
                 $table->unsignedBigInteger($pivotPermission);
                 $table->unsignedBigInteger($pivotRole);

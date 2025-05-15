@@ -1,0 +1,25 @@
+/var/www/vhosts/nm-digitalhub.com/webhost.nm-digitalhub.com/app/Filament/Admin/Resources/Spatie/Permission/Models/PermissionResource.php:    public static function getPages(): array
+/var/www/vhosts/nm-digitalhub.com/webhost.nm-digitalhub.com/app/Filament/Admin/Resources/RoleResource.php:    public static function getPages(): array
+/var/www/vhosts/nm-digitalhub.com/webhost.nm-digitalhub.com/app/Filament/Admin/Resources/UserResource.php:    public static function getPages(): array
+/var/www/vhosts/nm-digitalhub.com/webhost.nm-digitalhub.com/app/Filament/Resources/GeneratorResource/Pages/GenerateCode.php:    public static function getPages(): array
+/var/www/vhosts/nm-digitalhub.com/webhost.nm-digitalhub.com/app/Filament/Resources/PageResource.php:    public static function getPages(): array
+/var/www/vhosts/nm-digitalhub.com/webhost.nm-digitalhub.com/app/Filament/Resources/ClientPageResource.php:    public static function getPages(): array
+/var/www/vhosts/nm-digitalhub.com/webhost.nm-digitalhub.com/app/Filament/Resources/ClientModuleResource.php:    public static function getPages(): array
+/var/www/vhosts/nm-digitalhub.com/webhost.nm-digitalhub.com/app/Filament/Resources/MailTemplateResource.php:    public static function getPages(): array
+/var/www/vhosts/nm-digitalhub.com/webhost.nm-digitalhub.com/app/Filament/Resources/ProductResource.php:    public static function getPages(): array
+/var/www/vhosts/nm-digitalhub.com/webhost.nm-digitalhub.com/app/Filament/Resources/GeneratorResource.php:    public static function getPages(): array
+/var/www/vhosts/nm-digitalhub.com/webhost.nm-digitalhub.com/app/Filament/Resources/GenerationLogResource.php:    public static function getPages(): array
+/var/www/vhosts/nm-digitalhub.com/webhost.nm-digitalhub.com/app/Filament/Resources/ModuleManagerResource.php:    public static function getPages(): array
+/var/www/vhosts/nm-digitalhub.com/webhost.nm-digitalhub.com/app/Filament/Resources/MailSettingResource.php:    public static function getPages(): array
+/var/www/vhosts/nm-digitalhub.com/webhost.nm-digitalhub.com/app/Filament/Resources/UserResource.php:    public static function getPages(): array
+/var/www/vhosts/nm-digitalhub.com/webhost.nm-digitalhub.com/app/Console/Commands/FixResourceGetPages.php:    protected $description = 'Fix Filament Resource getPages() method implementation';
+/var/www/vhosts/nm-digitalhub.com/webhost.nm-digitalhub.com/app/Console/Commands/FixResourceGetPages.php:        $this->info('Checking Filament Resources for incorrect getPages() methods...');
+/var/www/vhosts/nm-digitalhub.com/webhost.nm-digitalhub.com/app/Console/Commands/FixResourceGetPages.php:                // Check if getPages() contains string return values
+/var/www/vhosts/nm-digitalhub.com/webhost.nm-digitalhub.com/app/Console/Commands/FixResourceGetPages.php:                    $this->warn("Found string-based getPages() in {$resourceName}");
+/var/www/vhosts/nm-digitalhub.com/webhost.nm-digitalhub.com/app/Console/Commands/FixResourceGetPages.php:                    $this->info("Fixed getPages() in {$resourceName}");
+/var/www/vhosts/nm-digitalhub.com/webhost.nm-digitalhub.com/app/Console/Commands/FixResourceGetPages.php:            $this->info('No resources with incorrect getPages() methods found.');
+/var/www/vhosts/nm-digitalhub.com/webhost.nm-digitalhub.com/app/Console/Commands/FixResourceGetPages.php:            $this->info("Fixed getPages() in {$fixedFiles} resource(s).");
+/var/www/vhosts/nm-digitalhub.com/webhost.nm-digitalhub.com/app/Console/Commands/FixFilamentResources.php:            // Fix getPages() method if it returns strings instead of class references
+/var/www/vhosts/nm-digitalhub.com/webhost.nm-digitalhub.com/app/Console/Commands/FixFilamentResources.php:                        "public static function getPages(): array\n    {\n        return [$fixedPagesContent]",
+/var/www/vhosts/nm-digitalhub.com/webhost.nm-digitalhub.com/app/Console/Commands/FixFilamentResources.php:                    $this->info("Fixed getPages() in {$fileName}");
+/var/www/vhosts/nm-digitalhub.com/webhost.nm-digitalhub.com/app/Console/Commands/CheckFilamentResources.php:                $issues[] = "File {$fileName} uses string-based page registrations instead of class references in getPages()";

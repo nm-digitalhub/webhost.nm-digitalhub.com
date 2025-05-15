@@ -1,27 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\GenerationLogResource\Pages;
-use App\Filament\Resources\GenerationLogResource\RelationManagers;
 use App\Models\GenerationLog;
-use App\Models\User;
-use App\Models\Generator;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class GenerationLogResource extends Resource
 {
     protected static ?string $model = GenerationLog::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
+
     protected static ?string $navigationGroup = 'ניהול מערכת';
+
     protected static ?string $modelLabel = 'לוג ייצור קוד';
+
     protected static ?string $pluralModelLabel = 'לוגים של ייצור קוד';
 
     public static function form(Form $form): Form
@@ -110,26 +110,29 @@ class GenerationLogResource extends Resource
                     ->sortable()
                     ->searchable(),
 
-                Tables\Columns\BadgeColumn::make('entity_type')
+                Tables\Columns\TextColumn::make('entity_type')
                     ->label('סוג')
-                    ->colors([
-                        'primary' => 'model',
-                        'success' => 'resource',
-                        'warning' => 'page',
-                        'danger' => 'widget',
-                    ])
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'model' => 'primary',
+                        'resource' => 'success',
+                        'page' => 'warning',
+                        'widget' => 'danger',
+                        default => 'gray',
+                    })
                     ->searchable(),
-
                 Tables\Columns\TextColumn::make('entity_name')
                     ->label('שם')
                     ->searchable(),
 
-                Tables\Columns\BadgeColumn::make('status')
+                Tables\Columns\TextColumn::make('status')
                     ->label('סטטוס')
-                    ->colors([
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
                         'success' => 'success',
-                        'danger' => 'error',
-                    ]),
+                        'error' => 'danger',
+                        default => 'gray',
+                    }),
 
                 Tables\Columns\IconColumn::make('overwritten')
                     ->label('דרס קובץ')
@@ -185,13 +188,27 @@ class GenerationLogResource extends Resource
             //
         ];
     }
+public static function getWidgets(): array
+{
+    return [];
+}
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListGenerationLogs::route('/'),
-            'create' => Pages\CreateGenerationLog::route('/create'),
-            'edit' => Pages\EditGenerationLog::route('/{record}/edit'),
+            'index' => Pages\ListGenerationLogs::class,
+            'create' => Pages\CreateGenerationLog::class,
+            'edit' => Pages\EditGenerationLog::class,
         ];
+    }
+    public static function isEmailVerificationRequired(\Filament\Panel $panel): bool
+    {
+        return $panel->isEmailVerificationRequired();
+    }
+
+
+    public static function isTenantSubscriptionRequired(\Filament\Panel $panel): bool
+    {
+        return $panel->isTenantSubscriptionRequired();
     }
 }

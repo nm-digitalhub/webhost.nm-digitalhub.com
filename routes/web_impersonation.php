@@ -1,7 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+declare(strict_types=1);
+
 use App\Http\Controllers\ImpersonationController;
+use Illuminate\Support\Facades\Route;
 
 // Admin impersonation routes (Super-Admin only)
 Route::middleware(['auth', 'role:Super-Admin'])

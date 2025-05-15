@@ -1,16 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ClientModule extends Model
 {
-    use HasFactory;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -49,12 +47,12 @@ class ClientModule extends Model
      */
     public function isVisibleToUser(?User $user = null): bool
     {
-        if (!$this->enabled) {
+        if (! $this->enabled) {
             return false;
         }
 
         // If no user provided or no role restrictions, check if the module is public
-        if (!$user || empty($this->role_restrictions)) {
+        if (! $user || empty($this->role_restrictions)) {
             return true;
         }
 
@@ -97,6 +95,6 @@ class ClientModule extends Model
      */
     public function scopeOrdered($query)
     {
-        return $query->orderBy('position', 'asc');
+        return $query->orderBy('position');
     }
 }

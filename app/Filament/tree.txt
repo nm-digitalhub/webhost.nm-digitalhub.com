@@ -1,0 +1,104 @@
+.
+├── Admin
+│   └── Resources
+│       ├── RoleResource
+│       │   └── Pages
+│       │       ├── CreateRole.php
+│       │       ├── EditRole.php
+│       │       └── ListRoles.php
+│       ├── RoleResource.php
+│       ├── Spatie
+│       │   └── Permission
+│       │       └── Models
+│       │           ├── PermissionResource
+│       │           │   └── Pages
+│       │           │       ├── CreatePermission.php
+│       │           │       ├── EditPermission.php
+│       │           │       └── ListPermissions.php
+│       │           └── PermissionResource.php
+│       ├── UserResource
+│       │   └── Pages
+│       │       ├── CreateUser.php
+│       │       ├── EditUser.php
+│       │       └── ListUsers.php
+│       └── UserResource.php
+├── Pages
+│   └── Dashboard.php
+├── Resources
+│   ├── <?php.php
+│   ├── ClientModuleResource
+│   │   └── Pages
+│   │       ├── CreateClientModule.php
+│   │       ├── EditClientModule.php
+│   │       ├── ListClientModule.php
+│   │       └── ListClientModules.php
+│   ├── ClientModuleResource.php
+│   ├── ClientPageResource
+│   │   └── Pages
+│   │       ├── CreateClientPage.php
+│   │       ├── EditClientPage.php
+│   │       └── ListClientPages.php
+│   ├── ClientPageResource.php
+│   ├── GenerationLogResource
+│   │   └── Pages
+│   │       ├── CreateGenerationLog.php
+│   │       ├── EditGenerationLog.php
+│   │       └── ListGenerationLogs.php
+│   ├── GenerationLogResource.php
+│   ├── GeneratorResource
+│   │   └── Pages
+│   │       ├── CreateGenerator.php
+│   │       ├── EditGenerator.php
+│   │       ├── GenerateCode.php
+│   │       └── ListGenerators.php
+│   ├── GeneratorResource.php
+│   ├── MailSettingResource
+│   │   └── Pages
+│   │       ├── CreateMailSetting.php
+│   │       ├── EditMailSetting.php
+│   │       └── ListMailSettings.php
+│   ├── MailSettingResource.php
+│   ├── MailTemplateResource
+│   │   └── Pages
+│   │       ├── CreateMailTemplate.php
+│   │       ├── EditMailTemplate.php
+│   │       └── ListMailTemplates.php
+│   ├── MailTemplateResource.php
+│   ├── ModuleManagerResource
+│   │   └── Pages
+│   │       ├── CreateModule.php
+│   │       ├── CreateModuleManager.php
+│   │       ├── EditModule.php
+│   │       ├── EditModuleManager.php
+│   │       ├── ListModuleManagers.php
+│   │       ├── ListModules.php
+│   │       ├── ViewComponentCode.php
+│   │       └── list-module-managers.blade.php
+│   ├── ModuleManagerResource.php
+│   ├── PageResource
+│   │   └── Pages
+│   │       ├── CreatePage.php
+│   │       ├── EditPage.php
+│   │       └── ListPages.php
+│   ├── PageResource.php
+│   ├── ProductResource
+│   │   └── Pages
+│   │       ├── CreateProduct.php
+│   │       ├── EditProduct.php
+│   │       └── ListProducts.php
+│   ├── ProductResource.php
+│   ├── UserResource
+│   │   └── Pages
+│   │       └── ListUsers.php
+│   └── UserResource.php
+├── Widgets
+│   ├── AccountWidget.php
+│   ├── FilamentInfoWidget.php
+│   ├── LatestActivityWidget.php
+│   ├── ModulesStatsWidget.php
+│   ├── SystemHealthWidget.php
+│   ├── SystemResourcesWidget.php
+│   └── UsersStatsWidget.php
+└── tree.txt
+
+35 directories, 67 files

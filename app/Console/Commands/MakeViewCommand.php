@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -30,22 +32,23 @@ class MakeViewCommand extends Command
         $type = $this->option('type');
         $content = $this->option('content');
         $force = $this->option('force');
-        
+
         // Convert dot notation to directory structure
         $viewPath = resource_path('views/' . str_replace('.', '/', $name) . '.' . $type);
-        
+
         // Check if the file already exists
-        if (File::exists($viewPath) && !$force) {
+        if (File::exists($viewPath) && ! $force) {
             $this->error("View file {$viewPath} already exists!");
+
             return 1;
         }
-        
+
         // Create directory if it doesn't exist
         $directory = dirname($viewPath);
-        if (!File::exists($directory)) {
+        if (! File::exists($directory)) {
             File::makeDirectory($directory, 0755, true);
         }
-        
+
         // Generate default content if not provided
         if (empty($content)) {
             $content = match ($type) {
@@ -53,14 +56,15 @@ class MakeViewCommand extends Command
                 default => '',
             };
         }
-        
+
         // Write the file
         File::put($viewPath, $content);
-        
+
         $this->info("View file {$viewPath} created successfully.");
+
         return 0;
     }
-    
+
     /**
      * Get default content for a Blade view
      */
@@ -88,7 +92,7 @@ BLADE;
 </x-filament-panels::page>
 BLADE;
         }
-        
+
         // Default content for other views
         return <<<'BLADE'
 <div>

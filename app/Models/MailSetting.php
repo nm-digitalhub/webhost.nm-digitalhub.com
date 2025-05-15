@@ -1,15 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Crypt;
 
 class MailSetting extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'driver',
         'host',
@@ -49,9 +48,10 @@ class MailSetting extends Model
 
     public function getPasswordAttribute($value)
     {
-        if (!empty($value)) {
+        if (! empty($value)) {
             return Crypt::decryptString($value);
         }
+
         return $value;
     }
 
@@ -64,9 +64,10 @@ class MailSetting extends Model
 
     public function getGoogleClientSecretAttribute($value)
     {
-        if (!empty($value)) {
+        if (! empty($value)) {
             return Crypt::decryptString($value);
         }
+
         return $value;
     }
 
@@ -110,7 +111,7 @@ class MailSetting extends Model
             ],
         ];
 
-        if (!empty($this->reply_to_address)) {
+        if (! empty($this->reply_to_address)) {
             $config['reply_to'] = [
                 'address' => $this->reply_to_address,
                 'name' => $this->reply_to_name ?? $this->from_name,

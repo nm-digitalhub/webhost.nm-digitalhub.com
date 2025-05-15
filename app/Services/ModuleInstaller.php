@@ -1,21 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
-use App\Models\Module;
-use App\Models\Cart;
-use App\Models\CartItem;
-use App\Models\Coupon;
-use App\Models\Page;
-use App\Models\Product;
-use App\Filament\Resources\ProductResource;
 use App\Filament\Resources\CartResource;
 use App\Filament\Resources\CouponResource;
 use App\Filament\Resources\PageResource;
+use App\Filament\Resources\ProductResource;
+use App\Models\Module;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
 class ModuleInstaller
@@ -23,11 +19,11 @@ class ModuleInstaller
     /**
      * Install a client panel module.
      *
-     * @param string $name The name of the module
-     * @param string $slug The slug for the module
-     * @param string $icon The icon class or name
-     * @param string $type The module type (section, page, link)
-     * @param array $config Additional configuration
+     * @param  string  $name  The name of the module
+     * @param  string  $slug  The slug for the module
+     * @param  string  $icon  The icon class or name
+     * @param  string  $type  The module type (section, page, link)
+     * @param  array  $config  Additional configuration
      */
     public function installClientPanelModule(string $name, string $slug, string $icon, string $type = 'page', array $config = []): array
     {
@@ -103,7 +99,7 @@ class ModuleInstaller
                 ]
             );
 
-            if (!$section['success']) {
+            if (! $section['success']) {
                 return $section;
             }
 
@@ -119,7 +115,7 @@ class ModuleInstaller
                     'description' => 'View and manage support tickets',
                     'metadata' => [
                         'parent_section' => 'support-section',
-                        'features' => ['create_ticket', 'view_tickets', 'reply_to_tickets']
+                        'features' => ['create_ticket', 'view_tickets', 'reply_to_tickets'],
                     ],
                 ]
             );
@@ -136,7 +132,7 @@ class ModuleInstaller
                     'description' => 'Browse knowledge base articles',
                     'metadata' => [
                         'parent_section' => 'support-section',
-                        'features' => ['search_articles', 'view_articles', 'rate_articles']
+                        'features' => ['search_articles', 'view_articles', 'rate_articles'],
                     ],
                 ]
             );
@@ -193,7 +189,7 @@ class ModuleInstaller
                 ]
             );
 
-            if (!$section['success']) {
+            if (! $section['success']) {
                 return $section;
             }
 
@@ -209,7 +205,7 @@ class ModuleInstaller
                     'description' => 'View and pay invoices',
                     'metadata' => [
                         'parent_section' => 'billing-section',
-                        'features' => ['view_invoices', 'download_invoices', 'pay_invoices']
+                        'features' => ['view_invoices', 'download_invoices', 'pay_invoices'],
                     ],
                 ]
             );
@@ -226,7 +222,7 @@ class ModuleInstaller
                     'description' => 'Manage payment methods',
                     'metadata' => [
                         'parent_section' => 'billing-section',
-                        'features' => ['add_payment_method', 'edit_payment_method', 'delete_payment_method']
+                        'features' => ['add_payment_method', 'edit_payment_method', 'delete_payment_method'],
                     ],
                 ]
             );
@@ -243,7 +239,7 @@ class ModuleInstaller
                     'description' => 'Manage your subscriptions',
                     'metadata' => [
                         'parent_section' => 'billing-section',
-                        'features' => ['view_subscriptions', 'cancel_subscription', 'change_plan']
+                        'features' => ['view_subscriptions', 'cancel_subscription', 'change_plan'],
                     ],
                 ]
             );
@@ -284,7 +280,7 @@ class ModuleInstaller
                     'route_name' => 'client.domains',
                     'description' => 'Manage your domain names',
                     'metadata' => [
-                        'features' => ['register_domain', 'transfer_domain', 'manage_dns', 'whois_privacy']
+                        'features' => ['register_domain', 'transfer_domain', 'manage_dns', 'whois_privacy'],
                     ],
                 ]
             );
@@ -301,7 +297,7 @@ class ModuleInstaller
                     'description' => 'Search for available domain names',
                     'metadata' => [
                         'parent' => 'domains',
-                        'features' => ['bulk_search', 'suggestions', 'premium_domains']
+                        'features' => ['bulk_search', 'suggestions', 'premium_domains'],
                     ],
                 ]
             );
@@ -318,7 +314,7 @@ class ModuleInstaller
                     'description' => 'Manage DNS records for your domains',
                     'metadata' => [
                         'parent' => 'domains',
-                        'features' => ['a_records', 'cname_records', 'mx_records', 'txt_records']
+                        'features' => ['a_records', 'cname_records', 'mx_records', 'txt_records'],
                     ],
                 ]
             );
@@ -356,14 +352,14 @@ class ModuleInstaller
             }
 
             // 1. Run migrations
-            if (!Schema::hasTable('products')) {
+            if (! Schema::hasTable('products')) {
                 Artisan::call('migrate', [
-                    '--path' => 'database/migrations/2025_05_06_093159_create_products_table.php'
+                    '--path' => 'database/migrations/2025_05_06_093159_create_products_table.php',
                 ]);
             }
 
             // 2. Create Filament Resource if it doesn't exist already
-            if (!class_exists(ProductResource::class)) {
+            if (! class_exists(ProductResource::class)) {
                 $this->createFilamentResource('Product');
             }
 
@@ -417,13 +413,13 @@ class ModuleInstaller
             }
 
             // 1. Check for dependencies
-            if (!$this->isModuleInstalled('product') || !$this->isModuleInstalled('cart')) {
+            if (! $this->isModuleInstalled('product') || ! $this->isModuleInstalled('cart')) {
                 // Install dependencies first
-                if (!$this->isModuleInstalled('product')) {
+                if (! $this->isModuleInstalled('product')) {
                     $this->installProductModule();
                 }
-                
-                if (!$this->isModuleInstalled('cart')) {
+
+                if (! $this->isModuleInstalled('cart')) {
                     $this->installCartModule();
                 }
             }
@@ -481,25 +477,25 @@ class ModuleInstaller
             }
 
             // 1. Install dependencies
-            if (!$this->isModuleInstalled('product')) {
+            if (! $this->isModuleInstalled('product')) {
                 $this->installProductModule();
             }
 
             // 2. Run migrations
-            if (!Schema::hasTable('carts')) {
+            if (! Schema::hasTable('carts')) {
                 Artisan::call('migrate', [
-                    '--path' => 'database/migrations/2025_05_08_000002_create_carts_table.php'
+                    '--path' => 'database/migrations/2025_05_08_000002_create_carts_table.php',
                 ]);
             }
 
-            if (!Schema::hasTable('cart_items')) {
+            if (! Schema::hasTable('cart_items')) {
                 Artisan::call('migrate', [
-                    '--path' => 'database/migrations/2025_05_08_000003_create_cart_items_table.php'
+                    '--path' => 'database/migrations/2025_05_08_000003_create_cart_items_table.php',
                 ]);
             }
 
             // 3. Create Filament Resource
-            if (!class_exists(CartResource::class)) {
+            if (! class_exists(CartResource::class)) {
                 $this->createFilamentResource('Cart');
             }
 
@@ -556,14 +552,14 @@ class ModuleInstaller
             }
 
             // 1. Run migrations
-            if (!Schema::hasTable('coupons')) {
+            if (! Schema::hasTable('coupons')) {
                 Artisan::call('migrate', [
-                    '--path' => 'database/migrations/2025_05_08_000004_create_coupons_table.php'
+                    '--path' => 'database/migrations/2025_05_08_000004_create_coupons_table.php',
                 ]);
             }
 
             // 2. Create Filament Resource
-            if (!class_exists(CouponResource::class)) {
+            if (! class_exists(CouponResource::class)) {
                 $this->createFilamentResource('Coupon');
             }
 
@@ -617,14 +613,14 @@ class ModuleInstaller
             }
 
             // 1. Run migrations
-            if (!Schema::hasTable('pages')) {
+            if (! Schema::hasTable('pages')) {
                 Artisan::call('migrate', [
-                    '--path' => 'database/migrations/2025_05_08_000005_create_pages_table.php'
+                    '--path' => 'database/migrations/2025_05_08_000005_create_pages_table.php',
                 ]);
             }
 
             // 2. Create Filament Resource
-            if (!class_exists(PageResource::class)) {
+            if (! class_exists(PageResource::class)) {
                 $this->createFilamentResource('Page');
             }
 
@@ -683,41 +679,41 @@ class ModuleInstaller
     {
         $resourceName = "{$modelName}Resource";
         $resourcePath = app_path("Filament/Resources/{$resourceName}.php");
-        
+
         // Skip if resource already exists
         if (File::exists($resourcePath)) {
             return;
         }
-        
+
         // Use Generator to create the resource
         $generator = app(GeneratorService::class);
-        
+
         // Create a dummy generator model to pass to the generator service
         $generatorModel = new \App\Models\Generator([
             'name' => $resourceName,
             'type' => 'resource',
-            'namespace' => "App\\Filament\\Resources",
+            'namespace' => 'App\\Filament\\Resources',
             'label' => $modelName,
             'icon' => $this->getIconForModel($modelName),
             'group' => 'ניהול מערכת',
             'target_path' => $resourcePath,
         ]);
-        
+
         // Generate the resource
         $generator->generate($generatorModel, true);
-        
+
         // Also create directory for Pages
         $pagesDir = app_path("Filament/Resources/{$resourceName}/Pages");
-        if (!File::exists($pagesDir)) {
+        if (! File::exists($pagesDir)) {
             File::makeDirectory($pagesDir, 0755, true);
-            
+
             // Create basic pages (List, Create, Edit)
             $this->createResourcePage($resourceName, $modelName, 'List');
             $this->createResourcePage($resourceName, $modelName, 'Create');
             $this->createResourcePage($resourceName, $modelName, 'Edit');
         }
     }
-    
+
     /**
      * Create a resource page.
      */
@@ -727,17 +723,17 @@ class ModuleInstaller
         if ($pageType === 'Edit' || $pageType === 'Create') {
             $pageName = "{$pageType}{$modelName}";
         }
-        
+
         $pagePath = app_path("Filament/Resources/{$resourceName}/Pages/{$pageName}.php");
-        
+
         // Skip if page already exists
         if (File::exists($pagePath)) {
             return;
         }
-        
+
         // Create page file
         $generator = app(GeneratorService::class);
-        
+
         // Create a dummy generator model for the page
         $generatorModel = new \App\Models\Generator([
             'name' => $pageName,
@@ -745,11 +741,11 @@ class ModuleInstaller
             'namespace' => "App\\Filament\\Resources\\{$resourceName}\\Pages",
             'target_path' => $pagePath,
         ]);
-        
+
         // Generate the page
         $generator->generate($generatorModel, true);
     }
-    
+
     /**
      * Get an appropriate icon for a model.
      */
@@ -762,36 +758,36 @@ class ModuleInstaller
             'Page' => 'heroicon-o-document-text',
             'Module' => 'heroicon-o-cube',
         ];
-        
+
         return $icons[$modelName] ?? 'heroicon-o-rectangle-stack';
     }
-    
+
     /**
      * Create cart-related views.
      */
     private function createCartViews(): void
     {
         $viewsDir = resource_path('views/cart');
-        
-        if (!File::exists($viewsDir)) {
+
+        if (! File::exists($viewsDir)) {
             File::makeDirectory($viewsDir, 0755, true);
-            
+
             // Create basic cart views
             $this->createView($viewsDir, 'index.blade.php', $this->getCartIndexTemplate());
             $this->createView($viewsDir, 'mini-cart.blade.php', $this->getCartMiniTemplate());
         }
     }
-    
+
     /**
      * Create checkout-related views.
      */
     private function createCheckoutViews(): void
     {
         $viewsDir = resource_path('views/checkout');
-        
-        if (!File::exists($viewsDir)) {
+
+        if (! File::exists($viewsDir)) {
             File::makeDirectory($viewsDir, 0755, true);
-            
+
             // Create checkout views
             $this->createView($viewsDir, 'index.blade.php', $this->getCheckoutIndexTemplate());
             $this->createView($viewsDir, 'review.blade.php', $this->getCheckoutReviewTemplate());
@@ -799,34 +795,34 @@ class ModuleInstaller
             $this->createView($viewsDir, 'success.blade.php', $this->getCheckoutSuccessTemplate());
         }
     }
-    
+
     /**
      * Create page-related views.
      */
     private function createPageViews(): void
     {
         $viewsDir = resource_path('views/pages');
-        
-        if (!File::exists($viewsDir)) {
+
+        if (! File::exists($viewsDir)) {
             File::makeDirectory($viewsDir, 0755, true);
-            
+
             // Create basic page views
             $this->createView($viewsDir, 'show.blade.php', $this->getPageShowTemplate());
         }
     }
-    
+
     /**
      * Create a view file.
      */
     private function createView(string $directory, string $filename, string $content): void
     {
         $filePath = "{$directory}/{$filename}";
-        
-        if (!File::exists($filePath)) {
+
+        if (! File::exists($filePath)) {
             File::put($filePath, $content);
         }
     }
-    
+
     /**
      * Ensure routes exist.
      */
@@ -834,16 +830,16 @@ class ModuleInstaller
     {
         $routesPath = base_path('routes/web.php');
         $routesContent = File::get($routesPath);
-        
+
         // Only add routes if they don't already exist
-        if (!Str::contains($routesContent, "Route::prefix('{$routePrefix}')")) {
+        if (! Str::contains($routesContent, "Route::prefix('{$routePrefix}')")) {
             $routeStub = $this->getRouteStubForPrefix($routePrefix);
-            
+
             // Append to web.php
             File::append($routesPath, "\n" . $routeStub);
         }
     }
-    
+
     /**
      * Get route stub for a given prefix.
      */
@@ -858,7 +854,7 @@ class ModuleInstaller
             default => '',
         };
     }
-    
+
     /**
      * Get product routes.
      */
@@ -872,7 +868,7 @@ Route::prefix('products')->name('products.')->group(function () {
 });
 EOT;
     }
-    
+
     /**
      * Get cart routes.
      */
@@ -891,7 +887,7 @@ Route::prefix('cart')->name('cart.')->group(function () {
 });
 EOT;
     }
-    
+
     /**
      * Get checkout routes.
      */
@@ -907,14 +903,14 @@ Route::prefix('checkout')->name('checkout.')->group(function () {
     Route::post('/place-order', [\App\Http\Controllers\CheckoutController::class, 'placeOrder'])->name('place-order');
     Route::get('/success/{order}', [\App\Http\Controllers\CheckoutController::class, 'success'])->name('success');
     Route::get('/cancel/{order_id}', [\App\Http\Controllers\CheckoutController::class, 'cancel'])->name('cancel');
-    
+
     // Payment gateway callback routes
     Route::get('/callback/{gateway}', [\App\Http\Controllers\CheckoutController::class, 'callback'])->name('callback');
     Route::post('/notify/{gateway}', [\App\Http\Controllers\CheckoutController::class, 'notify'])->name('notify');
 });
 EOT;
     }
-    
+
     /**
      * Get coupon routes.
      */
@@ -932,7 +928,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin/coupons')->name('admin.coupo
 });
 EOT;
     }
-    
+
     /**
      * Get page routes.
      */
@@ -953,7 +949,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin/pages')->name('admin.pages.'
 });
 EOT;
     }
-    
+
     /**
      * Get cart index template.
      */
@@ -967,7 +963,7 @@ EOT;
 @section('content')
 <div class="container mx-auto py-8">
     <h1 class="text-2xl font-bold mb-6">Shopping Cart</h1>
-    
+
     @if(isset($cart) && $cart->items_count > 0)
         <div class="bg-white rounded-lg shadow-lg p-6">
             <div class="overflow-x-auto">
@@ -1032,7 +1028,7 @@ EOT;
                     </tbody>
                 </table>
             </div>
-            
+
             <div class="mt-6 flex flex-wrap gap-4">
                 <div class="flex-1 min-w-[320px]">
                     <h3 class="text-lg font-semibold mb-2">Apply Coupon</h3>
@@ -1041,16 +1037,16 @@ EOT;
                         <input type="text" name="coupon_code" placeholder="Coupon Code" class="flex-1 px-4 py-2 border rounded-l">
                         <button type="submit" class="px-4 py-2 bg-gray-800 text-white rounded-r hover:bg-gray-700">Apply</button>
                     </form>
-                    
+
                     @if(session('coupon_error'))
                         <p class="text-red-500 mt-2">{{ session('coupon_error') }}</p>
                     @endif
-                    
+
                     @if(session('coupon_success'))
                         <p class="text-green-500 mt-2">{{ session('coupon_success') }}</p>
                     @endif
                 </div>
-                
+
                 <div class="flex-1 min-w-[320px]">
                     <h3 class="text-lg font-semibold mb-2">Cart Totals</h3>
                     <div class="bg-gray-100 p-4 rounded">
@@ -1058,7 +1054,7 @@ EOT;
                             <span>Subtotal</span>
                             <span>{{ $cart->formattedTotal }}</span>
                         </div>
-                        
+
                         @if($cart->getAppliedCoupon())
                             <div class="flex justify-between py-2 border-t">
                                 <span>Discount ({{ $cart->getAppliedCoupon()['code'] }})</span>
@@ -1071,12 +1067,12 @@ EOT;
                                 </span>
                             </div>
                         @endif
-                        
+
                         <div class="flex justify-between py-2 border-t">
                             <span class="font-semibold">Total</span>
                             <span class="font-semibold">{{ $cart->formattedTotal }}</span>
                         </div>
-                        
+
                         <a href="{{ route('checkout.index') }}" class="mt-4 block w-full text-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Proceed to Checkout</a>
                     </div>
                 </div>
@@ -1092,7 +1088,7 @@ EOT;
 @endsection
 EOT;
     }
-    
+
     /**
      * Get mini cart template.
      */
@@ -1102,7 +1098,7 @@ EOT;
 <div class="bg-white rounded-lg shadow-lg p-4">
     @if(isset($cart) && $cart->items_count > 0)
         <h3 class="font-semibold mb-3">Cart ({{ $cart->items_count }})</h3>
-        
+
         <div class="max-h-60 overflow-y-auto mb-3">
             @foreach($cart->items as $item)
                 <div class="flex items-center py-2 border-b">
@@ -1131,12 +1127,12 @@ EOT;
                 </div>
             @endforeach
         </div>
-        
+
         <div class="flex justify-between py-2 font-semibold">
             <span>Total:</span>
             <span>{{ $cart->formattedTotal }}</span>
         </div>
-        
+
         <div class="flex gap-2 mt-3">
             <a href="{{ route('cart.index') }}" class="flex-1 text-center px-3 py-2 text-xs bg-gray-200 text-gray-800 rounded hover:bg-gray-300">View Cart</a>
             <a href="{{ route('checkout.index') }}" class="flex-1 text-center px-3 py-2 text-xs bg-blue-600 text-white rounded hover:bg-blue-700">Checkout</a>
@@ -1148,7 +1144,7 @@ EOT;
 </div>
 EOT;
     }
-    
+
     /**
      * Get checkout index template.
      */
@@ -1162,16 +1158,16 @@ EOT;
 @section('content')
 <div class="container mx-auto py-8">
     <h1 class="text-2xl font-bold mb-6">Checkout</h1>
-    
+
     @if(isset($cart) && $cart->items_count > 0)
         <div class="flex flex-wrap -mx-4">
             <div class="w-full lg:w-2/3 px-4 mb-8">
                 <div class="bg-white rounded-lg shadow-lg p-6">
                     <h2 class="text-xl font-semibold mb-4">Billing Details</h2>
-                    
+
                     <form action="{{ route('checkout.process') }}" method="POST">
                         @csrf
-                        
+
                         <div class="flex flex-wrap -mx-2">
                             <div class="w-full md:w-1/2 px-2 mb-4">
                                 <label for="billing_name" class="block mb-1">Full Name *</label>
@@ -1180,7 +1176,7 @@ EOT;
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
-                            
+
                             <div class="w-full md:w-1/2 px-2 mb-4">
                                 <label for="billing_email" class="block mb-1">Email *</label>
                                 <input type="email" name="billing_email" id="billing_email" value="{{ auth()->user()->email ?? old('billing_email') }}" required class="w-full border rounded px-3 py-2">
@@ -1188,7 +1184,7 @@ EOT;
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
-                            
+
                             <div class="w-full md:w-1/2 px-2 mb-4">
                                 <label for="billing_phone" class="block mb-1">Phone *</label>
                                 <input type="tel" name="billing_phone" id="billing_phone" value="{{ old('billing_phone') }}" required class="w-full border rounded px-3 py-2">
@@ -1196,7 +1192,7 @@ EOT;
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
-                            
+
                             <div class="w-full md:w-1/2 px-2 mb-4">
                                 <label for="billing_country" class="block mb-1">Country *</label>
                                 <select name="billing_country" id="billing_country" required class="w-full border rounded px-3 py-2">
@@ -1208,7 +1204,7 @@ EOT;
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
-                            
+
                             <div class="w-full px-2 mb-4">
                                 <label for="billing_address" class="block mb-1">Address *</label>
                                 <input type="text" name="billing_address" id="billing_address" value="{{ old('billing_address') }}" required class="w-full border rounded px-3 py-2">
@@ -1216,7 +1212,7 @@ EOT;
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
-                            
+
                             <div class="w-full md:w-1/3 px-2 mb-4">
                                 <label for="billing_city" class="block mb-1">City *</label>
                                 <input type="text" name="billing_city" id="billing_city" value="{{ old('billing_city') }}" required class="w-full border rounded px-3 py-2">
@@ -1224,7 +1220,7 @@ EOT;
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
-                            
+
                             <div class="w-full md:w-1/3 px-2 mb-4">
                                 <label for="billing_state" class="block mb-1">State</label>
                                 <input type="text" name="billing_state" id="billing_state" value="{{ old('billing_state') }}" class="w-full border rounded px-3 py-2">
@@ -1232,7 +1228,7 @@ EOT;
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
-                            
+
                             <div class="w-full md:w-1/3 px-2 mb-4">
                                 <label for="billing_zip" class="block mb-1">Postal Code *</label>
                                 <input type="text" name="billing_zip" id="billing_zip" value="{{ old('billing_zip') }}" required class="w-full border rounded px-3 py-2">
@@ -1240,24 +1236,24 @@ EOT;
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
-                            
+
                             <div class="w-full px-2 mb-4">
                                 <label for="notes" class="block mb-1">Order Notes</label>
                                 <textarea name="notes" id="notes" rows="3" class="w-full border rounded px-3 py-2">{{ old('notes') }}</textarea>
                             </div>
                         </div>
-                        
+
                         <div class="mt-6">
                             <button type="submit" class="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700">Continue to Review</button>
                         </div>
                     </form>
                 </div>
             </div>
-            
+
             <div class="w-full lg:w-1/3 px-4">
                 <div class="bg-white rounded-lg shadow-lg p-6 sticky top-6">
                     <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
-                    
+
                     <div class="border-b pb-4 mb-4">
                         @foreach($cart->items as $item)
                             <div class="flex justify-between py-2">
@@ -1269,13 +1265,13 @@ EOT;
                             </div>
                         @endforeach
                     </div>
-                    
+
                     <div class="mb-4">
                         <div class="flex justify-between py-2">
                             <span>Subtotal</span>
                             <span>{{ $cart->formattedTotal }}</span>
                         </div>
-                        
+
                         @if($cart->getAppliedCoupon())
                             <div class="flex justify-between py-2 text-green-600">
                                 <span>Discount ({{ $cart->getAppliedCoupon()['code'] }})</span>
@@ -1288,13 +1284,13 @@ EOT;
                                 </span>
                             </div>
                         @endif
-                        
+
                         <div class="flex justify-between py-2 font-semibold">
                             <span>Total</span>
                             <span>{{ $cart->formattedTotal }}</span>
                         </div>
                     </div>
-                    
+
                     @if(!$cart->getAppliedCoupon())
                         <div class="mb-4">
                             <form action="{{ route('cart.apply-coupon') }}" method="POST" class="flex">
@@ -1314,7 +1310,7 @@ EOT;
                             </form>
                         </div>
                     @endif
-                    
+
                     <a href="{{ route('cart.index') }}" class="block text-center text-blue-600 hover:text-blue-800">Return to Cart</a>
                 </div>
             </div>
@@ -1329,7 +1325,7 @@ EOT;
 @endsection
 EOT;
     }
-    
+
     /**
      * Get checkout review template.
      */
@@ -1357,13 +1353,13 @@ EOT;
             </div>
         </div>
     </div>
-    
+
     @if(isset($cart) && $cart->items_count > 0)
         <div class="flex flex-wrap -mx-4">
             <div class="w-full lg:w-2/3 px-4 mb-8">
                 <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
                     <h2 class="text-xl font-semibold mb-4">Order Items</h2>
-                    
+
                     <div class="overflow-x-auto">
                         <table class="w-full">
                             <thead>
@@ -1407,10 +1403,10 @@ EOT;
                         </table>
                     </div>
                 </div>
-                
+
                 <div class="bg-white rounded-lg shadow-lg p-6">
                     <h2 class="text-xl font-semibold mb-4">Billing Details</h2>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <h3 class="font-medium mb-2">Contact Information</h3>
@@ -1418,7 +1414,7 @@ EOT;
                             <p>{{ $billingDetails['billing_email'] }}</p>
                             <p>{{ $billingDetails['billing_phone'] }}</p>
                         </div>
-                        
+
                         <div>
                             <h3 class="font-medium mb-2">Billing Address</h3>
                             <p>{{ $billingDetails['billing_address'] }}</p>
@@ -1426,25 +1422,25 @@ EOT;
                             <p>{{ $countries[$billingDetails['billing_country']] ?? $billingDetails['billing_country'] }}</p>
                         </div>
                     </div>
-                    
+
                     @if(!empty($billingDetails['notes']))
                         <div class="mt-4">
                             <h3 class="font-medium mb-2">Order Notes</h3>
                             <p class="text-gray-700">{{ $billingDetails['notes'] }}</p>
                         </div>
                     @endif
-                    
+
                     <div class="mt-6 flex justify-between">
                         <a href="{{ route('checkout.index') }}" class="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100">Edit Details</a>
                         <a href="{{ route('checkout.payment') }}" class="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700">Continue to Payment</a>
                     </div>
                 </div>
             </div>
-            
+
             <div class="w-full lg:w-1/3 px-4">
                 <div class="bg-white rounded-lg shadow-lg p-6 sticky top-6">
                     <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
-                    
+
                     <div class="border-b pb-4 mb-4">
                         @foreach($cart->items as $item)
                             <div class="flex justify-between py-2">
@@ -1456,13 +1452,13 @@ EOT;
                             </div>
                         @endforeach
                     </div>
-                    
+
                     <div class="mb-4">
                         <div class="flex justify-between py-2">
                             <span>Subtotal</span>
                             <span>{{ $cart->formattedTotal }}</span>
                         </div>
-                        
+
                         @if($cart->getAppliedCoupon())
                             <div class="flex justify-between py-2 text-green-600">
                                 <span>Discount ({{ $cart->getAppliedCoupon()['code'] }})</span>
@@ -1475,13 +1471,13 @@ EOT;
                                 </span>
                             </div>
                         @endif
-                        
+
                         <div class="flex justify-between py-2 font-semibold text-lg">
                             <span>Total</span>
                             <span>{{ $cart->formattedTotal }}</span>
                         </div>
                     </div>
-                    
+
                     <a href="{{ route('checkout.payment') }}" class="block w-full text-center px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700">Proceed to Payment</a>
                 </div>
             </div>
@@ -1496,7 +1492,7 @@ EOT;
 @endsection
 EOT;
     }
-    
+
     /**
      * Get checkout payment template.
      */
@@ -1524,16 +1520,16 @@ EOT;
             </div>
         </div>
     </div>
-    
+
     @if(isset($cart) && $cart->items_count > 0)
         <div class="flex flex-wrap -mx-4">
             <div class="w-full lg:w-2/3 px-4 mb-8">
                 <div class="bg-white rounded-lg shadow-lg p-6">
                     <h2 class="text-xl font-semibold mb-4">Payment Method</h2>
-                    
+
                     <form action="{{ route('checkout.place-order') }}" method="POST" id="payment-form">
                         @csrf
-                        
+
                         <div class="mb-6">
                             <div class="flex flex-wrap -mx-2">
                                 @foreach($paymentGateways as $gateway)
@@ -1545,23 +1541,23 @@ EOT;
                                     </div>
                                 @endforeach
                             </div>
-                            
+
                             @error('payment_gateway')
                                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
                         </div>
-                        
+
                         <div class="border-t pt-6 pb-4">
                             <label class="flex items-center mb-4">
                                 <input type="checkbox" name="agree_terms" required class="mr-2">
                                 <span>I agree to the <a href="{{ route('pages.show', 'terms-and-conditions') }}" class="text-blue-600 hover:underline" target="_blank">Terms and Conditions</a></span>
                             </label>
-                            
+
                             @error('agree_terms')
                                 <p class="text-red-500 text-sm">{{ $message }}</p>
                             @enderror
                         </div>
-                        
+
                         <div class="flex justify-between">
                             <a href="{{ route('checkout.review') }}" class="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100">Back to Review</a>
                             <button type="submit" class="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700">Place Order</button>
@@ -1569,11 +1565,11 @@ EOT;
                     </form>
                 </div>
             </div>
-            
+
             <div class="w-full lg:w-1/3 px-4">
                 <div class="bg-white rounded-lg shadow-lg p-6 sticky top-6">
                     <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
-                    
+
                     <div class="border-b pb-4 mb-4">
                         @foreach($cart->items as $item)
                             <div class="flex justify-between py-2">
@@ -1585,13 +1581,13 @@ EOT;
                             </div>
                         @endforeach
                     </div>
-                    
+
                     <div class="mb-4">
                         <div class="flex justify-between py-2">
                             <span>Subtotal</span>
                             <span>{{ $cart->formattedTotal }}</span>
                         </div>
-                        
+
                         @if($cart->getAppliedCoupon())
                             <div class="flex justify-between py-2 text-green-600">
                                 <span>Discount ({{ $cart->getAppliedCoupon()['code'] }})</span>
@@ -1604,13 +1600,13 @@ EOT;
                                 </span>
                             </div>
                         @endif
-                        
+
                         <div class="flex justify-between py-2 font-semibold text-lg">
                             <span>Total</span>
                             <span>{{ $cart->formattedTotal }}</span>
                         </div>
                     </div>
-                    
+
                     <div class="bg-gray-100 p-4 rounded">
                         <h3 class="font-medium mb-2">Billing Details</h3>
                         <p>{{ $billingDetails['billing_name'] }}</p>
@@ -1632,7 +1628,7 @@ EOT;
 @endsection
 EOT;
     }
-    
+
     /**
      * Get checkout success template.
      */
@@ -1651,19 +1647,19 @@ EOT;
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
         </div>
-        
+
         <h1 class="text-3xl font-bold mb-4">Order Complete!</h1>
-        
+
         <p class="text-xl mb-6">Thank you for your purchase!</p>
-        
+
         <div class="mb-8">
             <p class="text-gray-700">Order Number: <span class="font-semibold">{{ $order->order_number }}</span></p>
             <p class="text-gray-700">A confirmation email has been sent to <span class="font-semibold">{{ $order->billing_email }}</span></p>
         </div>
-        
+
         <div class="bg-gray-100 p-6 rounded mb-8 max-w-md mx-auto">
             <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
-            
+
             <div class="mb-4">
                 @foreach($order->items as $item)
                     <div class="flex justify-between py-2">
@@ -1675,7 +1671,7 @@ EOT;
                     </div>
                 @endforeach
             </div>
-            
+
             <div class="border-t pt-2">
                 <div class="flex justify-between py-2 font-semibold">
                     <span>Total</span>
@@ -1683,7 +1679,7 @@ EOT;
                 </div>
             </div>
         </div>
-        
+
         <div class="flex justify-center gap-4">
             <a href="{{ route('products.index') }}" class="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700">Continue Shopping</a>
             @auth
@@ -1695,7 +1691,7 @@ EOT;
 @endsection
 EOT;
     }
-    
+
     /**
      * Get page show template.
      */
@@ -1710,7 +1706,7 @@ EOT;
     @if($page->meta_description)
         <meta name="description" content="{{ $page->meta_description }}">
     @endif
-    
+
     @if($page->meta_keywords)
         <meta name="keywords" content="{{ $page->meta_keywords }}">
     @endif
@@ -1722,18 +1718,18 @@ EOT;
         @if($page->featured_image)
             <div class="w-full h-64 md:h-80 bg-cover bg-center" style="background-image: url('{{ $page->getFeaturedImageUrl() }}')"></div>
         @endif
-        
+
         <div class="p-6 md:p-8">
             <h1 class="text-3xl font-bold mb-6">{{ $page->title }}</h1>
-            
+
             <div class="prose prose-blue max-w-none">
                 {!! $page->content !!}
             </div>
-            
+
             @if($page->hasChildren())
                 <div class="mt-8 pt-6 border-t">
                     <h2 class="text-xl font-semibold mb-4">Related Pages</h2>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         @foreach($page->children()->published()->ordered()->get() as $childPage)
                             <a href="{{ $childPage->getUrl() }}" class="block bg-gray-100 hover:bg-gray-200 rounded p-4">

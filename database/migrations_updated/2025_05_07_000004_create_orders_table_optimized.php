@@ -1,14 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
-     * 
+     *
      * Optimized version with:
      * - Added string length limits for all string fields
      * - Added indexes on searchable and filterable fields
@@ -29,7 +30,7 @@ return new class extends Migration
             $table->decimal('tax', 10, 2)->default(0);
             $table->decimal('discount', 10, 2)->default(0);
             $table->string('currency', 3)->default('ILS');
-            
+
             // Billing Information with proper length limits
             $table->string('billing_name', 100)->nullable();
             $table->string('billing_email', 191)->nullable();
@@ -39,12 +40,12 @@ return new class extends Migration
             $table->string('billing_state', 100)->nullable();
             $table->string('billing_zip', 20)->nullable();
             $table->string('billing_country', 2)->nullable();
-            
+
             $table->text('notes')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            
+
             // Add composite index for common order filtering
             $table->index(['status', 'created_at']);
         });

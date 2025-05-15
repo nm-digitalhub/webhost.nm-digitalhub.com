@@ -1,14 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
-     * 
+     *
      * Optimized version with:
      * - Consolidated both page-related migrations
      * - Added string length limits
@@ -37,7 +38,7 @@ return new class extends Migration
             $table->json('metadata')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            
+
             // Add composite index for common filtering patterns
             $table->index(['is_published', 'language', 'type']);
         });

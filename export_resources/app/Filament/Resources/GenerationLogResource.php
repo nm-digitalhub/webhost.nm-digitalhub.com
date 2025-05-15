@@ -1,27 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\GenerationLogResource\Pages;
-use App\Filament\Resources\GenerationLogResource\RelationManagers;
 use App\Models\GenerationLog;
-use App\Models\User;
-use App\Models\Generator;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class GenerationLogResource extends Resource
 {
     protected static ?string $model = GenerationLog::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
+
     protected static ?string $navigationGroup = 'ניהול מערכת';
+
     protected static ?string $modelLabel = 'לוג ייצור קוד';
+
     protected static ?string $pluralModelLabel = 'לוגים של ייצור קוד';
 
     public static function form(Form $form): Form

@@ -1,19 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire\Admin;
 
 use Livewire\Component;
-use Livewire\WithPagination;
 
 class Invoices extends Component
 {
-    use WithPagination;
-
     protected $paginationTheme = 'tailwind';
 
     public $search = '';
+
     public $status = '';
+
     public $sortField = 'created_at';
+
     public $sortDirection = 'desc';
 
     protected $queryString = [

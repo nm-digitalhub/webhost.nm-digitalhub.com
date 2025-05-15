@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -47,7 +50,33 @@ class UserResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => \App\Filament\Resources\UserResource\Pages\ListUsers::class,
+            'index' => Pages\ListUsers::class,
         ];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [];
+    }
+
+
+
+    /**
+     * @return array<class-string<\Filament\Resources\RelationManagers\RelationManager>>
+     */
+    public static function getRelations(): array
+    {
+        return [];
+    }
+
+    public static function isEmailVerificationRequired(\Filament\Panel $panel): bool
+    {
+        return $panel->isEmailVerificationRequired();
+    }
+
+
+    public static function isTenantSubscriptionRequired(\Filament\Panel $panel): bool
+    {
+        return $panel->isTenantSubscriptionRequired();
     }
 }

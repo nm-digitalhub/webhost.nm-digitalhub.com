@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Middleware;
+declare(strict_types=1);
+
+namespace App\Http\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
@@ -13,7 +15,7 @@ class CheckRole
      */
     public function handle(Request $request, Closure $next, string $role): Response
     {
-        if (!$request->user() || !$request->user()->hasRole($role)) {
+        if (! $request->user() || ! $request->user()->hasRole($role)) {
             return redirect()->route('dashboard')->with('error', 'אין לך הרשאה לגשת לעמוד זה.');
         }
 

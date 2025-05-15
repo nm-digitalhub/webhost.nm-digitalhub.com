@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Middleware;
+declare(strict_types=1);
+
+namespace App\Http\Http\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -24,8 +26,6 @@ class EnsurePasswordIsConfirmed
 
     /**
      * Create a new middleware instance.
-     *
-     * @return void
      */
     public function __construct(ResponseFactory $responseFactory, UrlGenerator $urlGenerator)
     {

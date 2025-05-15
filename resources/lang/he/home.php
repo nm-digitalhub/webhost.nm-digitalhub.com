@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'close' => 'סגור',
     'hero_title' => 'פתרונות אחסון אתרים מתקדמים',

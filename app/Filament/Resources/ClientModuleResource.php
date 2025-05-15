@@ -1,37 +1,47 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ClientModuleResource\Pages;
 use App\Models\ClientModule;
-use Filament\Forms;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Resources\Pages\PageRegistration;
 use Filament\Resources\Resource;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Filament\Tables;
-use Illuminate\Database\Eloquent\Builder;
+use Filament\Widgets\Widget;
 
 class ClientModuleResource extends Resource
 {
     protected static ?string $model = ClientModule::class;
 
     protected static ?string $navigationGroup = 'מנהל מודולים';
-    protected static ?string $modelLabel = 'מודול לקוח';
-    protected static ?string $pluralModelLabel = 'מודולים ללקוח';
 
-    public static function shouldRegisterNavigation(): bool
-    {
-        return true;
-    }
+    protected static ?string $navigationIcon = 'heroicon-o-puzzle-piece';
+
+    protected static ?string $modelLabel = 'מודול לקוח';
+
+    protected static ?string $pluralModelLabel = 'מודולים ללקוח';
 
     public static function form(Form $form): Form
     {
-        return $form->schema([]);
+        return $form->schema([
+            TextInput::make('name')
+                ->label('שם המודול')
+                ->required()
+                ->maxLength(255),
+        ]);
     }
 
     public static function table(Table $table): Table
     {
-        return $table->columns([]);
+        return $table->columns([
+            TextColumn::make('name')->label('שם')->sortable()->searchable(),
+            TextColumn::make('created_at')->label('נוצר בתאריך')->dateTime(),
+        ]);
     }
 
     public static function getRelations(): array
@@ -39,6 +49,19 @@ class ClientModuleResource extends Resource
         return [];
     }
 
+    /**
+     * חובה להחזיר מערך גם אם לא משתמשים בו, אחרת Filament יקרוס.
+     *
+     * @return array<class-string<Widget>>
+     */
+    public static function getWidgets(): array
+    {
+        return [];
+    }
+
+    /**
+     * @return array<string, PageRegistration>
+     */
     public static function getPages(): array
     {
         return [
@@ -46,5 +69,15 @@ class ClientModuleResource extends Resource
             'create' => Pages\CreateClientModule::route('/create'),
             'edit' => Pages\EditClientModule::route('/{record}/edit'),
         ];
+    }
+    public static function isEmailVerificationRequired(\Filament\Panel $panel): bool
+    {
+        return $panel->isEmailVerificationRequired();
+    }
+
+
+    public static function isTenantSubscriptionRequired(\Filament\Panel $panel): bool
+    {
+        return $panel->isTenantSubscriptionRequired();
     }
 }

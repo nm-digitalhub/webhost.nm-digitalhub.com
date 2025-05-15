@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+export PATH="/var/www/vhosts/nm-digitalhub.com/webhost.nm-digitalhub.com/bin:$PATH"<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">

@@ -1,6 +1,8 @@
 <?php
 
-$resourcePath = __DIR__ . '/app/Filament/Resources';
+declare(strict_types=1);
+
+$resourcePath = __DIR__.'/app/Filament/Resources';
 $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($resourcePath));
 
 echo "Scanning Filament Resource files for invalid getPages() definitions...\n\n";
@@ -13,7 +15,7 @@ foreach ($files as $file) {
         if (preg_match('/function\s+getPages\s*\(.*\)\s*:\s*array\s*\{/', $content) &&
             preg_match('/return\s+\[\s*[\'"]\w+[\'"]\s*=>\s*Pages\\\\.*::class/', $content)
         ) {
-            echo "[!] Possibly invalid getPages() in file: " . $file->getRealPath() . "\n";
+            echo '[!] Possibly invalid getPages() in file: '.$file->getRealPath()."\n";
         }
     }
 }

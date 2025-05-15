@@ -7,27 +7,39 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "blade-ui-kit/blade-heroicons": "*",
         "filament/filament": "^3.3",
         "google/apiclient": "^2.18",
+        "illuminate/support": "*",
         "laravel/framework": "^12.0",
         "laravel/jetstream": "^5.3",
         "laravel/sanctum": "^4.1",
         "laravel/tinker": "^2.10.1",
         "livewire/livewire": "^3.6",
-        "spatie/laravel-permission": "^6.17"
+        "openai-php/client": "*",
+        "spatie/laravel-ignition": "*",
+        "spatie/laravel-permission": "^6.17",
+        "symfony/http-client": "^7.2",
+        "symfony/mailgun-mailer": "^7.2",
+        "symfony/postmark-mailer": "^7.2",
+        "symfony/psr-http-message-bridge": "^7.2"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.15",
-        "barryvdh/laravel-ide-helper": "^3.0",
+        "barryvdh/laravel-ide-helper": "*",
         "driftingly/rector-laravel": "*",
         "fakerphp/faker": "^1.23",
-        "larastan/larastan": "^3.4",
+        "friendsofphp/php-cs-fixer": "*",
+        "larastan/larastan": "*",
+        "laravel-shift/cli": "*",
         "laravel/breeze": "^2.3",
+        "laravel/installer": "*",
         "laravel/pail": "^1.2.2",
-        "laravel/pint": "^1.13",
+        "laravel/pint": "*",
         "laravel/sail": "^1.41",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
+        "orchestra/testbench": "*",
         "phpunit/phpunit": "^11.5.3",
         "rector/rector": "*"
     },
@@ -70,7 +82,8 @@
         "test": [
             "@php artisan config:clear --ansi",
             "@php artisan test"
-        ]
+        ],
+        "rector": "vendor/bin/rector process"
     },
     "extra": {
         "laravel": {

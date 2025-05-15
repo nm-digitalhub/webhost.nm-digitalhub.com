@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire\Auth;
 
 use Livewire\Component;
-use Illuminate\Support\Facades\Auth;
 
 class ConfirmPassword extends Component
 {

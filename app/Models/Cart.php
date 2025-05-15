@@ -1,16 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Cart extends Model
 {
-    use HasFactory;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -94,11 +93,13 @@ class Cart extends Model
             if ($quantity <= 0) {
                 $cartItem->delete();
                 $this->refreshTotals();
+
                 return null;
             }
 
             $cartItem->update(['quantity' => $quantity]);
             $this->refreshTotals();
+
             return $cartItem;
         }
 
@@ -112,6 +113,7 @@ class Cart extends Model
     {
         $result = $this->items()->where('id', $cartItemId)->delete();
         $this->refreshTotals();
+
         return $result > 0;
     }
 
@@ -133,7 +135,7 @@ class Cart extends Model
         $this->load('items');
 
         $itemsCount = $this->items->sum('quantity');
-        $total = $this->items->sum(fn($item) => $item->price * $item->quantity);
+        $total = $this->items->sum(fn ($item) => $item->price * $item->quantity);
 
         $this->update([
             'items_count' => $itemsCount,
@@ -147,7 +149,7 @@ class Cart extends Model
     public function applyCoupon(Coupon $coupon): bool
     {
         // Check if coupon is valid
-        if (!$coupon->isValid() || !$coupon->isApplicable($this)) {
+        if (! $coupon->isValid() || ! $coupon->isApplicable($this)) {
             return false;
         }
 
@@ -161,6 +163,7 @@ class Cart extends Model
         ];
 
         $this->update(['metadata' => $metadata]);
+
         return true;
     }
 
@@ -188,6 +191,7 @@ class Cart extends Model
     public function formattedTotal(): string
     {
         $symbol = $this->currency === 'ILS' ? '₪' : ($this->currency === 'USD' ? '$' : '€');
+
         return $symbol . number_format($this->total, 2);
     }
 

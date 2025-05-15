@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'dashboard' => [
         'title' => 'לוח בקרה',
@@ -57,7 +59,7 @@ return [
             ],
             'active_count' => ':count פעילים',
             'expiring_soon' => 'שירותים המסתיימים בקרוב',
-             'expiring_types' => [
+            'expiring_types' => [
                 'domains' => 'דומיינים',
                 'hosting' => 'חבילות אחסון',
                 'vps' => 'שרתים וירטואליים',

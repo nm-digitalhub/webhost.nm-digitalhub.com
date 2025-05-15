@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
 use App\Models\User;
@@ -35,8 +37,9 @@ class SetupAdminRole extends Command
         // מציאת המשתמש
         $user = User::where('email', $email)->first();
 
-        if (!$user) {
+        if (! $user) {
             $this->error("User with email {$email} not found!");
+
             return 1;
         }
 

@@ -18,4 +18,24 @@ class Panel
     {
         return $this;
     }
+
+    public function navigationGroups(array $groups): static
+    {
+        return $this;
+    }
+
+    public function discoverResources(array $paths = null, ?string $for = null, string $in = null): static
+    {
+        return $this;
+    }
+
+    public function discoverPages(array $paths = null, ?string $for = null, string $in = null): static
+    {
+        return $this;
+    }
+
+    public function discoverWidgets(array $paths = null, ?string $for = null, string $in = null): static
+    {
+        return $this;
+    }
 }

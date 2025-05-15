@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use ReflectionClass;
 use ReflectionMethod;
@@ -16,7 +18,7 @@ class GenerateUiMapCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'ui:map 
+    protected $signature = 'ui:map
                             {--output=resources/docs/interface-map.md : Output file path}
                             {--diagram=resources/docs/interface-graph.svg : Diagram output file path}
                             {--relations=resources/docs/interface-relations.json : Relations JSON file path}
@@ -79,7 +81,7 @@ class GenerateUiMapCommand extends Command
      * Array to store all Livewire components data
      */
     protected $livewireComponents = [];
-    
+
     /**
      * Array of glob patterns to ignore
      */
@@ -87,8 +89,6 @@ class GenerateUiMapCommand extends Command
 
     /**
      * Create a new command instance.
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -102,17 +102,17 @@ class GenerateUiMapCommand extends Command
      */
     public function handle()
     {
-        if (!$this->option('silent')) {
+        if (! $this->option('silent')) {
             $this->info('Generating UI Interface Map...');
         }
-        
+
         // Process ignore patterns
         $ignorePattern = $this->option('ignore-pattern');
-        if (!empty($ignorePattern)) {
+        if (! empty($ignorePattern)) {
             $this->ignorePatterns = explode(',', $ignorePattern);
             $this->ignorePatterns = array_map('trim', $this->ignorePatterns);
-            
-            if (!$this->option('silent')) {
+
+            if (! $this->option('silent')) {
                 $this->info('Ignoring files matching patterns: ' . implode(', ', $this->ignorePatterns));
             }
         }
@@ -151,15 +151,15 @@ class GenerateUiMapCommand extends Command
         // Save the map to the specified output file
         $outputPath = $this->option('output');
         $outputDir = dirname(base_path($outputPath));
-        
+
         // Create directory if it doesn't exist
-        if (!File::isDirectory($outputDir)) {
+        if (! File::isDirectory($outputDir)) {
             File::makeDirectory($outputDir, 0755, true);
         }
-        
+
         File::put(base_path($outputPath), $map);
 
-        if (!$this->option('silent')) {
+        if (! $this->option('silent')) {
             $this->info("UI Interface Map generated successfully at: {$outputPath}");
         }
 
@@ -168,15 +168,15 @@ class GenerateUiMapCommand extends Command
             $relations = $this->generateRelationsJson();
             $relationsPath = $this->option('relations');
             $relationsDir = dirname(base_path($relationsPath));
-            
+
             // Create directory if it doesn't exist
-            if (!File::isDirectory($relationsDir)) {
+            if (! File::isDirectory($relationsDir)) {
                 File::makeDirectory($relationsDir, 0755, true);
             }
-            
+
             File::put(base_path($relationsPath), $relations);
-            
-            if (!$this->option('silent')) {
+
+            if (! $this->option('silent')) {
                 $this->info("Interface relations JSON generated successfully at: {$relationsPath}");
             }
         }
@@ -186,15 +186,15 @@ class GenerateUiMapCommand extends Command
             $diagram = $this->generateVisualDiagram();
             $diagramPath = $this->option('diagram');
             $diagramDir = dirname(base_path($diagramPath));
-            
+
             // Create directory if it doesn't exist
-            if (!File::isDirectory($diagramDir)) {
+            if (! File::isDirectory($diagramDir)) {
                 File::makeDirectory($diagramDir, 0755, true);
             }
-            
+
             File::put(base_path($diagramPath), $diagram);
-            
-            if (!$this->option('silent')) {
+
+            if (! $this->option('silent')) {
                 $this->info("Visual diagram generated successfully at: {$diagramPath}");
             }
         }
@@ -208,31 +208,31 @@ class GenerateUiMapCommand extends Command
     protected function collectRoutes()
     {
         $routes = Route::getRoutes();
-        
+
         foreach ($routes as $route) {
             $uri = $route->uri();
             $methods = $route->methods();
             $name = $route->getName();
             $action = $route->getAction();
-            
+
             // Skip closure-based routes
-            if (!isset($action['controller']) || $action['controller'] instanceof \Closure) {
+            if (! isset($action['controller']) || $action['controller'] instanceof \Closure) {
                 continue;
             }
-            
+
             // Check if it's a public or admin route
-            $isAdminRoute = Str::contains($uri, 'admin') || 
+            $isAdminRoute = Str::contains($uri, 'admin') ||
                            Str::contains($uri, 'filament') ||
                            (isset($action['prefix']) && Str::contains($action['prefix'], 'admin'));
-            
-            if (($isAdminRoute && !$this->option('admin-routes')) || 
-                (!$isAdminRoute && !$this->option('public-routes'))) {
+
+            if (($isAdminRoute && ! $this->option('admin-routes')) ||
+                (! $isAdminRoute && ! $this->option('public-routes'))) {
                 continue;
             }
-            
+
             $controller = null;
             $method = null;
-            
+
             if (isset($action['controller'])) {
                 $parts = explode('@', (string) $action['controller']);
                 if (count($parts) >= 2) {
@@ -240,14 +240,14 @@ class GenerateUiMapCommand extends Command
                     $method = $parts[1];
                 }
             }
-            
+
             $middleware = [];
             if ($this->option('show-middleware') && isset($action['middleware'])) {
-                $middleware = is_array($action['middleware']) ? 
-                             $action['middleware'] : 
+                $middleware = is_array($action['middleware']) ?
+                             $action['middleware'] :
                              [$action['middleware']];
             }
-            
+
             $this->routes[] = [
                 'uri' => $uri,
                 'methods' => $methods,
@@ -255,7 +255,7 @@ class GenerateUiMapCommand extends Command
                 'controller' => $controller,
                 'method' => $method,
                 'middleware' => $middleware,
-                'is_admin' => $isAdminRoute
+                'is_admin' => $isAdminRoute,
             ];
         }
     }
@@ -267,15 +267,15 @@ class GenerateUiMapCommand extends Command
     {
         $viewsPath = resource_path('views');
         $files = File::allFiles($viewsPath);
-        
+
         foreach ($files as $file) {
-            if ($file->getExtension() === 'php' && !$this->shouldIgnoreFile($file->getPathname())) {
+            if ($file->getExtension() === 'php' && ! $this->shouldIgnoreFile($file->getPathname())) {
                 $path = $file->getPathname();
                 $relativePath = str_replace($viewsPath . '/', '', $path);
                 $viewName = str_replace('/', '.', str_replace('.blade.php', '', $relativePath));
-                
+
                 $content = File::get($path);
-                
+
                 // Extract titles if option is enabled
                 $title = null;
                 if ($this->option('extract-titles')) {
@@ -283,14 +283,14 @@ class GenerateUiMapCommand extends Command
                     if (isset($titleMatches[1]) && ($titleMatches[1] !== '' && $titleMatches[1] !== '0')) {
                         $title = trim($titleMatches[1]);
                     }
-                    
+
                     // Also check for @section('title', '...')
                     preg_match("/@section\('title',\s*'(.*?)'\)/s", $content, $sectionTitleMatches);
                     if (isset($sectionTitleMatches[1]) && ($sectionTitleMatches[1] !== '' && $sectionTitleMatches[1] !== '0')) {
                         $title = trim($sectionTitleMatches[1]);
                     }
                 }
-                
+
                 // Extract sections if option is enabled
                 $sections = [];
                 if ($this->option('extract-sections')) {
@@ -299,15 +299,15 @@ class GenerateUiMapCommand extends Command
                         $sections[$match[1]] = true;
                     }
                 }
-                
+
                 // Check for RTL support if option is enabled
                 $rtlSupport = false;
                 if ($this->option('rtl-support')) {
-                    $rtlSupport = Str::contains($content, 'dir="rtl"') || 
+                    $rtlSupport = Str::contains($content, 'dir="rtl"') ||
                                  Str::contains($content, 'direction: rtl') ||
                                  Str::contains($content, 'rtl: true');
                 }
-                
+
                 // Check for i18n / translations if option is enabled
                 $translations = [];
                 if ($this->option('i18n-map')) {
@@ -315,14 +315,14 @@ class GenerateUiMapCommand extends Command
                     if (isset($translationMatches[1]) && $translationMatches[1] !== []) {
                         $translations = $translationMatches[1];
                     }
-                    
+
                     // Also check for @lang('...')
                     preg_match_all("/@lang\('(.*?)'\)/", $content, $langMatches);
                     if (isset($langMatches[1]) && $langMatches[1] !== []) {
                         $translations = array_merge($translations, $langMatches[1]);
                     }
                 }
-                
+
                 $this->views[$viewName] = [
                     'path' => $relativePath,
                     'title' => $title,
@@ -343,6 +343,7 @@ class GenerateUiMapCommand extends Command
     protected function extractViewExtends($content)
     {
         preg_match("/@extends\('(.*?)'\)/", (string) $content, $matches);
+
         return empty($matches[1]) ? null : $matches[1];
     }
 
@@ -352,6 +353,7 @@ class GenerateUiMapCommand extends Command
     protected function extractViewIncludes($content)
     {
         preg_match_all("/@include\('(.*?)'\)/", (string) $content, $matches);
+
         return empty($matches[1]) ? [] : $matches[1];
     }
 
@@ -361,19 +363,19 @@ class GenerateUiMapCommand extends Command
     protected function extractViewComponents($content)
     {
         $components = [];
-        
+
         // Extract x-components
         preg_match_all("/<x-([a-zA-Z0-9\-\.]+)/", (string) $content, $xMatches);
         if (isset($xMatches[1]) && $xMatches[1] !== []) {
             $components = array_merge($components, $xMatches[1]);
         }
-        
+
         // Extract @component directives
         preg_match_all("/@component\('(.*?)'\)/", (string) $content, $componentMatches);
         if (isset($componentMatches[1]) && $componentMatches[1] !== []) {
             $components = array_merge($components, $componentMatches[1]);
         }
-        
+
         return $components;
     }
 
@@ -383,45 +385,45 @@ class GenerateUiMapCommand extends Command
     protected function collectModels()
     {
         $modelsPath = app_path('Models');
-        
-        if (!File::isDirectory($modelsPath)) {
+
+        if (! File::isDirectory($modelsPath)) {
             return;
         }
-        
+
         $files = File::allFiles($modelsPath);
-        
+
         foreach ($files as $file) {
-            if ($file->getExtension() === 'php' && !$this->shouldIgnoreFile($file->getPathname())) {
+            if ($file->getExtension() === 'php' && ! $this->shouldIgnoreFile($file->getPathname())) {
                 $path = $file->getPathname();
                 $relativePath = str_replace(app_path() . '/', '', $path);
                 $className = str_replace(['.php', '/'], ['', '\\'], $relativePath);
                 $fullyQualifiedClassName = 'App\\' . $className;
-                
-                if (!class_exists($fullyQualifiedClassName)) {
+
+                if (! class_exists($fullyQualifiedClassName)) {
                     continue;
                 }
-                
+
                 try {
                     $reflectionClass = new ReflectionClass($fullyQualifiedClassName);
-                    
+
                     // Skip abstract classes
                     if ($reflectionClass->isAbstract()) {
                         continue;
                     }
-                    
+
                     $relationships = [];
                     $methods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
-                    
+
                     // Simple heuristic for finding relationship methods
                     foreach ($methods as $method) {
                         // Skip methods inherited from the parent class
                         if ($method->class !== $fullyQualifiedClassName) {
                             continue;
                         }
-                        
+
                         $methodName = $method->getName();
                         $methodContent = File::get($method->getFileName(), false);
-                        
+
                         // Check for common relationship methods
                         if (Str::contains($methodContent, '->hasOne') ||
                             Str::contains($methodContent, '->hasMany') ||
@@ -429,7 +431,6 @@ class GenerateUiMapCommand extends Command
                             Str::contains($methodContent, '->belongsToMany') ||
                             Str::contains($methodContent, '->morphTo') ||
                             Str::contains($methodContent, '->morphMany')) {
-                            
                             // Try to determine relationship type
                             $type = null;
                             if (Str::contains($methodContent, '->hasOne')) {
@@ -445,14 +446,14 @@ class GenerateUiMapCommand extends Command
                             } elseif (Str::contains($methodContent, '->morphMany')) {
                                 $type = 'morphMany';
                             }
-                            
+
                             $relationships[$methodName] = [
                                 'type' => $type,
-                                'method' => $methodName
+                                'method' => $methodName,
                             ];
                         }
                     }
-                    
+
                     // Get fillable attributes
                     $fillable = [];
                     if ($reflectionClass->hasProperty('fillable')) {
@@ -461,12 +462,12 @@ class GenerateUiMapCommand extends Command
                         $instance = $reflectionClass->newInstanceWithoutConstructor();
                         $fillable = $property->getValue($instance);
                     }
-                    
+
                     $modelName = $reflectionClass->getShortName();
                     $this->models[$modelName] = [
                         'class' => $fullyQualifiedClassName,
                         'relationships' => $relationships,
-                        'fillable' => $fillable
+                        'fillable' => $fillable,
                     ];
                 } catch (\Exception) {
                     // Skip problematic models
@@ -482,32 +483,32 @@ class GenerateUiMapCommand extends Command
     protected function collectFilamentResources()
     {
         $resourcesPath = app_path('Filament/Resources');
-        
-        if (!File::isDirectory($resourcesPath)) {
+
+        if (! File::isDirectory($resourcesPath)) {
             return;
         }
-        
+
         $files = File::allFiles($resourcesPath);
-        
+
         foreach ($files as $file) {
-            if ($file->getExtension() === 'php' && !Str::contains($file->getPathname(), '/Pages/') && !$this->shouldIgnoreFile($file->getPathname())) {
+            if ($file->getExtension() === 'php' && ! Str::contains($file->getPathname(), '/Pages/') && ! $this->shouldIgnoreFile($file->getPathname())) {
                 $path = $file->getPathname();
                 $relativePath = str_replace(app_path() . '/', '', $path);
                 $className = str_replace(['.php', '/'], ['', '\\'], $relativePath);
                 $fullyQualifiedClassName = 'App\\' . $className;
-                
-                if (!class_exists($fullyQualifiedClassName)) {
+
+                if (! class_exists($fullyQualifiedClassName)) {
                     continue;
                 }
-                
+
                 try {
                     $reflectionClass = new ReflectionClass($fullyQualifiedClassName);
-                    
+
                     // Skip abstract classes
                     if ($reflectionClass->isAbstract()) {
                         continue;
                     }
-                    
+
                     // Get the model this resource manages
                     $model = null;
                     if ($reflectionClass->hasProperty('model')) {
@@ -516,7 +517,7 @@ class GenerateUiMapCommand extends Command
                         $instance = $reflectionClass->newInstanceWithoutConstructor();
                         $model = $property->getValue($instance);
                     }
-                    
+
                     // Get the navigation group
                     $navigationGroup = null;
                     if ($reflectionClass->hasProperty('navigationGroup')) {
@@ -525,7 +526,7 @@ class GenerateUiMapCommand extends Command
                         $instance = $reflectionClass->newInstanceWithoutConstructor();
                         $navigationGroup = $property->getValue($instance);
                     }
-                    
+
                     // Get the navigation icon
                     $navigationIcon = null;
                     if ($reflectionClass->hasProperty('navigationIcon')) {
@@ -534,13 +535,13 @@ class GenerateUiMapCommand extends Command
                         $instance = $reflectionClass->newInstanceWithoutConstructor();
                         $navigationIcon = $property->getValue($instance);
                     }
-                    
+
                     $resourceName = $reflectionClass->getShortName();
                     $this->filamentResources[$resourceName] = [
                         'class' => $fullyQualifiedClassName,
                         'model' => $model,
                         'navigationGroup' => $navigationGroup,
-                        'navigationIcon' => $navigationIcon
+                        'navigationIcon' => $navigationIcon,
                     ];
                 } catch (\Exception) {
                     // Skip problematic resources
@@ -556,32 +557,32 @@ class GenerateUiMapCommand extends Command
     protected function collectLivewireComponents()
     {
         $livewirePath = app_path('Livewire');
-        
-        if (!File::isDirectory($livewirePath)) {
+
+        if (! File::isDirectory($livewirePath)) {
             return;
         }
-        
+
         $files = File::allFiles($livewirePath);
-        
+
         foreach ($files as $file) {
-            if ($file->getExtension() === 'php' && !$this->shouldIgnoreFile($file->getPathname())) {
+            if ($file->getExtension() === 'php' && ! $this->shouldIgnoreFile($file->getPathname())) {
                 $path = $file->getPathname();
                 $relativePath = str_replace(app_path() . '/', '', $path);
                 $className = str_replace(['.php', '/'], ['', '\\'], $relativePath);
                 $fullyQualifiedClassName = 'App\\' . $className;
-                
-                if (!class_exists($fullyQualifiedClassName)) {
+
+                if (! class_exists($fullyQualifiedClassName)) {
                     continue;
                 }
-                
+
                 try {
                     $reflectionClass = new ReflectionClass($fullyQualifiedClassName);
-                    
+
                     // Skip abstract classes
                     if ($reflectionClass->isAbstract()) {
                         continue;
                     }
-                    
+
                     // Find the corresponding view
                     $view = null;
                     if ($reflectionClass->hasProperty('view')) {
@@ -596,18 +597,18 @@ class GenerateUiMapCommand extends Command
                         $componentNamespace = str_replace('\\', '.', $componentNamespace);
                         $componentNamespace = Str::kebab(str_replace($componentName, '', $componentNamespace));
                         $componentName = Str::kebab($componentName);
-                        
+
                         if ($componentNamespace) {
                             $view = 'livewire.' . rtrim($componentNamespace, '.') . '.' . $componentName;
                         } else {
                             $view = 'livewire.' . $componentName;
                         }
                     }
-                    
+
                     $componentName = $reflectionClass->getShortName();
                     $this->livewireComponents[$componentName] = [
                         'class' => $fullyQualifiedClassName,
-                        'view' => $view
+                        'view' => $view,
                     ];
                 } catch (\Exception) {
                     // Skip problematic components
@@ -623,7 +624,7 @@ class GenerateUiMapCommand extends Command
     protected function generateMap()
     {
         $format = $this->option('format');
-        
+
         return match ($format) {
             'json' => $this->generateJsonMap(),
             'html' => $this->generateHtmlMap(),
@@ -637,149 +638,149 @@ class GenerateUiMapCommand extends Command
     protected function generateMarkdownMap()
     {
         $output = "# NM-DigitalHUB UI Interface Map\n\n";
-        $output .= "Generated on: " . date('Y-m-d H:i:s') . "\n\n";
-        
+        $output .= 'Generated on: ' . date('Y-m-d H:i:s') . "\n\n";
+
         // Routes section
         $output .= "## Routes\n\n";
-        
+
         // Group routes by type (admin/public)
-        $adminRoutes = array_filter($this->routes, fn($route) => $route['is_admin']);
-        
-        $publicRoutes = array_filter($this->routes, fn($route) => !$route['is_admin']);
-        
+        $adminRoutes = array_filter($this->routes, fn ($route) => $route['is_admin']);
+
+        $publicRoutes = array_filter($this->routes, fn ($route) => ! $route['is_admin']);
+
         // Public routes table
         if ($publicRoutes !== []) {
             $output .= "### Public Routes\n\n";
             $output .= "| URI | Methods | Name | Controller | Middleware |\n";
             $output .= "|-----|---------|------|------------|------------|\n";
-            
+
             foreach ($publicRoutes as $route) {
                 $methods = implode(', ', $route['methods']);
                 $controller = $route['controller'] ? class_basename($route['controller']) . '@' . $route['method'] : 'N/A';
-                $middleware = implode(', ', array_map(fn($m) => is_string($m) ? $m : 'Closure', $route['middleware']));
-                
+                $middleware = implode(', ', array_map(fn ($m) => is_string($m) ? $m : 'Closure', $route['middleware']));
+
                 $output .= "| {$route['uri']} | {$methods} | {$route['name']} | {$controller} | {$middleware} |\n";
             }
-            
+
             $output .= "\n";
         }
-        
+
         // Admin routes table
         if ($adminRoutes !== []) {
             $output .= "### Admin Routes\n\n";
             $output .= "| URI | Methods | Name | Controller | Middleware |\n";
             $output .= "|-----|---------|------|------------|------------|\n";
-            
+
             foreach ($adminRoutes as $route) {
                 $methods = implode(', ', $route['methods']);
                 $controller = $route['controller'] ? class_basename($route['controller']) . '@' . $route['method'] : 'N/A';
-                $middleware = implode(', ', array_map(fn($m) => is_string($m) ? $m : 'Closure', $route['middleware']));
-                
+                $middleware = implode(', ', array_map(fn ($m) => is_string($m) ? $m : 'Closure', $route['middleware']));
+
                 $output .= "| {$route['uri']} | {$methods} | {$route['name']} | {$controller} | {$middleware} |\n";
             }
-            
+
             $output .= "\n";
         }
-        
+
         // Views section
-        if (!empty($this->views)) {
+        if (! empty($this->views)) {
             $output .= "## Views\n\n";
             $output .= "| View Name | Path | Title | Extends | Components |\n";
             $output .= "|-----------|------|-------|---------|------------|\n";
-            
+
             foreach ($this->views as $viewName => $view) {
                 $title = $view['title'] ?? 'N/A';
                 $extends = $view['extends'] ?? 'N/A';
                 $components = implode(', ', $view['components']);
-                
+
                 $output .= "| {$viewName} | {$view['path']} | {$title} | {$extends} | {$components} |\n";
             }
-            
+
             $output .= "\n";
         }
-        
+
         // Models section
-        if (!empty($this->models)) {
+        if (! empty($this->models)) {
             $output .= "## Models\n\n";
             $output .= "| Model | Class | Relationships |\n";
             $output .= "|-------|-------|---------------|\n";
-            
+
             foreach ($this->models as $modelName => $model) {
                 $relationshipsList = [];
                 foreach ($model['relationships'] as $name => $relationship) {
                     $relationshipsList[] = "{$name} ({$relationship['type']})";
                 }
                 $relationships = implode(', ', $relationshipsList);
-                
+
                 $output .= "| {$modelName} | {$model['class']} | {$relationships} |\n";
             }
-            
+
             $output .= "\n";
         }
-        
+
         // Filament resources section
-        if (!empty($this->filamentResources)) {
+        if (! empty($this->filamentResources)) {
             $output .= "## Filament Resources\n\n";
             $output .= "| Resource | Model | Navigation Group | Icon |\n";
             $output .= "|----------|-------|------------------|------|\n";
-            
+
             foreach ($this->filamentResources as $resourceName => $resource) {
                 $model = $resource['model'] ? class_basename($resource['model']) : 'N/A';
                 $navigationGroup = $resource['navigationGroup'] ?? 'N/A';
                 $navigationIcon = $resource['navigationIcon'] ?? 'N/A';
-                
+
                 $output .= "| {$resourceName} | {$model} | {$navigationGroup} | {$navigationIcon} |\n";
             }
-            
+
             $output .= "\n";
         }
-        
+
         // Livewire components section
-        if (!empty($this->livewireComponents)) {
+        if (! empty($this->livewireComponents)) {
             $output .= "## Livewire Components\n\n";
             $output .= "| Component | Class | View |\n";
             $output .= "|-----------|-------|------|\n";
-            
+
             foreach ($this->livewireComponents as $componentName => $component) {
                 $view = $component['view'] ?? 'N/A';
-                
+
                 $output .= "| {$componentName} | {$component['class']} | {$view} |\n";
             }
-            
+
             $output .= "\n";
         }
-        
+
         // Add recommendations if enabled
         if ($this->option('add-recommendations')) {
             $output .= "## Recommendations\n\n";
-            
+
             // Missing View Components
             $output .= "### Missing View Components\n\n";
             $output .= "The following components are referenced in views but may not exist:\n\n";
-            
+
             $missingComponents = [];
             foreach ($this->views as $viewName => $view) {
                 foreach ($view['components'] as $component) {
                     // Check if component exists as a view
                     $componentView = str_replace('-', '.', $component);
                     $componentViewPath = "components.{$componentView}";
-                    
-                    if (!isset($this->views[$componentViewPath]) && !in_array($component, $missingComponents)) {
+
+                    if (! isset($this->views[$componentViewPath]) && ! in_array($component, $missingComponents)) {
                         $missingComponents[] = $component;
                     }
                 }
             }
-            
+
             if ($missingComponents === []) {
                 $output .= "No missing components detected.\n\n";
             } else {
-                $output .= "- " . implode("\n- ", $missingComponents) . "\n\n";
+                $output .= '- ' . implode("\n- ", $missingComponents) . "\n\n";
             }
-            
+
             // Unused Models
             $output .= "### Unused Models\n\n";
             $output .= "The following models do not have corresponding Filament resources:\n\n";
-            
+
             $unusedModels = [];
             foreach ($this->models as $modelName => $model) {
                 $hasResource = false;
@@ -789,104 +790,104 @@ class GenerateUiMapCommand extends Command
                         break;
                     }
                 }
-                
-                if (!$hasResource) {
+
+                if (! $hasResource) {
                     $unusedModels[] = $modelName;
                 }
             }
-            
+
             if ($unusedModels === []) {
                 $output .= "No unused models detected.\n\n";
             } else {
-                $output .= "- " . implode("\n- ", $unusedModels) . "\n\n";
+                $output .= '- ' . implode("\n- ", $unusedModels) . "\n\n";
             }
-            
+
             // Potentially Unused Views
             $output .= "### Potentially Unused Views\n\n";
             $output .= "The following views may not be directly referenced by routes or other views:\n\n";
-            
+
             $referencedViews = [];
-            
+
             // Views referenced by routes (through controllers)
-            
+
             // Views referenced by other views (extends or includes)
             foreach ($this->views as $viewName => $view) {
                 if ($view['extends']) {
                     $referencedViews[$view['extends']] = true;
                 }
-                
+
                 foreach ($view['includes'] as $included) {
                     $referencedViews[$included] = true;
                 }
             }
-            
+
             // Views referenced by Livewire components
             foreach ($this->livewireComponents as $component) {
                 if ($component['view']) {
                     $referencedViews[$component['view']] = true;
                 }
             }
-            
+
             $unusedViews = [];
             foreach ($this->views as $viewName => $view) {
-                if (!isset($referencedViews[$viewName]) && !Str::startsWith($viewName, 'components.')) {
+                if (! isset($referencedViews[$viewName]) && ! Str::startsWith($viewName, 'components.')) {
                     $unusedViews[] = $viewName;
                 }
             }
-            
+
             if ($unusedViews === []) {
                 $output .= "No potentially unused views detected.\n\n";
             } else {
-                $output .= "- " . implode("\n- ", $unusedViews) . "\n\n";
+                $output .= '- ' . implode("\n- ", $unusedViews) . "\n\n";
             }
-            
+
             // Views without Titles
             $output .= "### Views Without Titles\n\n";
             $output .= "The following views do not have explicit title tags or section declarations:\n\n";
-            
+
             $viewsWithoutTitles = [];
             foreach ($this->views as $viewName => $view) {
-                if (empty($view['title']) && 
-                    !Str::startsWith($viewName, 'components.') &&
-                    !Str::startsWith($viewName, 'layouts.') &&
-                    !Str::startsWith($viewName, 'partials.')) {
+                if (empty($view['title']) &&
+                    ! Str::startsWith($viewName, 'components.') &&
+                    ! Str::startsWith($viewName, 'layouts.') &&
+                    ! Str::startsWith($viewName, 'partials.')) {
                     $viewsWithoutTitles[] = $viewName;
                 }
             }
-            
+
             if ($viewsWithoutTitles === []) {
                 $output .= "No views without titles detected.\n\n";
             } else {
-                $output .= "- " . implode("\n- ", $viewsWithoutTitles) . "\n\n";
+                $output .= '- ' . implode("\n- ", $viewsWithoutTitles) . "\n\n";
             }
-            
+
             // Routes without Names
             $output .= "### Routes Without Names\n\n";
             $output .= "The following routes do not have explicit names, which may make URL generation more difficult:\n\n";
-            
+
             $routesWithoutNames = [];
             foreach ($this->routes as $route) {
                 if (empty($route['name'])) {
                     $routesWithoutNames[] = $route['uri'] . ' (' . implode(', ', $route['methods']) . ')';
                 }
             }
-            
+
             if ($routesWithoutNames === []) {
                 $output .= "No routes without names detected.\n\n";
             } else {
-                $output .= "- " . implode("\n- ", $routesWithoutNames) . "\n\n";
+                $output .= '- ' . implode("\n- ", $routesWithoutNames) . "\n\n";
             }
-            
+
             // Structure Recommendations
             $output .= "### Structure Recommendations\n\n";
-            
+
             $recommendations = [];
-            
+
             // Check if there are too many routes
             if (count($this->routes) > 50) {
-                $recommendations[] = "Consider organizing routes into smaller, more focused groups";
+                $recommendations[] = 'Consider organizing routes into smaller, more focused groups';
             }
-            
+
             // Check if there are too many models without relationships
             $modelsWithoutRelationships = 0;
             foreach ($this->models as $model) {
@@ -894,60 +895,60 @@ class GenerateUiMapCommand extends Command
                     $modelsWithoutRelationships++;
                 }
             }
-            
+
             if ($modelsWithoutRelationships > 3) {
                 $recommendations[] = "Several models ({$modelsWithoutRelationships}) lack defined relationships. Consider adding relationships for better data modeling";
             }
-            
+
             // Check for potential controller complexity
             $controllerMethodCounts = [];
             foreach ($this->routes as $route) {
                 if ($route['controller']) {
                     $controllerName = $route['controller'];
-                    if (!isset($controllerMethodCounts[$controllerName])) {
+                    if (! isset($controllerMethodCounts[$controllerName])) {
                         $controllerMethodCounts[$controllerName] = 0;
                     }
                     $controllerMethodCounts[$controllerName]++;
                 }
             }
-            
+
             foreach ($controllerMethodCounts as $controller => $count) {
                 if ($count > 10) {
                     $recommendations[] = "Controller '{$controller}' has {$count} routes. Consider breaking it into smaller, more focused controllers";
                 }
             }
-            
+
             if ($recommendations === []) {
                 $output .= "No structure recommendations at this time.\n\n";
             } else {
-                $output .= "- " . implode("\n- ", $recommendations) . "\n\n";
+                $output .= '- ' . implode("\n- ", $recommendations) . "\n\n";
             }
         }
-        
+
         // Add cross-relation table if enabled
         if ($this->option('generate-cross-relation-table')) {
             $output .= "## Cross-Relation Table\n\n";
             $output .= "This table shows connections between different components of the application.\n\n";
-            
+
             // Models to Resources table
             $output .= "### Models to Resources\n\n";
             $output .= "| Model | Resource | Navigation Group |\n";
             $output .= "|-------|----------|------------------|\n";
-            
+
             $modelResourceMappings = [];
-            
+
             foreach ($this->models as $modelName => $model) {
                 $resources = [];
-                
+
                 foreach ($this->filamentResources as $resourceName => $resource) {
                     if (isset($resource['model']) && class_basename($resource['model']) === $modelName) {
                         $resources[] = [
                             'name' => $resourceName,
-                            'group' => $resource['navigationGroup'] ?? 'N/A'
+                            'group' => $resource['navigationGroup'] ?? 'N/A',
                         ];
                     }
                 }
-                
+
                 if ($resources === []) {
                     $output .= "| {$modelName} | None | N/A |\n";
                 } else {
@@ -960,34 +961,34 @@ class GenerateUiMapCommand extends Command
                     }
                 }
             }
-            
+
             $output .= "\n";
-            
+
             // Routes to Controllers table
             $output .= "### Routes to Controllers\n\n";
             $output .= "| Route | HTTP Methods | Controller | Method |\n";
             $output .= "|-------|--------------|------------|--------|\n";
-            
+
             $controllerRouteMappings = [];
-            
+
             foreach ($this->routes as $route) {
                 $controller = $route['controller'] ? class_basename($route['controller']) : 'N/A';
                 $method = $route['method'] ?? 'N/A';
                 $methods = implode(', ', $route['methods']);
-                
+
                 $output .= "| {$route['uri']} | {$methods} | {$controller} | {$method} |\n";
             }
-            
+
             $output .= "\n";
-            
+
             // Livewire Components to Views table
             $output .= "### Livewire Components to Views\n\n";
             $output .= "| Component | View | Used in Routes |\n";
             $output .= "|-----------|------|----------------|\n";
-            
+
             foreach ($this->livewireComponents as $componentName => $component) {
                 $view = $component['view'] ?? 'N/A';
-                
+
                 // Find routes that use this component
                 $relatedRoutes = [];
                 foreach ($this->routes as $route) {
@@ -995,15 +996,15 @@ class GenerateUiMapCommand extends Command
                         $relatedRoutes[] = $route['uri'];
                     }
                 }
-                
+
                 $routesList = $relatedRoutes === [] ? 'None' : implode(', ', $relatedRoutes);
-                
+
                 $output .= "| {$componentName} | {$view} | {$routesList} |\n";
             }
-            
+
             $output .= "\n";
         }
-        
+
         return $output;
     }
 
@@ -1014,15 +1015,15 @@ class GenerateUiMapCommand extends Command
     {
         $map = [
             'meta' => [
-                'generated_at' => date('Y-m-d H:i:s')
+                'generated_at' => date('Y-m-d H:i:s'),
             ],
             'routes' => $this->routes,
             'views' => $this->views,
             'models' => $this->models,
             'filament_resources' => $this->filamentResources,
-            'livewire_components' => $this->livewireComponents
+            'livewire_components' => $this->livewireComponents,
         ];
-        
+
         return json_encode($map, JSON_PRETTY_PRINT);
     }
 
@@ -1068,15 +1069,15 @@ class GenerateUiMapCommand extends Command
 <body>
     <h1>NM-DigitalHUB UI Interface Map</h1>
     <p>Generated on: ' . date('Y-m-d H:i:s') . '</p>';
-        
+
         // Routes section
         $html .= '<h2>Routes</h2>';
-        
+
         // Group routes by type (admin/public)
-        $adminRoutes = array_filter($this->routes, fn($route) => $route['is_admin']);
-        
-        $publicRoutes = array_filter($this->routes, fn($route) => !$route['is_admin']);
-        
+        $adminRoutes = array_filter($this->routes, fn ($route) => $route['is_admin']);
+
+        $publicRoutes = array_filter($this->routes, fn ($route) => ! $route['is_admin']);
+
         // Public routes table
         if ($publicRoutes !== []) {
             $html .= '<h3>Public Routes</h3>';
@@ -1088,12 +1089,12 @@ class GenerateUiMapCommand extends Command
                     <th>Controller</th>
                     <th>Middleware</th>
                 </tr>';
-            
+
             foreach ($publicRoutes as $route) {
                 $methods = implode(', ', $route['methods']);
                 $controller = $route['controller'] ? class_basename($route['controller']) . '@' . $route['method'] : 'N/A';
-                $middleware = implode(', ', array_map(fn($m) => is_string($m) ? $m : 'Closure', $route['middleware']));
-                
+                $middleware = implode(', ', array_map(fn ($m) => is_string($m) ? $m : 'Closure', $route['middleware']));
+
                 $html .= "<tr>
                     <td>{$route['uri']}</td>
                     <td>{$methods}</td>
@@ -1102,10 +1103,10 @@ class GenerateUiMapCommand extends Command
                     <td>{$middleware}</td>
                 </tr>";
             }
-            
+
             $html .= '</table>';
         }
-        
+
         // Admin routes table
         if ($adminRoutes !== []) {
             $html .= '<h3>Admin Routes</h3>';
@@ -1117,12 +1118,12 @@ class GenerateUiMapCommand extends Command
                     <th>Controller</th>
                     <th>Middleware</th>
                 </tr>';
-            
+
             foreach ($adminRoutes as $route) {
                 $methods = implode(', ', $route['methods']);
                 $controller = $route['controller'] ? class_basename($route['controller']) . '@' . $route['method'] : 'N/A';
-                $middleware = implode(', ', array_map(fn($m) => is_string($m) ? $m : 'Closure', $route['middleware']));
-                
+                $middleware = implode(', ', array_map(fn ($m) => is_string($m) ? $m : 'Closure', $route['middleware']));
+
                 $html .= "<tr>
                     <td>{$route['uri']}</td>
                     <td>{$methods}</td>
@@ -1131,12 +1132,12 @@ class GenerateUiMapCommand extends Command
                     <td>{$middleware}</td>
                 </tr>";
             }
-            
+
             $html .= '</table>';
         }
-        
+
         // Views section
-        if (!empty($this->views)) {
+        if (! empty($this->views)) {
             $html .= '<h2>Views</h2>';
             $html .= '<table>
                 <tr>
@@ -1146,12 +1147,12 @@ class GenerateUiMapCommand extends Command
                     <th>Extends</th>
                     <th>Components</th>
                 </tr>';
-            
+
             foreach ($this->views as $viewName => $view) {
                 $title = $view['title'] ?? 'N/A';
                 $extends = $view['extends'] ?? 'N/A';
                 $components = implode(', ', $view['components']);
-                
+
                 $html .= "<tr>
                     <td>{$viewName}</td>
                     <td>{$view['path']}</td>
@@ -1160,12 +1161,12 @@ class GenerateUiMapCommand extends Command
                     <td>{$components}</td>
                 </tr>";
             }
-            
+
             $html .= '</table>';
         }
-        
+
         // Models section
-        if (!empty($this->models)) {
+        if (! empty($this->models)) {
             $html .= '<h2>Models</h2>';
             $html .= '<table>
                 <tr>
@@ -1173,26 +1174,26 @@ class GenerateUiMapCommand extends Command
                     <th>Class</th>
                     <th>Relationships</th>
                 </tr>';
-            
+
             foreach ($this->models as $modelName => $model) {
                 $relationshipsList = [];
                 foreach ($model['relationships'] as $name => $relationship) {
                     $relationshipsList[] = "{$name} ({$relationship['type']})";
                 }
                 $relationships = implode(', ', $relationshipsList);
-                
+
                 $html .= "<tr>
                     <td>{$modelName}</td>
                     <td>{$model['class']}</td>
                     <td>{$relationships}</td>
                 </tr>";
             }
-            
+
             $html .= '</table>';
         }
-        
+
         // Filament resources section
-        if (!empty($this->filamentResources)) {
+        if (! empty($this->filamentResources)) {
             $html .= '<h2>Filament Resources</h2>';
             $html .= '<table>
                 <tr>
@@ -1201,12 +1202,12 @@ class GenerateUiMapCommand extends Command
                     <th>Navigation Group</th>
                     <th>Icon</th>
                 </tr>';
-            
+
             foreach ($this->filamentResources as $resourceName => $resource) {
                 $model = $resource['model'] ? class_basename($resource['model']) : 'N/A';
                 $navigationGroup = $resource['navigationGroup'] ?? 'N/A';
                 $navigationIcon = $resource['navigationIcon'] ?? 'N/A';
-                
+
                 $html .= "<tr>
                     <td>{$resourceName}</td>
                     <td>{$model}</td>
@@ -1214,12 +1215,12 @@ class GenerateUiMapCommand extends Command
                     <td>{$navigationIcon}</td>
                 </tr>";
             }
-            
+
             $html .= '</table>';
         }
-        
+
         // Livewire components section
-        if (!empty($this->livewireComponents)) {
+        if (! empty($this->livewireComponents)) {
             $html .= '<h2>Livewire Components</h2>';
             $html .= '<table>
                 <tr>
@@ -1227,26 +1228,26 @@ class GenerateUiMapCommand extends Command
                     <th>Class</th>
                     <th>View</th>
                 </tr>';
-            
+
             foreach ($this->livewireComponents as $componentName => $component) {
                 $view = $component['view'] ?? 'N/A';
-                
+
                 $html .= "<tr>
                     <td>{$componentName}</td>
                     <td>{$component['class']}</td>
                     <td>{$view}</td>
                 </tr>";
             }
-            
+
             $html .= '</table>';
         }
-        
+
         // Close HTML
         $html .= '</body></html>';
-        
+
         return $html;
     }
-    
+
     /**
      * Deduplicate entries in all collections
      */
@@ -1255,54 +1256,54 @@ class GenerateUiMapCommand extends Command
         // Deduplicate routes by URI
         $uniqueRoutes = [];
         $routeKeys = [];
-        
+
         foreach ($this->routes as $route) {
             $key = $route['uri'] . '|' . implode(',', $route['methods']);
-            if (!isset($routeKeys[$key])) {
+            if (! isset($routeKeys[$key])) {
                 $routeKeys[$key] = true;
                 $uniqueRoutes[] = $route;
             }
         }
-        
+
         $this->routes = $uniqueRoutes;
-        
+
         // Deduplicate views by path
         $uniqueViews = [];
-        
+
         foreach ($this->views as $name => $view) {
             $uniqueViews[$name] = $view;
         }
-        
+
         $this->views = $uniqueViews;
-        
+
         // Deduplicate models by class
         $uniqueModels = [];
-        
+
         foreach ($this->models as $name => $model) {
             $uniqueModels[$name] = $model;
         }
-        
+
         $this->models = $uniqueModels;
-        
+
         // Deduplicate Filament resources by class
         $uniqueResources = [];
-        
+
         foreach ($this->filamentResources as $name => $resource) {
             $uniqueResources[$name] = $resource;
         }
-        
+
         $this->filamentResources = $uniqueResources;
-        
+
         // Deduplicate Livewire components by class
         $uniqueComponents = [];
-        
+
         foreach ($this->livewireComponents as $name => $component) {
             $uniqueComponents[$name] = $component;
         }
-        
+
         $this->livewireComponents = $uniqueComponents;
     }
-    
+
     /**
      * Generate relations JSON for cross-reference
      */
@@ -1311,12 +1312,12 @@ class GenerateUiMapCommand extends Command
         $relations = [
             'meta' => [
                 'generated_at' => date('Y-m-d H:i:s'),
-                'format_version' => '1.0'
+                'format_version' => '1.0',
             ],
             'entities' => [],
-            'relationships' => []
+            'relationships' => [],
         ];
-        
+
         // Add routes as entities
         foreach ($this->routes as $index => $route) {
             $entityId = 'route_' . $index;
@@ -1327,28 +1328,28 @@ class GenerateUiMapCommand extends Command
                 'methods' => $route['methods'],
                 'is_admin' => $route['is_admin'],
             ];
-            
+
             // Link routes to controllers
             if ($route['controller']) {
                 $controllerId = 'controller_' . md5((string) $route['controller']);
-                
-                if (!isset($relations['entities'][$controllerId])) {
+
+                if (! isset($relations['entities'][$controllerId])) {
                     $relations['entities'][$controllerId] = [
                         'type' => 'controller',
                         'name' => class_basename($route['controller']),
-                        'class' => $route['controller']
+                        'class' => $route['controller'],
                     ];
                 }
-                
+
                 $relations['relationships'][] = [
                     'source' => $entityId,
                     'target' => $controllerId,
                     'type' => 'invokes',
-                    'method' => $route['method']
+                    'method' => $route['method'],
                 ];
             }
         }
-        
+
         // Add views as entities
         foreach ($this->views as $name => $view) {
             $entityId = 'view_' . md5((string) $name);
@@ -1358,12 +1359,12 @@ class GenerateUiMapCommand extends Command
                 'path' => $view['path'],
                 'title' => $view['title'] ?? '',
             ];
-            
+
             // Link views to their parent views (extends)
             if ($view['extends']) {
                 $parentId = 'view_' . md5((string) $view['extends']);
-                
-                if (!isset($relations['entities'][$parentId])) {
+
+                if (! isset($relations['entities'][$parentId])) {
                     $relations['entities'][$parentId] = [
                         'type' => 'view',
                         'name' => $view['extends'],
@@ -1371,19 +1372,19 @@ class GenerateUiMapCommand extends Command
                         'title' => '',
                     ];
                 }
-                
+
                 $relations['relationships'][] = [
                     'source' => $entityId,
                     'target' => $parentId,
-                    'type' => 'extends'
+                    'type' => 'extends',
                 ];
             }
-            
+
             // Link views to included views
             foreach ($view['includes'] as $included) {
                 $includedId = 'view_' . md5((string) $included);
-                
-                if (!isset($relations['entities'][$includedId])) {
+
+                if (! isset($relations['entities'][$includedId])) {
                     $relations['entities'][$includedId] = [
                         'type' => 'view',
                         'name' => $included,
@@ -1391,33 +1392,33 @@ class GenerateUiMapCommand extends Command
                         'title' => '',
                     ];
                 }
-                
+
                 $relations['relationships'][] = [
                     'source' => $entityId,
                     'target' => $includedId,
-                    'type' => 'includes'
+                    'type' => 'includes',
                 ];
             }
-            
+
             // Link views to components
             foreach ($view['components'] as $component) {
                 $componentId = 'component_' . md5((string) $component);
-                
-                if (!isset($relations['entities'][$componentId])) {
+
+                if (! isset($relations['entities'][$componentId])) {
                     $relations['entities'][$componentId] = [
                         'type' => 'component',
                         'name' => $component,
                     ];
                 }
-                
+
                 $relations['relationships'][] = [
                     'source' => $entityId,
                     'target' => $componentId,
-                    'type' => 'uses'
+                    'type' => 'uses',
                 ];
             }
         }
-        
+
         // Add models as entities
         foreach ($this->models as $name => $model) {
             $entityId = 'model_' . md5((string) $name);
@@ -1426,32 +1427,32 @@ class GenerateUiMapCommand extends Command
                 'name' => $name,
                 'class' => $model['class'],
             ];
-            
+
             // Link models with their relationships
             foreach ($model['relationships'] as $relName => $relationship) {
                 $targetModelName = $this->extractModelFromRelationship($relationship);
-                
+
                 if ($targetModelName) {
                     $targetModelId = 'model_' . md5((string) $targetModelName);
-                    
-                    if (!isset($relations['entities'][$targetModelId])) {
+
+                    if (! isset($relations['entities'][$targetModelId])) {
                         $relations['entities'][$targetModelId] = [
                             'type' => 'model',
                             'name' => $targetModelName,
                             'class' => "App\\Models\\{$targetModelName}",
                         ];
                     }
-                    
+
                     $relations['relationships'][] = [
                         'source' => $entityId,
                         'target' => $targetModelId,
                         'type' => $relationship['type'],
-                        'name' => $relName
+                        'name' => $relName,
                     ];
                 }
             }
         }
-        
+
         // Add Filament resources as entities
         foreach ($this->filamentResources as $name => $resource) {
             $entityId = 'resource_' . md5((string) $name);
@@ -1461,28 +1462,28 @@ class GenerateUiMapCommand extends Command
                 'class' => $resource['class'],
                 'navigation_group' => $resource['navigationGroup'] ?? '',
             ];
-            
+
             // Link resources to their models
             if ($resource['model']) {
                 $modelName = class_basename($resource['model']);
                 $modelId = 'model_' . md5($modelName);
-                
-                if (!isset($relations['entities'][$modelId])) {
+
+                if (! isset($relations['entities'][$modelId])) {
                     $relations['entities'][$modelId] = [
                         'type' => 'model',
                         'name' => $modelName,
                         'class' => $resource['model'],
                     ];
                 }
-                
+
                 $relations['relationships'][] = [
                     'source' => $entityId,
                     'target' => $modelId,
-                    'type' => 'manages'
+                    'type' => 'manages',
                 ];
             }
         }
-        
+
         // Add Livewire components as entities
         foreach ($this->livewireComponents as $name => $component) {
             $entityId = 'livewire_' . md5((string) $name);
@@ -1491,12 +1492,12 @@ class GenerateUiMapCommand extends Command
                 'name' => $name,
                 'class' => $component['class'],
             ];
-            
+
             // Link Livewire components to their views
             if ($component['view']) {
                 $viewId = 'view_' . md5((string) $component['view']);
-                
-                if (!isset($relations['entities'][$viewId])) {
+
+                if (! isset($relations['entities'][$viewId])) {
                     $relations['entities'][$viewId] = [
                         'type' => 'view',
                         'name' => $component['view'],
@@ -1504,18 +1505,18 @@ class GenerateUiMapCommand extends Command
                         'title' => '',
                     ];
                 }
-                
+
                 $relations['relationships'][] = [
                     'source' => $entityId,
                     'target' => $viewId,
-                    'type' => 'renders'
+                    'type' => 'renders',
                 ];
             }
         }
-        
+
         return json_encode($relations, JSON_PRETTY_PRINT);
     }
-    
+
     /**
      * Extract model name from a relationship definition
      */
@@ -1526,7 +1527,7 @@ class GenerateUiMapCommand extends Command
         // would parse the actual code.
         return null; // Placeholder, would be implemented with actual code analysis
     }
-    
+
     /**
      * Check if a file should be ignored based on the ignore patterns
      */
@@ -1535,23 +1536,23 @@ class GenerateUiMapCommand extends Command
         if (empty($this->ignorePatterns)) {
             return false;
         }
-        
+
         foreach ($this->ignorePatterns as $pattern) {
             if (Str::is($pattern, basename((string) $path))) {
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     /**
      * Generate a visual diagram in SVG format
      */
     protected function generateVisualDiagram()
     {
         $this->option('graph-style');
-        
+
         // Setup SVG document
         $width = 1200;
         $height = 900;
@@ -1583,59 +1584,59 @@ class GenerateUiMapCommand extends Command
     </style>
 
 SVG;
-        
+
         // In a full implementation, we would:
         // 1. Calculate node positions based on the selected layout style
         // 2. Draw nodes for each entity type (routes, controllers, views, etc.)
         // 3. Draw connections between related entities
         // 4. Add groups for public/admin sections
-        
+
         // For this example, we'll add a placeholder diagram with a sample layout
         $svg .= <<<SVG
     <!-- Background group boxes -->
     <rect class="group-box" fill="#e3f2fd" x="50" y="50" width="500" height="300" rx="5" ry="5" />
     <text class="group-label" x="60" y="70">Public Section</text>
-    
+
     <rect class="group-box" fill="#ede7f6" x="600" y="50" width="500" height="300" rx="5" ry="5" />
     <text class="group-label" x="610" y="70">Admin Section</text>
-    
+
     <rect class="group-box" fill="#e8f5e9" x="50" y="400" width="1050" height="200" rx="5" ry="5" />
     <text class="group-label" x="60" y="420">Models &amp; Resources</text>
-    
+
     <!-- Sample nodes -->
     <rect class="node node-route" x="100" y="100" width="120" height="40" rx="5" ry="5" />
     <text class="node-text" x="110" y="125">/ (home)</text>
-    
+
     <rect class="node node-controller" x="300" y="100" width="120" height="40" rx="5" ry="5" />
     <text class="node-text" x="310" y="125">HomeController</text>
-    
+
     <rect class="node node-view" x="300" y="200" width="120" height="40" rx="5" ry="5" />
     <text class="node-text" x="310" y="225">home.blade.php</text>
-    
+
     <rect class="node node-route node-admin" x="650" y="100" width="120" height="40" rx="5" ry="5" />
     <text class="node-text" x="660" y="125">/admin/dashboard</text>
-    
+
     <rect class="node node-livewire" x="850" y="100" width="120" height="40" rx="5" ry="5" />
     <text class="node-text" x="860" y="125">Admin\Dashboard</text>
-    
+
     <rect class="node node-view" x="850" y="200" width="120" height="40" rx="5" ry="5" />
     <text class="node-text" x="860" y="225">admin.dashboard</text>
-    
+
     <rect class="node node-model" x="100" y="450" width="120" height="40" rx="5" ry="5" />
     <text class="node-text" x="110" y="475">User</text>
-    
+
     <rect class="node node-model" x="300" y="450" width="120" height="40" rx="5" ry="5" />
     <text class="node-text" x="310" y="475">Generator</text>
-    
+
     <rect class="node node-resource" x="500" y="450" width="120" height="40" rx="5" ry="5" />
     <text class="node-text" x="510" y="475">GeneratorResource</text>
-    
+
     <rect class="node node-model" x="700" y="450" width="120" height="40" rx="5" ry="5" />
     <text class="node-text" x="710" y="475">Product</text>
-    
+
     <rect class="node node-resource" x="900" y="450" width="120" height="40" rx="5" ry="5" />
     <text class="node-text" x="910" y="475">ProductResource</text>
-    
+
     <!-- Sample connections -->
     <path class="link" d="M220,120 L300,120" marker-end="url(#arrowhead)" />
     <path class="link" d="M360,140 L360,200" marker-end="url(#arrowhead)" />
@@ -1644,37 +1645,37 @@ SVG;
     <path class="link-dotted" d="M160,450 L160,300" marker-end="url(#dotted-arrowhead)" />
     <path class="link" d="M420,450 L500,450" marker-end="url(#arrowhead)" />
     <path class="link" d="M820,450 L900,450" marker-end="url(#arrowhead)" />
-    
+
     <!-- Legend -->
     <rect x="50" y="650" width="1050" height="100" fill="#f5f5f5" rx="5" ry="5" />
     <text x="60" y="670" font-size="14" font-weight="bold">Legend</text>
-    
+
     <rect class="node-route" x="60" y="690" width="80" height="20" rx="3" ry="3" />
     <text class="node-text" x="100" y="705" text-anchor="middle">Route</text>
-    
+
     <rect class="node-controller" x="160" y="690" width="80" height="20" rx="3" ry="3" />
     <text class="node-text" x="200" y="705" text-anchor="middle">Controller</text>
-    
+
     <rect class="node-view" x="260" y="690" width="80" height="20" rx="3" ry="3" />
     <text class="node-text" x="300" y="705" text-anchor="middle">View</text>
-    
+
     <rect class="node-model" x="360" y="690" width="80" height="20" rx="3" ry="3" />
     <text class="node-text" x="400" y="705" text-anchor="middle">Model</text>
-    
+
     <rect class="node-resource" x="460" y="690" width="80" height="20" rx="3" ry="3" />
     <text class="node-text" x="500" y="705" text-anchor="middle">Resource</text>
-    
+
     <rect class="node-livewire" x="560" y="690" width="80" height="20" rx="3" ry="3" />
     <text class="node-text" x="600" y="705" text-anchor="middle">Livewire</text>
-    
+
     <line class="link" x1="660" y1="700" x2="720" y2="700" marker-end="url(#arrowhead)" />
     <text class="node-text" x="690" y="690" text-anchor="middle">Direct</text>
-    
+
     <line class="link-dotted" x1="740" y1="700" x2="800" y2="700" marker-end="url(#dotted-arrowhead)" />
     <text class="node-text" x="770" y="690" text-anchor="middle">Reference</text>
 </svg>
 SVG;
-        
+
         return $svg;
     }
 }

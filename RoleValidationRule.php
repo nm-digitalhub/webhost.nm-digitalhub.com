@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Jetstream\Rules;
 
 use Illuminate\Contracts\Validation\ValidationRule;
@@ -16,7 +18,7 @@ class Role implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, \Closure $fail): void
     {
-        if (!in_array($value, array_keys($this->jetstream->getRoles()))) {
+        if (! in_array($value, array_keys($this->jetstream->getRoles()))) {
             $fail(__('The :attribute must be a valid role.'));
         }
     }

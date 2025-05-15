@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use App\Models\User;
@@ -21,7 +23,7 @@ class DeleteAccountTest extends TestCase
 
         $this->actingAs($user = User::factory()->create());
 
-        $component = Livewire::test(DeleteUserForm::class)
+        Livewire::test(DeleteUserForm::class)
             ->set('password', 'password')
             ->call('deleteUser');
 

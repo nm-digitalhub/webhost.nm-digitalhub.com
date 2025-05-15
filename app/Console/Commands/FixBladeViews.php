@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -9,6 +11,7 @@ use Illuminate\Support\Str;
 class FixBladeViews extends Command
 {
     protected $signature = 'views:fix-blade';
+
     protected $description = 'Fix Blade views to comply with Laravel 12 and Filament 3 standards';
 
     public function handle()
@@ -31,23 +34,23 @@ class FixBladeViews extends Command
 
     private function fixViewsInDirectory(string $directory)
     {
-        if (!File::isDirectory($directory)) {
+        if (! File::isDirectory($directory)) {
             $this->warn("Directory not found: {$directory}");
+
             return;
         }
 
         $files = File::glob("{$directory}/*.blade.php");
-        $this->info("Processing " . count($files) . " blade files in {$directory}");
+        $this->info('Processing ' . count($files) . " blade files in {$directory}");
 
         foreach ($files as $filePath) {
             $content = File::get($filePath);
             $originalContent = $content;
-            $fileName = basename($filePath);
+            $fileName = basename((string) $filePath);
 
             // Replace @section('content') with x-filament.layouts.app if using admin layout
             if (Str::contains($content, "@section('content')") &&
                 (Str::contains(basename($directory), 'admin') || Str::contains($fileName, 'admin'))) {
-
                 $this->info("Replacing content section with Filament layout in {$fileName}");
 
                 // Replace the entire content section structure with Filament layout
@@ -59,7 +62,7 @@ class FixBladeViews extends Command
             }
 
             // Replace hardcoded strings with localization function
-            if (preg_match_all('/(?<![_\'"])([א-ת]{2,}|[A-Za-z]{2,}\s+[A-Za-z]{2,})(?![_\'"])/', $content, $matches)) {
+            if (preg_match_all('/(?<![_\'"])([א-ת]{2,}|[A-Za-z]{2,}\s+[A-Za-z]{2,})(?![_\'"])/', (string) $content, $matches)) {
                 foreach ($matches[0] as $match) {
                     // Skip if it's already in a translation helper
                     if (preg_match('/__([\'"]).+?\\1/', $match)) {
@@ -86,7 +89,7 @@ class FixBladeViews extends Command
             }
 
             // Add dir attribute for RTL support if needed
-            if (!Str::contains($content, 'dir=') && (
+            if (! Str::contains($content, 'dir=') && (
                 Str::contains($content, '<html') ||
                 Str::contains($content, '<body') ||
                 Str::contains($content, '<div class="container">')
@@ -94,7 +97,7 @@ class FixBladeViews extends Command
                 $content = preg_replace(
                     '/(<html[^>]*|<body[^>]*|<div class="container"[^>]*)>/',
                     '$1 dir="{{ app()->getLocale() === \'he\' ? \'rtl\' : \'ltr\' }}">',
-                    $content
+                    (string) $content
                 );
                 $this->info("Added dynamic dir attribute for RTL support in {$fileName}");
             }

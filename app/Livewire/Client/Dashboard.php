@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire\Client;
 
 use Carbon\Carbon;
@@ -8,10 +10,15 @@ use Livewire\Component;
 class Dashboard extends Component
 {
     public $activeDomains;
+
     public $activeHosting;
+
     public $activeVps;
+
     public $pendingInvoices;
+
     public $domains;
+
     public $invoices;
 
     public function mount()

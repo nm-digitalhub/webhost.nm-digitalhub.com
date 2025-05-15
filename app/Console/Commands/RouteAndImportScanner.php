@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -16,6 +18,7 @@ class RouteAndImportScanner extends Command
     protected $description = 'Scan project files to validate and correct use statements and route definitions';
 
     protected $issues = [];
+
     protected $fixes = [];
 
     public function handle()
@@ -80,16 +83,17 @@ class RouteAndImportScanner extends Command
             'Controllers' => app_path('Http/Controllers'),
             'Middleware' => app_path('Http/Middleware'),
             'Models' => app_path('Models'),
-            'Livewire' => app_path('Livewire')
+            'Livewire' => app_path('Livewire'),
         ];
 
         foreach ($directories as $type => $directory) {
-            if (!File::isDirectory($directory)) {
+            if (! File::isDirectory($directory)) {
                 $this->warn("Directory not found: {$directory}");
+
                 continue;
             }
 
-            $finder = new Finder();
+            $finder = new Finder;
             $finder->files()->in($directory)->name('*.php');
 
             foreach ($finder as $file) {
@@ -114,12 +118,13 @@ class RouteAndImportScanner extends Command
 
         $viewsDirectory = resource_path('views/livewire');
 
-        if (!File::isDirectory($viewsDirectory)) {
+        if (! File::isDirectory($viewsDirectory)) {
             $this->warn("Livewire views directory not found: {$viewsDirectory}");
+
             return;
         }
 
-        $finder = new Finder();
+        $finder = new Finder;
         $finder->files()->in($viewsDirectory)->name('*.blade.php');
 
         foreach ($finder as $file) {
@@ -134,16 +139,15 @@ class RouteAndImportScanner extends Command
     private function checkMissingUseStatements($content, $fileName)
     {
         // Check for controller references without use statements
-        preg_match_all('/\[([^:,\]]+)::class/', $content, $controllerMatches);
+        preg_match_all('/\[([^:,\]]+)::class/', (string) $content, $controllerMatches);
 
         if (isset($controllerMatches[1]) && count($controllerMatches[1]) > 0) {
             foreach ($controllerMatches[1] as $controller) {
-                if (!Str::contains($content, "use App\\Http\\Controllers\\{$controller};") &&
-                    !Str::contains($content, "use App\\Http\\Controllers\\Admin\\{$controller};") &&
-                    !Str::contains($content, "use App\\Http\\Controllers\\Client\\{$controller};") &&
-                    !Str::contains($content, "use App\\Http\\Controllers\\Api\\{$controller};") &&
-                    !Str::contains($content, "use App\\Http\\Controllers\\Auth\\{$controller};")) {
-
+                if (! Str::contains($content, "use App\\Http\\Controllers\\{$controller};") &&
+                    ! Str::contains($content, "use App\\Http\\Controllers\\Admin\\{$controller};") &&
+                    ! Str::contains($content, "use App\\Http\\Controllers\\Client\\{$controller};") &&
+                    ! Str::contains($content, "use App\\Http\\Controllers\\Api\\{$controller};") &&
+                    ! Str::contains($content, "use App\\Http\\Controllers\\Auth\\{$controller};")) {
                     $this->addIssue(
                         'missing_use_statement',
                         "routes/{$fileName}",
@@ -155,11 +159,11 @@ class RouteAndImportScanner extends Command
         }
 
         // Check for Livewire component references without use statements
-        preg_match_all('/(Route::get\([^,]+,\s*)([A-Za-z0-9_\\\\]+)::class/', $content, $livewireMatches);
+        preg_match_all('/(Route::get\([^,]+,\s*)([A-Za-z0-9_\\\\]+)::class/', (string) $content, $livewireMatches);
 
         if (isset($livewireMatches[2]) && count($livewireMatches[2]) > 0) {
             foreach ($livewireMatches[2] as $component) {
-                if (!Str::contains($component, '\\') && !Str::contains($content, "use App\\Livewire\\{$component};")) {
+                if (! Str::contains($component, '\\') && ! Str::contains($content, "use App\\Livewire\\{$component};")) {
                     $this->addIssue(
                         'missing_use_statement',
                         "routes/{$fileName}",
@@ -171,7 +175,7 @@ class RouteAndImportScanner extends Command
         }
 
         // Check for middleware references without use statements
-        preg_match_all('/->middleware\(\[?([\'"][^\'",]+[\'"]|[a-zA-Z0-9_:]+)/', $content, $middlewareMatches);
+        preg_match_all('/->middleware\(\[?([\'"][^\'",]+[\'"]|[a-zA-Z0-9_:]+)/', (string) $content, $middlewareMatches);
 
         if (isset($middlewareMatches[1]) && count($middlewareMatches[1]) > 0) {
             foreach ($middlewareMatches[1] as $middleware) {
@@ -187,7 +191,7 @@ class RouteAndImportScanner extends Command
                     $middleware = explode(':', $middleware)[0];
                 }
 
-                if (!Str::contains($content, "use App\\Http\\Middleware\\{$middleware};")) {
+                if (! Str::contains($content, "use App\\Http\\Middleware\\{$middleware};")) {
                     $this->addIssue(
                         'missing_use_statement',
                         "routes/{$fileName}",
@@ -204,7 +208,7 @@ class RouteAndImportScanner extends Command
         $routes = [];
 
         // Extract all route definitions
-        preg_match_all('/Route::(get|post|put|patch|delete|options|any)\([\'"]([^\'"]+)[\'"]/', $content, $routeMatches, PREG_SET_ORDER);
+        preg_match_all('/Route::(get|post|put|patch|delete|options|any)\([\'"]([^\'"]+)[\'"]/', (string) $content, $routeMatches, PREG_SET_ORDER);
 
         foreach ($routeMatches as $match) {
             $method = $match[1];
@@ -216,7 +220,7 @@ class RouteAndImportScanner extends Command
                     'duplicate_route',
                     "routes/{$fileName}",
                     "Duplicate route definition: {$method} '{$uri}'",
-                    "Remove or rename one of the duplicate route definitions"
+                    'Remove or rename one of the duplicate route definitions'
                 );
             } else {
                 $routes[$routeKey] = true;
@@ -227,12 +231,12 @@ class RouteAndImportScanner extends Command
     private function checkRouteNamingStandards($content, $fileName)
     {
         // Extract all named routes
-        preg_match_all('/->name\([\'"]([^\'"]+)[\'"]/', $content, $nameMatches);
+        preg_match_all('/->name\([\'"]([^\'"]+)[\'"]/', (string) $content, $nameMatches);
 
         if (isset($nameMatches[1]) && count($nameMatches[1]) > 0) {
             foreach ($nameMatches[1] as $routeName) {
                 // Check for proper namespacing (admin. or client. prefix for respective areas)
-                if (Str::contains($fileName, ['admin', 'Admin']) && !Str::startsWith($routeName, 'admin.')) {
+                if (Str::contains($fileName, ['admin', 'Admin']) && ! Str::startsWith($routeName, 'admin.')) {
                     $this->addIssue(
                         'route_naming',
                         "routes/{$fileName}",
@@ -241,7 +245,7 @@ class RouteAndImportScanner extends Command
                     );
                 }
 
-                if (Str::contains($fileName, ['client', 'Client']) && !Str::startsWith($routeName, 'client.')) {
+                if (Str::contains($fileName, ['client', 'Client']) && ! Str::startsWith($routeName, 'client.')) {
                     $this->addIssue(
                         'route_naming',
                         "routes/{$fileName}",
@@ -251,12 +255,12 @@ class RouteAndImportScanner extends Command
                 }
 
                 // Check for dot notation in route names
-                if (!Str::contains($routeName, '.')) {
+                if (! Str::contains($routeName, '.')) {
                     $this->addIssue(
                         'route_naming',
                         "routes/{$fileName}",
                         "Route name [{$routeName}] should use dot notation (e.g., 'resource.action')",
-                        "Rename to follow convention: [resource].[action]"
+                        'Rename to follow convention: [resource].[action]'
                     );
                 }
             }
@@ -266,37 +270,37 @@ class RouteAndImportScanner extends Command
     private function checkMiddlewareUsage($content, $fileName)
     {
         // Check if auth routes have auth middleware
-        if (Str::contains($fileName, 'auth') || preg_match('/Route::middleware\(\[.*?auth.*?\]\)/', $content)) {
+        if (Str::contains($fileName, 'auth') || preg_match('/Route::middleware\(\[.*?auth.*?\]\)/', (string) $content)) {
             // This is fine, auth routes should have auth middleware
-        } else if (
+        } elseif (
             (Str::contains($fileName, ['admin', 'Admin']) || Str::contains($fileName, ['client', 'Client']))
-            && !preg_match('/Route::middleware\(\[.*?auth.*?\]\)/', $content)
+            && ! preg_match('/Route::middleware\(\[.*?auth.*?\]\)/', (string) $content)
         ) {
             $this->addIssue(
                 'middleware_usage',
                 "routes/{$fileName}",
-                "Routes in admin or client sections should be protected by auth middleware",
-                "Add auth middleware to route groups in this file"
+                'Routes in admin or client sections should be protected by auth middleware',
+                'Add auth middleware to route groups in this file'
             );
         }
 
         // Check for proper admin middleware in admin routes
-        if (Str::contains($fileName, ['admin', 'Admin']) && !preg_match('/Route::middleware\(\[.*?IsAdmin.*?\]\)/', $content)) {
+        if (Str::contains($fileName, ['admin', 'Admin']) && ! preg_match('/Route::middleware\(\[.*?IsAdmin.*?\]\)/', (string) $content)) {
             $this->addIssue(
                 'middleware_usage',
                 "routes/{$fileName}",
-                "Admin routes should be protected by IsAdmin middleware",
-                "Add IsAdmin middleware to route groups in this file"
+                'Admin routes should be protected by IsAdmin middleware',
+                'Add IsAdmin middleware to route groups in this file'
             );
         }
 
         // Check for proper client middleware in client routes
-        if (Str::contains($fileName, ['client', 'Client']) && !preg_match('/Route::middleware\(\[.*?IsClient.*?\]\)/', $content)) {
+        if (Str::contains($fileName, ['client', 'Client']) && ! preg_match('/Route::middleware\(\[.*?IsClient.*?\]\)/', (string) $content)) {
             $this->addIssue(
                 'middleware_usage',
                 "routes/{$fileName}",
-                "Client routes should be protected by IsClient middleware",
-                "Add IsClient middleware to route groups in this file"
+                'Client routes should be protected by IsClient middleware',
+                'Add IsClient middleware to route groups in this file'
             );
         }
     }
@@ -304,15 +308,16 @@ class RouteAndImportScanner extends Command
     private function checkNamespaceConsistency($content, $filePath, $type)
     {
         // Extract namespace
-        preg_match('/namespace\s+([^;]+);/', $content, $matches);
+        preg_match('/namespace\s+([^;]+);/', (string) $content, $matches);
 
-        if (!isset($matches[1])) {
+        if (! isset($matches[1])) {
             $this->addIssue(
                 'missing_namespace',
                 $filePath,
-                "Missing namespace declaration",
-                "Add appropriate namespace based on file location"
+                'Missing namespace declaration',
+                'Add appropriate namespace based on file location'
             );
+
             return;
         }
 
@@ -332,7 +337,7 @@ class RouteAndImportScanner extends Command
     private function determineExpectedNamespace($filePath, $type)
     {
         // Extract relative path components
-        $parts = explode('/', $filePath);
+        $parts = explode('/', (string) $filePath);
         array_shift($parts); // Remove 'app'
 
         // Handle special case for Http folder
@@ -370,9 +375,9 @@ class RouteAndImportScanner extends Command
     private function checkUnusedImports($content, $filePath)
     {
         // Extract all use statements
-        preg_match_all('/use\s+([^;]+);/', $content, $useMatches);
+        preg_match_all('/use\s+([^;]+);/', (string) $content, $useMatches);
 
-        if (!isset($useMatches[1]) || count($useMatches[1]) === 0) {
+        if (! isset($useMatches[1]) || count($useMatches[1]) === 0) {
             return;
         }
 
@@ -383,7 +388,7 @@ class RouteAndImportScanner extends Command
 
             // Check for aliased imports
             if (Str::contains($import, ' as ')) {
-                list($import, $className) = explode(' as ', $import);
+                [$import, $className] = explode(' as ', $import);
                 $className = trim($className);
             }
 
@@ -393,7 +398,7 @@ class RouteAndImportScanner extends Command
             }
 
             // Check if the class name is used in the file
-            if (!preg_match('/\b' . preg_quote($className, '/') . '\b(?!\s*;)/', $content)) {
+            if (! preg_match('/\b' . preg_quote($className, '/') . '\b(?!\s*;)/', (string) $content)) {
                 $this->addIssue(
                     'unused_import',
                     $filePath,
@@ -410,49 +415,49 @@ class RouteAndImportScanner extends Command
         switch ($type) {
             case 'Controllers':
                 // Controllers should extend BaseController or Controller
-                if (Str::contains($content, 'extends Controller') && !Str::contains($content, 'use App\Http\Controllers\Controller;')) {
+                if (Str::contains($content, 'extends Controller') && ! Str::contains($content, 'use App\Http\Controllers\Controller;')) {
                     $this->addIssue(
                         'missing_required_import',
                         $filePath,
-                        "Missing required import for Controller class",
-                        "Add: use App\\Http\\Controllers\\Controller;"
+                        'Missing required import for Controller class',
+                        'Add: use App\\Http\\Controllers\\Controller;'
                     );
                 }
                 break;
 
             case 'Middleware':
                 // Middleware should implement Middleware contract
-                if (!Str::contains($content, 'use Illuminate\Http\Middleware\TrustProxies;') &&
+                if (! Str::contains($content, 'use Illuminate\Http\Middleware\TrustProxies;') &&
                     Str::contains($content, 'extends TrustProxies')) {
                     $this->addIssue(
                         'missing_required_import',
                         $filePath,
-                        "Missing required import for TrustProxies class",
-                        "Add: use Illuminate\\Http\\Middleware\\TrustProxies;"
+                        'Missing required import for TrustProxies class',
+                        'Add: use Illuminate\\Http\\Middleware\\TrustProxies;'
                     );
                 }
                 break;
 
             case 'Models':
                 // Models should extend Eloquent Model
-                if (Str::contains($content, 'extends Model') && !Str::contains($content, 'use Illuminate\Database\Eloquent\Model;')) {
+                if (Str::contains($content, 'extends Model') && ! Str::contains($content, 'use Illuminate\Database\Eloquent\Model;')) {
                     $this->addIssue(
                         'missing_required_import',
                         $filePath,
-                        "Missing required import for Model class",
-                        "Add: use Illuminate\\Database\\Eloquent\\Model;"
+                        'Missing required import for Model class',
+                        'Add: use Illuminate\\Database\\Eloquent\\Model;'
                     );
                 }
                 break;
 
             case 'Livewire':
                 // Livewire components should extend Component
-                if (Str::contains($content, 'extends Component') && !Str::contains($content, 'use Livewire\Component;')) {
+                if (Str::contains($content, 'extends Component') && ! Str::contains($content, 'use Livewire\Component;')) {
                     $this->addIssue(
                         'missing_required_import',
                         $filePath,
-                        "Missing required import for Livewire Component class",
-                        "Add: use Livewire\\Component;"
+                        'Missing required import for Livewire Component class',
+                        'Add: use Livewire\\Component;'
                     );
                 }
                 break;
@@ -462,7 +467,7 @@ class RouteAndImportScanner extends Command
     private function checkLivewireComponentReferences($content, $filePath)
     {
         // Check for Livewire component references in blade files
-        preg_match_all('/<livewire:([^\\s>]+)/', $content, $componentMatches);
+        preg_match_all('/<livewire:([^\\s>]+)/', (string) $content, $componentMatches);
 
         if (isset($componentMatches[1]) && count($componentMatches[1]) > 0) {
             foreach ($componentMatches[1] as $component) {
@@ -473,7 +478,7 @@ class RouteAndImportScanner extends Command
                 $componentPaths = [
                     app_path("Livewire/{$studlyComponent}.php"),
                     app_path("Livewire/Admin/{$studlyComponent}.php"),
-                    app_path("Livewire/Client/{$studlyComponent}.php")
+                    app_path("Livewire/Client/{$studlyComponent}.php"),
                 ];
 
                 $componentExists = false;
@@ -484,7 +489,7 @@ class RouteAndImportScanner extends Command
                     }
                 }
 
-                if (!$componentExists) {
+                if (! $componentExists) {
                     $this->addIssue(
                         'missing_livewire_component',
                         $filePath,
@@ -502,7 +507,7 @@ class RouteAndImportScanner extends Command
             'type' => $type,
             'file' => $file,
             'description' => $description,
-            'suggestion' => $suggestion
+            'suggestion' => $suggestion,
         ];
 
         // Also add to fixes if fixable
@@ -511,7 +516,7 @@ class RouteAndImportScanner extends Command
                 'type' => $type,
                 'file' => $file,
                 'description' => $description,
-                'suggestion' => $suggestion
+                'suggestion' => $suggestion,
             ];
         }
     }
@@ -520,6 +525,7 @@ class RouteAndImportScanner extends Command
     {
         if (count($this->issues) === 0) {
             $this->info('No issues found! Everything looks good.');
+
             return;
         }
 
@@ -530,7 +536,7 @@ class RouteAndImportScanner extends Command
         $issuesByFile = [];
         foreach ($this->issues as $issue) {
             $file = $issue['file'];
-            if (!isset($issuesByFile[$file])) {
+            if (! isset($issuesByFile[$file])) {
                 $issuesByFile[$file] = [];
             }
             $issuesByFile[$file][] = $issue;
@@ -568,8 +574,8 @@ class RouteAndImportScanner extends Command
             'summary' => [
                 'total_issues' => count($this->issues),
                 'fixable_issues' => count($this->fixes),
-                'issues_by_type' => $this->countIssuesByType()
-            ]
+                'issues_by_type' => $this->countIssuesByType(),
+            ],
         ];
 
         File::put($reportPath, json_encode($report, JSON_PRETTY_PRINT));
@@ -581,11 +587,12 @@ class RouteAndImportScanner extends Command
         $counts = [];
         foreach ($this->issues as $issue) {
             $type = $issue['type'];
-            if (!isset($counts[$type])) {
+            if (! isset($counts[$type])) {
                 $counts[$type] = 0;
             }
             $counts[$type]++;
         }
+
         return $counts;
     }
 
@@ -593,6 +600,7 @@ class RouteAndImportScanner extends Command
     {
         if (count($this->fixes) === 0) {
             $this->info('No fixable issues found.');
+
             return;
         }
 
@@ -605,7 +613,7 @@ class RouteAndImportScanner extends Command
         $fixesByFile = [];
         foreach ($this->fixes as $fix) {
             $file = $fix['file'];
-            if (!isset($fixesByFile[$file])) {
+            if (! isset($fixesByFile[$file])) {
                 $fixesByFile[$file] = [];
             }
             $fixesByFile[$file][] = $fix;
@@ -614,8 +622,9 @@ class RouteAndImportScanner extends Command
         foreach ($fixesByFile as $file => $fixes) {
             $filePath = base_path($file);
 
-            if (!File::exists($filePath)) {
+            if (! File::exists($filePath)) {
                 $this->warn("File not found: {$filePath}");
+
                 continue;
             }
 
@@ -627,31 +636,32 @@ class RouteAndImportScanner extends Command
             foreach ($fixes as $fix) {
                 switch ($fix['type']) {
                     case 'missing_use_statement':
+
+                    case 'missing_required_import':
                         // Extract what to add from suggestion
-                        preg_match('/Add: (.+)/', $fix['suggestion'], $matches);
+                        preg_match('/Add: (.+)/', (string) $fix['suggestion'], $matches);
                         if (isset($matches[1])) {
                             $useStatement = $matches[1];
 
                             // Find position to insert (after other use statements or after namespace)
-                            if (preg_match('/use [^;]+;/', $content)) {
+                            if (preg_match('/use [^;]+;/', (string) $content)) {
                                 // After last use statement
-                                $content = preg_replace('/(use [^;]+;\n)(?!use)/', "$1{$useStatement}\n", $content);
-                            } else if (preg_match('/namespace [^;]+;/', $content)) {
+                                $content = preg_replace('/(use [^;]+;\n)(?!use)/', "$1{$useStatement}\n", (string) $content);
+                            } elseif (preg_match('/namespace [^;]+;/', (string) $content)) {
                                 // After namespace
-                                $content = preg_replace('/(namespace [^;]+;\n)/', "$1\n{$useStatement}\n", $content);
+                                $content = preg_replace('/(namespace [^;]+;\n)/', "$1\n{$useStatement}\n", (string) $content);
                             } else {
                                 // At beginning after <?php
-                                $content = preg_replace('/<\?php/', "<?php\n\n{$useStatement}", $content);
+                                $content = preg_replace('/<\?php/', "<?php\n\n{$useStatement}", (string) $content);
                             }
 
                             $this->line(" - Added: {$useStatement}");
                             $fixedCount++;
                         }
                         break;
-
                     case 'unused_import':
                         // Extract what to remove from suggestion
-                        preg_match('/Remove: (.+)/', $fix['suggestion'], $matches);
+                        preg_match('/Remove: (.+)/', (string) $fix['suggestion'], $matches);
                         if (isset($matches[1])) {
                             $useStatement = $matches[1];
 
@@ -664,37 +674,14 @@ class RouteAndImportScanner extends Command
                         }
                         break;
 
-                    case 'missing_required_import':
-                        // Extract what to add from suggestion
-                        preg_match('/Add: (.+)/', $fix['suggestion'], $matches);
-                        if (isset($matches[1])) {
-                            $useStatement = $matches[1];
-
-                            // Find position to insert (after other use statements or after namespace)
-                            if (preg_match('/use [^;]+;/', $content)) {
-                                // After last use statement
-                                $content = preg_replace('/(use [^;]+;\n)(?!use)/', "$1{$useStatement}\n", $content);
-                            } else if (preg_match('/namespace [^;]+;/', $content)) {
-                                // After namespace
-                                $content = preg_replace('/(namespace [^;]+;\n)/', "$1\n{$useStatement}\n", $content);
-                            } else {
-                                // At beginning after <?php
-                                $content = preg_replace('/<\?php/', "<?php\n\n{$useStatement}", $content);
-                            }
-
-                            $this->line(" - Added: {$useStatement}");
-                            $fixedCount++;
-                        }
-                        break;
-
                     case 'namespace_mismatch':
                         // Extract what to change from suggestion
-                        preg_match('/Change namespace to: (.+)/', $fix['suggestion'], $matches);
+                        preg_match('/Change namespace to: (.+)/', (string) $fix['suggestion'], $matches);
                         if (isset($matches[1])) {
                             $newNamespace = $matches[1];
 
                             // Replace namespace
-                            $content = preg_replace('/namespace [^;]+;/', "namespace {$newNamespace};", $content);
+                            $content = preg_replace('/namespace [^;]+;/', "namespace {$newNamespace};", (string) $content);
 
                             $this->line(" - Updated namespace to: {$newNamespace}");
                             $fixedCount++;
@@ -716,10 +703,10 @@ class RouteAndImportScanner extends Command
         }
 
         $this->line('');
-        $this->info("Fixed {$fixedCount} issues out of " . count($this->fixes) . " fixable issues.");
+        $this->info("Fixed {$fixedCount} issues out of " . count($this->fixes) . ' fixable issues.');
 
         if ($fixedCount < count($this->fixes)) {
-            $this->warn((count($this->fixes) - $fixedCount) . " issues could not be fixed automatically.");
+            $this->warn((count($this->fixes) - $fixedCount) . ' issues could not be fixed automatically.');
         }
     }
 }

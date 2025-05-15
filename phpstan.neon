@@ -1,3 +1,31 @@
-        - '#Cannot call method [a-zA-Z0-9_]+\(\) on mixed\.#'
-        - '#Parameter \#[0-9]+ \$[a-zA-Z0-9_]+ of function view expects view-string\|null, string given\.#'
-        - '#Access to property \$[a-zA-Z0-9_]+ on an unknown class HtmlString#'
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    level: max
+
+    paths:
+        - app
+        - routes
+        - config
+
+    bootstrapFiles:
+        - vendor/autoload.php
+
+    stubFiles:
+        - stubs/filament.stub
+
+    excludePaths:
+        - vendor
+        - storage
+        - bootstrap/cache
+        - database/seeders
+
+    reportUnmatchedIgnoredErrors: false
+
+    ignoreErrors:
+        - '#Method Filament\\Panel::(rtl|rtlWhen|direction)\(\) does not exist\.#'
+        - '#Call to an undefined method Filament\\Panel::(rtl|rtlWhen|direction)\(\)\.#'
+        - '#Call to an undefined method Livewire\\.*#'
+        - '#Call to static method .* on an unknown class Filament\\.*#'
+        - '#Access to an undefined property Filament\\.*#'

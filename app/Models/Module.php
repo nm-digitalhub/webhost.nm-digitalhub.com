@@ -1,14 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Module extends Model
 {
-    use HasFactory;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -41,7 +40,7 @@ class Module extends Model
      */
     public function isInstalled(): bool
     {
-        return !is_null($this->installed_at);
+        return ! is_null($this->installed_at);
     }
 
     /**

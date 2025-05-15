@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\RoleMiddleware;
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsClient;
+use App\Http\Middleware\RoleMiddleware;
 use App\Http\Middleware\SetLocale;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\ServiceProvider;
 
 class MiddlewareServiceProvider extends ServiceProvider
 {

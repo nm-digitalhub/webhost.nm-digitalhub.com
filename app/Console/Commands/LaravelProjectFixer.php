@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -8,32 +10,35 @@ use Illuminate\Support\Facades\File;
 
 class LaravelProjectFixer extends Command
 {
+    // החתימה של הפקודה
     protected $signature = 'project:fix';
+
+    // תיאור הפקודה
     protected $description = 'Comprehensive Laravel 12 + Filament 3 project fixer';
 
     public function handle()
     {
         $this->info('Starting comprehensive Laravel 12 + Filament 3 project fix...');
 
-        // 1. Fix PHP syntax issues
-        $this->runCommand('fix:php-tags', 'Fixing duplicate PHP tags');
+        // 1. תיקון בעיות תחביר PHP
+        $this->executeCommand('fix:php-tags', 'Fixing duplicate PHP tags');
 
-        // 2. Fix Filament resource issues (most critical)
-        $this->runCommand('filament:fix-page-registrations', 'Fixing Filament page registrations');
+        // 2. תיקון בעיות משאבים של Filament (הכי קריטי)
+        $this->executeCommand('filament:fix-page-registrations', 'Fixing Filament page registrations');
 
-        // 3. Fix Livewire namespace issues
-        $this->runCommand('livewire:fix-namespaces', 'Fixing Livewire namespaces');
+        // 3. תיקון בעיות Namespace ב-Livewire
+        $this->executeCommand('livewire:fix-namespaces', 'Fixing Livewire namespaces');
 
-        // 4. Detect misplaced views
-        $this->runCommand('views:detect-misplaced', 'Detecting misplaced views');
+        // 4. גילוי דפים שהוזזו לא נכון
+        $this->executeCommand('views:detect-misplaced', 'Detecting misplaced views');
 
-        // 5. Check for any remaining PHP syntax errors
-        $this->runCommand('check:php-syntax', 'Checking for PHP syntax errors');
+        // 5. בדיקה אם נשארו בעיות תחביר ב-PHP
+        $this->executeCommand('check:php-syntax', 'Checking for PHP syntax errors');
 
-        // 6. Set up Filament Admin panel provider if missing
+        // 6. לוודא ש-AdminPanelProvider של Filament קיים ועובד
         $this->ensureFilamentPanelProviderExists();
 
-        // 7. Clear all caches
+        // 7. ניקוי כל המטמונים
         $this->clearAllCaches();
 
         $this->info('Project fix completed!');
@@ -42,27 +47,41 @@ class LaravelProjectFixer extends Command
         return 0;
     }
 
-    private function runCommand($command, $description)
+    protected function clearAllCaches()
+    {
+        $this->info("\nClearing all caches...");
+        Artisan::call('cache:clear');
+        Artisan::call('config:clear');
+        Artisan::call('route:clear');
+        Artisan::call('view:clear');
+        $this->info('All caches cleared successfully.');
+    }
+
+    protected function executeCommand(string $command, string $description)
     {
         $this->info("\n" . str_repeat('-', 50));
         $this->info($description);
         $this->info(str_repeat('-', 50));
 
-        Artisan::call($command, [], $this->output);
+        try {
+            Artisan::call($command, [], $this->output);
+        } catch (\Exception $e) {
+            $this->error("Error running command '{$command}': " . $e->getMessage());
+        }
     }
 
-    private function ensureFilamentPanelProviderExists()
+    protected function ensureFilamentPanelProviderExists()
     {
         $panelProviderPath = app_path('Providers/Filament/AdminPanelProvider.php');
 
-        if (!File::exists($panelProviderPath)) {
-            $this->info("\n" . str_repeat('-', 50));
+        if (! File::exists($panelProviderPath)) {
+            $this->line("\n" . str_repeat('-', 50));
             $this->info('Creating Filament Admin Panel Provider');
             $this->info(str_repeat('-', 50));
 
             $directoryPath = dirname($panelProviderPath);
 
-            if (!File::isDirectory($directoryPath)) {
+            if (! File::isDirectory($directoryPath)) {
                 File::makeDirectory($directoryPath, 0755, true);
             }
 
@@ -70,13 +89,15 @@ class LaravelProjectFixer extends Command
             File::put($panelProviderPath, $content);
 
             $this->info("Created Admin Panel Provider at: {$panelProviderPath}");
+        } else {
+            $this->info('Filament Admin Panel Provider already exists. Skipping creation.');
 
             // Register the provider in config/app.php if not already registered
             $this->registerPanelProviderInConfig();
         }
     }
 
-    private function getFilamentPanelProviderContent()
+    protected function getFilamentPanelProviderContent()
     {
         return '<?php
 
@@ -135,7 +156,7 @@ class AdminPanelProvider extends PanelProvider
 }';
     }
 
-    private function registerPanelProviderInConfig()
+    protected function registerPanelProviderInConfig()
     {
         $configPath = config_path('app.php');
 
@@ -144,37 +165,15 @@ class AdminPanelProvider extends PanelProvider
 
             $providerClass = 'App\\Providers\\Filament\\AdminPanelProvider::class';
 
-            if (!str_contains($content, $providerClass)) {
+            if (! str_contains($content, $providerClass)) {
                 $pattern = "/(\'providers\'\s*=>\s*\[\s*)/";
                 $replacement = "$1\n        " . $providerClass . ",\n        ";
 
                 $content = preg_replace($pattern, $replacement, $content);
                 File::put($configPath, $content);
 
-                $this->info("Registered AdminPanelProvider in config/app.php");
+                $this->info('Registered AdminPanelProvider in config/app.php');
             }
         }
-    }
-
-    private function clearAllCaches()
-    {
-        $this->info("\n" . str_repeat('-', 50));
-        $this->info('Clearing all caches');
-        $this->info(str_repeat('-', 50));
-
-        Artisan::call('config:clear');
-        $this->info('✓ Config cache cleared');
-
-        Artisan::call('cache:clear');
-        $this->info('✓ Application cache cleared');
-
-        Artisan::call('route:clear');
-        $this->info('✓ Route cache cleared');
-
-        Artisan::call('view:clear');
-        $this->info('✓ View cache cleared');
-
-        Artisan::call('optimize:clear');
-        $this->info('✓ Compiled optimization files cleared');
     }
 }

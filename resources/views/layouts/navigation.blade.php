@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
@@ -16,7 +18,7 @@ class AdminController extends Controller
     public function dashboard()
     {
         $data = [
-            'title' => 'Admin Dashboard',
+            'title'       => 'Admin Dashboard',
             'description' => 'Welcome to the admin panel.',
         ];
 

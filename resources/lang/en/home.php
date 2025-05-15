@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'close' => 'Close',
     'hero_title' => 'Powerful Web Hosting Solutions',

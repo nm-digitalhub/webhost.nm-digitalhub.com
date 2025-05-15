@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Payment;
 
-use App\Contracts\PaymentGateway;
 use App\Models\Order;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Http;
@@ -14,8 +15,9 @@ class CardcomGateway extends AbstractPaymentGateway
      * API Base URLs
      */
     protected const SANDBOX_URL = 'https://sandbox.cardcom.solutions/Interface';
+
     protected const PRODUCTION_URL = 'https://secure.cardcom.solutions/Interface';
-    
+
     /**
      * Get the payment gateway identifier.
      */
@@ -23,7 +25,7 @@ class CardcomGateway extends AbstractPaymentGateway
     {
         return 'cardcom';
     }
-    
+
     /**
      * Get the payment gateway display name.
      */
@@ -31,7 +33,7 @@ class CardcomGateway extends AbstractPaymentGateway
     {
         return 'Cardcom (Israel)';
     }
-    
+
     /**
      * Get required configuration fields for this gateway.
      */
@@ -44,7 +46,7 @@ class CardcomGateway extends AbstractPaymentGateway
             'api_password',
         ];
     }
-    
+
     /**
      * Get the configuration form fields.
      */
@@ -103,7 +105,7 @@ class CardcomGateway extends AbstractPaymentGateway
             ],
         ];
     }
-    
+
     /**
      * Get the payment form fields.
      */
@@ -112,27 +114,27 @@ class CardcomGateway extends AbstractPaymentGateway
         // Cardcom handles the payment form on their side
         return [];
     }
-    
+
     /**
      * Create a payment session/transaction.
      *
-     * @param array $paymentData Additional payment data
+     * @param  array  $paymentData  Additional payment data
      * @return array Payment session data
      */
     public function createPayment(Order $order, array $paymentData = []): array
     {
-        if (!$this->isConfigured()) {
+        if (! $this->isConfigured()) {
             throw new \Exception('Cardcom gateway is not properly configured');
         }
-        
+
         $baseUrl = $this->mode === 'sandbox' ? self::SANDBOX_URL : self::PRODUCTION_URL;
         $terminalnumber = $this->config['terminal_number'];
         $username = $this->config['username'];
         $language = $this->config['language'] ?? 'he';
-        
+
         // Create the API endpoint URL
         $url = "{$baseUrl}/UseRest.aspx";
-        
+
         // Prepare the items for Cardcom
         $items = [];
         foreach ($order->items as $index => $item) {
@@ -140,7 +142,7 @@ class CardcomGateway extends AbstractPaymentGateway
             $items["Items[{$index}].Price"] = $item->price;
             $items["Items[{$index}].Quantity"] = $item->quantity;
         }
-        
+
         // Prepare the request data
         $requestData = array_merge([
             'TerminalNumber' => $terminalnumber,
@@ -165,13 +167,13 @@ class CardcomGateway extends AbstractPaymentGateway
             'InvoiceHead.Remarks' => $order->notes,
             // Skip the custom CSS for now
         ], $items);
-        
+
         try {
             $response = Http::asForm()->post($url, $requestData);
-            
+
             if ($response->successful()) {
                 $data = $response->json();
-                
+
                 if (isset($data['OperationResponse']['success']) && $data['OperationResponse']['success'] === true) {
                     // Create a transaction record
                     $transaction = $this->createTransactionRecord($order, null, Transaction::STATUS_PENDING, [
@@ -179,7 +181,7 @@ class CardcomGateway extends AbstractPaymentGateway
                         'request_data' => $requestData,
                         'response_data' => $data,
                     ]);
-                    
+
                     return [
                         'success' => true,
                         'redirect_url' => $data['OperationResponse']['url'],
@@ -189,16 +191,16 @@ class CardcomGateway extends AbstractPaymentGateway
                 } else {
                     $errorMessage = $data['OperationResponse']['message'] ?? 'Unknown error';
                     $this->createTransactionRecord(
-                        $order, 
-                        null, 
-                        Transaction::STATUS_FAILED, 
+                        $order,
+                        null,
+                        Transaction::STATUS_FAILED,
                         [
                             'request_data' => $requestData,
                             'response_data' => $data,
-                            'error' => $errorMessage
+                            'error' => $errorMessage,
                         ]
                     );
-                    
+
                     return [
                         'success' => false,
                         'message' => $errorMessage,
@@ -207,48 +209,47 @@ class CardcomGateway extends AbstractPaymentGateway
             } else {
                 $errorMessage = 'Failed to communicate with Cardcom. Status: ' . $response->status();
                 $this->createTransactionRecord(
-                    $order, 
-                    null, 
-                    Transaction::STATUS_FAILED, 
+                    $order,
+                    null,
+                    Transaction::STATUS_FAILED,
                     [
                         'request_data' => $requestData,
-                        'error' => $errorMessage
+                        'error' => $errorMessage,
                     ]
                 );
-                
+
                 return [
                     'success' => false,
                     'message' => $errorMessage,
                 ];
             }
-            
         } catch (\Exception $e) {
             Log::error('Cardcom payment error: ' . $e->getMessage(), [
                 'order_id' => $order->id,
                 'request_data' => $requestData,
             ]);
-            
+
             $this->createTransactionRecord(
-                $order, 
-                null, 
-                Transaction::STATUS_FAILED, 
+                $order,
+                null,
+                Transaction::STATUS_FAILED,
                 [
                     'request_data' => $requestData,
-                    'error' => $e->getMessage()
+                    'error' => $e->getMessage(),
                 ]
             );
-            
+
             return [
                 'success' => false,
                 'message' => 'An error occurred while processing your payment: ' . $e->getMessage(),
             ];
         }
     }
-    
+
     /**
      * Process callback/webhook from payment gateway.
      *
-     * @param array $data Request data from callback
+     * @param  array  $data  Request data from callback
      */
     public function processCallback(array $data): Transaction
     {
@@ -256,13 +257,13 @@ class CardcomGateway extends AbstractPaymentGateway
         $isApproved = isset($data['ResponseCode']) && $data['ResponseCode'] === '0';
         $transactionId = $data['terminaltransactionnumber'] ?? null;
         $cardcomId = $data['lowprofilecode'] ?? null;
-        
+
         // Try to find the transaction by the page code in metadata
         $transaction = Transaction::where('provider', $this->getIdentifier())
             ->whereJsonContains('metadata->cardcom_page_code', $data['lowprofilecode'] ?? '')
             ->first();
-            
-        if (!$transaction) {
+
+        if (! $transaction) {
             // Create a new transaction record for logging
             $transaction = Transaction::create([
                 'provider' => $this->getIdentifier(),
@@ -272,14 +273,14 @@ class CardcomGateway extends AbstractPaymentGateway
                     'callback_data' => $data,
                 ],
             ]);
-            
+
             return $transaction;
         }
-        
+
         // Update the transaction status
         $status = $isApproved ? Transaction::STATUS_COMPLETED : Transaction::STATUS_FAILED;
         $errorMessage = $isApproved ? (null) : $data['ResponseText'] ?? 'Payment was not approved';
-        
+
         $this->updateTransactionRecord(
             $transaction,
             $status,
@@ -297,26 +298,26 @@ class CardcomGateway extends AbstractPaymentGateway
                 'last_digits' => $data['LastFourDigits'] ?? null,
             ]
         );
-        
+
         // Update the order status
         $this->updateOrderStatus($transaction);
-        
+
         return $transaction;
     }
-    
+
     /**
      * Verify a payment transaction.
      */
     public function verifyPayment(string $transactionId): bool
     {
         $transaction = Transaction::find($transactionId);
-        if (!$transaction) {
+        if (! $transaction) {
             return false;
         }
-        
+
         $baseUrl = $this->mode === 'sandbox' ? self::SANDBOX_URL : self::PRODUCTION_URL;
         $url = "{$baseUrl}/UseRest.aspx";
-        
+
         $requestData = [
             'TerminalNumber' => $this->config['terminal_number'],
             'UserName' => $this->config['username'],
@@ -325,32 +326,31 @@ class CardcomGateway extends AbstractPaymentGateway
             'Operation' => 16, // Get transaction info
             'TransactionId' => $transaction->transaction_id,
         ];
-        
+
         try {
             $response = Http::asForm()->post($url, $requestData);
-            
+
             if ($response->successful()) {
                 $data = $response->json();
-                
+
                 if (isset($data['OperationResponse']['success']) && $data['OperationResponse']['success'] === true) {
                     // Verify the transaction status
                     $status = $data['OperationResponse']['status'] ?? '';
-                    
+
                     return in_array($status, ['Approved', 'Authorized']);
                 }
             }
-            
+
             return false;
-            
         } catch (\Exception $e) {
             Log::error('Cardcom verification error: ' . $e->getMessage(), [
                 'transaction_id' => $transactionId,
             ]);
-            
+
             return false;
         }
     }
-    
+
     /**
      * Capture an authorized payment.
      */
@@ -359,21 +359,21 @@ class CardcomGateway extends AbstractPaymentGateway
         // Cardcom automatically captures by default
         return true;
     }
-    
+
     /**
      * Refund a payment.
      *
-     * @param float|null $amount Amount to refund (null for full refund)
+     * @param  float|null  $amount  Amount to refund (null for full refund)
      */
     public function refundPayment(Transaction $transaction, ?float $amount = null): bool
     {
-        if (!$transaction->transaction_id) {
+        if (! $transaction->transaction_id) {
             return false;
         }
-        
+
         $baseUrl = $this->mode === 'sandbox' ? self::SANDBOX_URL : self::PRODUCTION_URL;
         $url = "{$baseUrl}/UseRest.aspx";
-        
+
         $requestData = [
             'TerminalNumber' => $this->config['terminal_number'],
             'UserName' => $this->config['username'],
@@ -383,13 +383,13 @@ class CardcomGateway extends AbstractPaymentGateway
             'TransactionId' => $transaction->transaction_id,
             'CreditAmount' => $amount ?? $transaction->amount,
         ];
-        
+
         try {
             $response = Http::asForm()->post($url, $requestData);
-            
+
             if ($response->successful()) {
                 $data = $response->json();
-                
+
                 if (isset($data['OperationResponse']['success']) && $data['OperationResponse']['success'] === true) {
                     // Update the transaction status
                     $this->updateTransactionRecord(
@@ -402,10 +402,10 @@ class CardcomGateway extends AbstractPaymentGateway
                             'refund_amount' => $amount ?? $transaction->amount,
                         ]
                     );
-                    
+
                     // Update the order status
                     $this->updateOrderStatus($transaction);
-                    
+
                     return true;
                 } else {
                     $errorMessage = $data['OperationResponse']['message'] ?? 'Unknown error';
@@ -413,7 +413,7 @@ class CardcomGateway extends AbstractPaymentGateway
                         'transaction_id' => $transaction->id,
                         'response' => $data,
                     ]);
-                    
+
                     return false;
                 }
             } else {
@@ -421,31 +421,30 @@ class CardcomGateway extends AbstractPaymentGateway
                     'transaction_id' => $transaction->id,
                     'response' => $response->body(),
                 ]);
-                
+
                 return false;
             }
-            
         } catch (\Exception $e) {
             Log::error('Cardcom refund error: ' . $e->getMessage(), [
                 'transaction_id' => $transaction->id,
             ]);
-            
+
             return false;
         }
     }
-    
+
     /**
      * Cancel an authorized payment.
      */
     public function cancelPayment(Transaction $transaction): bool
     {
-        if (!$transaction->transaction_id) {
+        if (! $transaction->transaction_id) {
             return false;
         }
-        
+
         $baseUrl = $this->mode === 'sandbox' ? self::SANDBOX_URL : self::PRODUCTION_URL;
         $url = "{$baseUrl}/UseRest.aspx";
-        
+
         $requestData = [
             'TerminalNumber' => $this->config['terminal_number'],
             'UserName' => $this->config['username'],
@@ -454,13 +453,13 @@ class CardcomGateway extends AbstractPaymentGateway
             'Operation' => 8, // Cancel operation
             'TransactionId' => $transaction->transaction_id,
         ];
-        
+
         try {
             $response = Http::asForm()->post($url, $requestData);
-            
+
             if ($response->successful()) {
                 $data = $response->json();
-                
+
                 if (isset($data['OperationResponse']['success']) && $data['OperationResponse']['success'] === true) {
                     // Update the transaction status
                     $this->updateTransactionRecord(
@@ -472,10 +471,10 @@ class CardcomGateway extends AbstractPaymentGateway
                             'cancel_data' => $data,
                         ]
                     );
-                    
+
                     // Update the order status
                     $this->updateOrderStatus($transaction);
-                    
+
                     return true;
                 } else {
                     $errorMessage = $data['OperationResponse']['message'] ?? 'Unknown error';
@@ -483,7 +482,7 @@ class CardcomGateway extends AbstractPaymentGateway
                         'transaction_id' => $transaction->id,
                         'response' => $data,
                     ]);
-                    
+
                     return false;
                 }
             } else {
@@ -491,26 +490,25 @@ class CardcomGateway extends AbstractPaymentGateway
                     'transaction_id' => $transaction->id,
                     'response' => $response->body(),
                 ]);
-                
+
                 return false;
             }
-            
         } catch (\Exception $e) {
             Log::error('Cardcom cancel error: ' . $e->getMessage(), [
                 'transaction_id' => $transaction->id,
             ]);
-            
+
             return false;
         }
     }
-    
+
     /**
      * Get the redirect URL for payment processing.
      */
     public function getRedirectUrl(Transaction $transaction): ?string
     {
         $metadata = $transaction->metadata ?? [];
-        
+
         return $metadata['response_data']['OperationResponse']['url'] ?? null;
     }
 }

@@ -1,22 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\RoleResource\Pages;
-use Spatie\Permission\Models\Role;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Spatie\Permission\Models\Role;
 
 class RoleResource extends Resource
 {
     protected static ?string $model = Role::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-shield-check';
+
     protected static ?string $navigationGroup = 'ניהול משתמשים';
+
     protected static ?string $modelLabel = 'תפקיד';
+
     protected static ?string $pluralModelLabel = 'תפקידים';
 
     public static function form(Form $form): Form

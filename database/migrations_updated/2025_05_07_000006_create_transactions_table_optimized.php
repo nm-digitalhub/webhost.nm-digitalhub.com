@@ -1,14 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
-     * 
+     *
      * Optimized version with:
      * - Added string length limits
      * - Added indexes on searchable fields (transaction_id, status)
@@ -33,7 +34,7 @@ return new class extends Migration
             $table->json('metadata')->nullable();
             $table->timestamps();
             $table->softDeletes(); // Add softDeletes for financial record keeping
-            
+
             // Add composite index for common filtering patterns
             $table->index(['status', 'created_at']);
         });

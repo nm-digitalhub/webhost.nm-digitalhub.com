@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\GeneratorResource\Pages;
@@ -9,7 +11,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class GeneratorResource extends Resource
@@ -17,8 +18,11 @@ class GeneratorResource extends Resource
     protected static ?string $model = Generator::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
+
     protected static ?string $navigationGroup = 'ניהול מערכת';
+
     protected static ?string $modelLabel = 'מחולל';
+
     protected static ?string $pluralModelLabel = 'מחוללים';
 
     public static function form(Form $form): Form
@@ -56,11 +60,12 @@ class GeneratorResource extends Resource
                                 Forms\Components\Textarea::make('description')
                                     ->label('תיאור')
                                     ->rows(3),
-                                    
+
                                 Forms\Components\TextInput::make('namespace')
                                     ->label('Namespace')
                                     ->placeholder(function (Forms\Get $get) {
                                         $type = $get('type');
+
                                         return match ($type) {
                                             'model' => 'App\\Models',
                                             'resource' => 'App\\Filament\\Resources',
@@ -69,12 +74,13 @@ class GeneratorResource extends Resource
                                             default => 'App',
                                         };
                                     }),
-                                    
+
                                 Forms\Components\TextInput::make('target_path')
                                     ->label('נתיב יעד')
                                     ->placeholder(function (Forms\Get $get) {
                                         $type = $get('type');
                                         $name = $get('name');
+
                                         return match ($type) {
                                             'model' => app_path('Models/' . $name . '.php'),
                                             'resource' => app_path('Filament/Resources/' . $name . 'Resource.php'),
@@ -84,16 +90,16 @@ class GeneratorResource extends Resource
                                         };
                                     })
                                     ->helperText('אם לא מצוין, יווצר לפי מוסכמות Laravel'),
-                                    
+
                                 Forms\Components\Toggle::make('preview_before_generate')
                                     ->label('הצג תצוגה מקדימה לפני יצירה')
                                     ->default(true),
-                                    
+
                                 Forms\Components\Toggle::make('confirm_overwrite')
                                     ->label('אשר דריסה של קבצים קיימים')
                                     ->default(true),
                             ]),
-                        
+
                         Forms\Components\Tabs\Tab::make('model_settings')
                             ->label('הגדרות Model')
                             ->schema([
@@ -101,29 +107,29 @@ class GeneratorResource extends Resource
                                     ->label('Extends')
                                     ->placeholder(\Illuminate\Database\Eloquent\Model::class)
                                     ->helperText('המחלקה שממנה המודל יורש'),
-                                
+
                                 Forms\Components\TagsInput::make('implements')
                                     ->label('Implements')
                                     ->helperText('Interfaces שהמודל מממש')
                                     ->placeholder('הוסף interface'),
-                                
+
                                 Forms\Components\TagsInput::make('traits')
                                     ->label('Traits')
                                     ->helperText('Traits שהמודל משתמש בהם')
                                     ->placeholder('הוסף trait'),
-                                    
+
                                 Forms\Components\Toggle::make('fillable')
                                     ->label('כלול מערך fillable')
                                     ->default(true),
-                                    
+
                                 Forms\Components\Toggle::make('timestamps')
                                     ->label('כלול timestamps')
                                     ->default(true),
-                                    
+
                                 Forms\Components\Toggle::make('soft_deletes')
                                     ->label('כלול soft deletes')
                                     ->default(false),
-                                    
+
                                 Forms\Components\Repeater::make('fields')
                                     ->label('שדות המודל')
                                     ->schema([
@@ -153,7 +159,7 @@ class GeneratorResource extends Resource
                                     ->itemLabel(fn (array $state): ?string => $state['name'] ?? null)
                                     ->collapsible()
                                     ->defaultItems(0),
-                                    
+
                                 Forms\Components\Repeater::make('relations')
                                     ->label('יחסים / Relations')
                                     ->schema([
@@ -177,13 +183,12 @@ class GeneratorResource extends Resource
                                         Forms\Components\TextInput::make('local_key')
                                             ->label('Local Key'),
                                     ])
-                                    ->itemLabel(fn (array $state): ?string => 
-                                        ($state['type'] ?? '') . ' ' . ($state['name'] ?? ''))
+                                    ->itemLabel(fn (array $state): ?string => ($state['type'] ?? '') . ' ' . ($state['name'] ?? ''))
                                     ->collapsible()
                                     ->defaultItems(0),
                             ])
                             ->visible(fn (Forms\Get $get): bool => $get('type') === 'model'),
-                            
+
                         Forms\Components\Tabs\Tab::make('resource_settings')
                             ->label('הגדרות Resource')
                             ->schema([
@@ -191,17 +196,17 @@ class GeneratorResource extends Resource
                                     ->label('תווית/Label')
                                     ->helperText('כותרת תצוגת הריסורס במערכת')
                                     ->live(),
-                                    
+
                                 Forms\Components\TextInput::make('icon')
                                     ->label('אייקון')
                                     ->placeholder('heroicon-o-document-text')
                                     ->helperText('שם האייקון של Heroicon (עם תחילית heroicon-o/s)'),
-                                    
+
                                 Forms\Components\TextInput::make('group')
                                     ->label('קבוצת ניווט')
                                     ->placeholder('ניהול תוכן')
                                     ->helperText('הקבוצה שבה הריסורס יופיע בתפריט'),
-                                    
+
                                 Forms\Components\Repeater::make('form_fields')
                                     ->label('שדות טופס')
                                     ->schema(self::getFormFieldsSchema())
@@ -209,7 +214,7 @@ class GeneratorResource extends Resource
                                     ->itemLabel(fn (array $state): ?string => $state['name'] ?? null)
                                     ->collapsible()
                                     ->defaultItems(0),
-                                    
+
                                 Forms\Components\Repeater::make('table_columns')
                                     ->label('עמודות טבלה')
                                     ->schema([
@@ -239,42 +244,42 @@ class GeneratorResource extends Resource
                                     ->defaultItems(0),
                             ])
                             ->visible(fn (Forms\Get $get): bool => $get('type') === 'resource'),
-                            
+
                         Forms\Components\Tabs\Tab::make('page_settings')
                             ->label('הגדרות Page')
                             ->schema([
                                 Forms\Components\TextInput::make('label')
                                     ->label('תווית/Label')
                                     ->helperText('כותרת הדף'),
-                                    
+
                                 Forms\Components\TextInput::make('icon')
                                     ->label('אייקון')
                                     ->placeholder('heroicon-o-document-text')
                                     ->helperText('שם האייקון של Heroicon (עם תחילית heroicon-o/s)'),
-                                    
+
                                 Forms\Components\TextInput::make('slug')
                                     ->label('Slug')
                                     ->placeholder('my-custom-page')
                                     ->helperText('נתיב ה-URL של הדף'),
-                                    
+
                                 Forms\Components\Toggle::make('navigation_item')
                                     ->label('הצג בתפריט הניווט')
                                     ->default(true),
-                                    
+
                                 Forms\Components\TextInput::make('group')
                                     ->label('קבוצת ניווט')
                                     ->placeholder('ניהול מערכת')
                                     ->helperText('הקבוצה שבה הדף יופיע בתפריט'),
                             ])
                             ->visible(fn (Forms\Get $get): bool => $get('type') === 'page'),
-                            
+
                         Forms\Components\Tabs\Tab::make('widget_settings')
                             ->label('הגדרות Widget')
                             ->schema([
                                 Forms\Components\TextInput::make('label')
                                     ->label('תווית/Label')
                                     ->helperText('כותרת הווידג\'ט'),
-                                    
+
                                 Forms\Components\Select::make('widget_type')
                                     ->label('סוג ווידג\'ט')
                                     ->options([
@@ -284,11 +289,11 @@ class GeneratorResource extends Resource
                                         'table' => 'Table',
                                         'custom' => 'Custom',
                                     ]),
-                                    
+
                                 Forms\Components\Toggle::make('poll')
                                     ->label('רענון אוטומטי')
                                     ->helperText('האם הווידג\'ט יתרענן אוטומטית'),
-                                    
+
                                 Forms\Components\TextInput::make('poll_interval')
                                     ->label('תדירות רענון (בשניות)')
                                     ->numeric()
@@ -347,7 +352,7 @@ class GeneratorResource extends Resource
                     ->label('שם')
                     ->searchable()
                     ->sortable(),
-                    
+
                 Tables\Columns\BadgeColumn::make('type')
                     ->label('סוג')
                     ->colors([
@@ -357,31 +362,31 @@ class GeneratorResource extends Resource
                         'danger' => 'widget',
                     ])
                     ->sortable(),
-                    
+
                 Tables\Columns\TextColumn::make('namespace')
                     ->label('Namespace')
                     ->toggleable(true),
-                    
+
                 Tables\Columns\TextColumn::make('description')
                     ->label('תיאור')
                     ->limit(50)
                     ->toggleable(),
-                    
+
                 Tables\Columns\IconColumn::make('fillable')
                     ->label('Fillable')
                     ->boolean()
                     ->toggleable(true),
-                    
+
                 Tables\Columns\IconColumn::make('timestamps')
                     ->label('Timestamps')
                     ->boolean()
                     ->toggleable(true),
-                    
+
                 Tables\Columns\IconColumn::make('soft_deletes')
                     ->label('Soft Deletes')
                     ->boolean()
                     ->toggleable(true),
-                    
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('נוצר בתאריך')
                     ->dateTime()
@@ -422,10 +427,26 @@ class GeneratorResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListGenerators::route('/'),
-            'create' => Pages\CreateGenerator::route('/create'),
-            'edit' => Pages\EditGenerator::route('/{record}/edit'),
-            'generate' => Pages\GenerateCode::route('/{record}/generate'),
+            'index' => Pages\ListGenerators::class,
+            'create' => Pages\CreateGenerator::class,
+            'edit' => Pages\EditGenerator::class,
+            'generate' => Pages\GenerateCode::class,
         ];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [];
+    }
+
+    public static function isEmailVerificationRequired(\Filament\Panel $panel): bool
+    {
+        return $panel->isEmailVerificationRequired();
+    }
+
+
+    public static function isTenantSubscriptionRequired(\Filament\Panel $panel): bool
+    {
+        return $panel->isTenantSubscriptionRequired();
     }
 }

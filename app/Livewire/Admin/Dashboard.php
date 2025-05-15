@@ -1,13 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire\Admin;
 
-use Livewire\Component;
 use Carbon\Carbon;
+use Livewire\Component;
 
 class Dashboard extends Component
 {
     public $stats;
+
     public $recentActivities;
 
     public function mount()
@@ -22,7 +25,7 @@ class Dashboard extends Component
             'pendingInvoices' => 3,
             'totalCustomers' => 42,
             'newOrders' => 7,
-            'openTickets' => 5
+            'openTickets' => 5,
         ];
 
         // Sample recent activities
@@ -32,14 +35,14 @@ class Dashboard extends Component
                 'domain' => 'example.com',
                 'user' => 'דני ישראלי',
                 'amount' => 15.99,
-                'date' => Carbon::now()->subDays(1)
+                'date' => Carbon::now()->subDays(1),
             ],
             [
                 'type' => 'hosting_purchase',
                 'plan' => 'Business Plus',
                 'user' => 'רונית כהן',
                 'amount' => 49.99,
-                'date' => Carbon::now()->subDays(2)
+                'date' => Carbon::now()->subDays(2),
             ],
             [
                 'type' => 'vps_upgrade',
@@ -47,28 +50,28 @@ class Dashboard extends Component
                 'to' => 'VPS Premium',
                 'user' => 'יוסף לוי',
                 'amount' => 25.00,
-                'date' => Carbon::now()->subDays(3)
+                'date' => Carbon::now()->subDays(3),
             ],
             [
                 'type' => 'invoice_payment',
                 'invoice' => 'INV-2023-1234',
                 'user' => 'מיכל ברק',
                 'amount' => 129.99,
-                'date' => Carbon::now()->subDays(4)
+                'date' => Carbon::now()->subDays(4),
             ],
             [
                 'type' => 'ticket_open',
                 'ticket' => 'TIK-2023-567',
                 'user' => 'אורי אבני',
                 'amount' => 0.00,
-                'date' => Carbon::now()->subDays(5)
+                'date' => Carbon::now()->subDays(5),
             ],
             [
                 'type' => 'domain_renewal',
                 'domain' => 'business-site.co.il',
                 'user' => 'שירה כהן',
                 'amount' => 75.00,
-                'date' => Carbon::now()->subDays(6)
+                'date' => Carbon::now()->subDays(6),
             ],
             [
                 'type' => 'hosting_upgrade',
@@ -76,8 +79,8 @@ class Dashboard extends Component
                 'to' => 'Professional',
                 'user' => 'יעקב לוי',
                 'amount' => 45.00,
-                'date' => Carbon::now()->subDays(7)
-            ]
+                'date' => Carbon::now()->subDays(7),
+            ],
         ];
     }
 

@@ -1,16 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 class Page extends Model
 {
-    use HasFactory, SoftDeletes;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -47,8 +45,6 @@ class Page extends Model
 
     /**
      * Boot the model.
-     *
-     * @return void
      */
     protected static function boot()
     {
@@ -61,7 +57,7 @@ class Page extends Model
         });
 
         static::updating(function ($page) {
-            if ($page->isDirty('title') && !$page->isDirty('slug')) {
+            if ($page->isDirty('title') && ! $page->isDirty('slug')) {
                 $page->slug = Str::slug($page->title);
             }
         });
@@ -145,7 +141,7 @@ class Page extends Model
      */
     public function getFeaturedImageUrl(): ?string
     {
-        if (!$this->featured_image) {
+        if (! $this->featured_image) {
             return null;
         }
 
@@ -164,11 +160,11 @@ class Page extends Model
     public function getExcerpt(int $length = 150): string
     {
         $content = strip_tags($this->content);
-        
+
         if (strlen($content) <= $length) {
             return $content;
         }
-        
+
         return substr($content, 0, $length) . '...';
     }
 }

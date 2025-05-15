@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'domain_registration' => 'רישום דומיין',
     'domain_renewal' => 'חידוש דומיין',

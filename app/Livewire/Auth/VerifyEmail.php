@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire\Auth;
 
 use Livewire\Component;
@@ -17,6 +19,7 @@ class VerifyEmail extends Component
         $this->dispatch('resent');
 
         session()->flash('resent');
+
         return null;
     }
 

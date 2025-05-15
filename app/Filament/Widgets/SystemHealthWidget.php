@@ -1,16 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Widgets;
 
 use Filament\Widgets\Widget;
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class SystemHealthWidget extends Widget
 {
     protected static ?int $sort = 5;
+
     protected static string $view = 'filament.widgets.system-health-widget';
-    protected int | string | array $columnSpan = 'full';
-    
+
+    protected int|string|array $columnSpan = 'full';
+
     // Mock system health checks (in a real implementation, these would come from actual checks)
     protected function getHealthChecks(): array
     {
@@ -21,11 +27,12 @@ class SystemHealthWidget extends Widget
             $this->checkQueueSystem(),
         ];
     }
-    
+
     protected function checkDatabaseConnection(): array
     {
         try {
-            \DB::connection()->getPdo();
+            DB::connection()->getPdo();
+
             return [
                 'name' => 'Database Connection',
                 'status' => 'passing',
@@ -41,15 +48,15 @@ class SystemHealthWidget extends Widget
             ];
         }
     }
-    
+
     protected function checkCacheSystem(): array
     {
         try {
             $cacheDriver = config('cache.default');
             $value = 'test_' . time();
-            \Cache::put('health_check', $value, 1);
-            $retrieved = \Cache::get('health_check');
-            
+            Cache::put('health_check', $value, 1);
+            $retrieved = Cache::get('health_check');
+
             if ($retrieved === $value) {
                 return [
                     'name' => 'Cache System',
@@ -74,12 +81,12 @@ class SystemHealthWidget extends Widget
             ];
         }
     }
-    
+
     protected function checkStoragePermissions(): array
     {
         $storagePath = storage_path();
-        
-        if (!is_dir($storagePath)) {
+
+        if (! is_dir($storagePath)) {
             return [
                 'name' => 'Storage Directory',
                 'status' => 'failing',
@@ -87,8 +94,8 @@ class SystemHealthWidget extends Widget
                 'icon' => 'heroicon-o-folder',
             ];
         }
-        
-        if (!is_writable($storagePath)) {
+
+        if (! is_writable($storagePath)) {
             return [
                 'name' => 'Storage Permissions',
                 'status' => 'failing',
@@ -96,12 +103,12 @@ class SystemHealthWidget extends Widget
                 'icon' => 'heroicon-o-folder',
             ];
         }
-        
+
         // Get available disk space
         $freeSpace = disk_free_space($storagePath);
         $totalSpace = disk_total_space($storagePath);
         $usedPercentage = round(($totalSpace - $freeSpace) / $totalSpace * 100);
-        
+
         if ($usedPercentage > 90) {
             return [
                 'name' => 'Storage Space',
@@ -125,25 +132,25 @@ class SystemHealthWidget extends Widget
             ];
         }
     }
-    
+
     protected function checkQueueSystem(): array
     {
         $queueConnection = config('queue.default');
         $queueStatus = 'unknown';
         $message = '';
-        
+
         if ($queueConnection === 'sync') {
             $queueStatus = 'warning';
             $message = 'Using sync driver (not recommended for production)';
         } elseif ($queueConnection === 'database') {
             try {
-                $failedCount = \DB::table('failed_jobs')->count();
+                $failedCount = DB::table('failed_jobs')->count();
                 $jobsCount = 0;
-                
-                if (\Schema::hasTable('jobs')) {
-                    $jobsCount = \DB::table('jobs')->count();
+
+                if (Schema::hasTable('jobs')) {
+                    $jobsCount = DB::table('jobs')->count();
                 }
-                
+
                 if ($failedCount > 0) {
                     $queueStatus = 'warning';
                     $message = $failedCount . ' failed jobs in queue';
@@ -159,7 +166,7 @@ class SystemHealthWidget extends Widget
             $queueStatus = 'passing';
             $message = 'Using ' . $queueConnection . ' driver';
         }
-        
+
         return [
             'name' => 'Queue System',
             'status' => $queueStatus,
@@ -167,20 +174,20 @@ class SystemHealthWidget extends Widget
             'icon' => 'heroicon-o-queue-list',
         ];
     }
-    
+
     private function formatBytes($bytes, $precision = 2): string
     {
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
-        
+
         $bytes = max($bytes, 0);
         $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
         $pow = min($pow, count($units) - 1);
-        
+
         $bytes /= 1024 ** $pow;
-        
+
         return round($bytes, $precision) . ' ' . $units[$pow];
     }
-    
+
     protected function getViewData(): array
     {
         return [

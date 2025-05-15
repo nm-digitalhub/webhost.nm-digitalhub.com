@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use App\Models\Generator;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class GeneratorsSeeder extends Seeder
 {
@@ -13,9 +16,9 @@ class GeneratorsSeeder extends Seeder
     public function run(): void
     {
         // We'll use DB facade to handle foreign key constraints properly
-        \DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
         Generator::truncate();
-        \DB::statement('SET FOREIGN_KEY_CHECKS=1');
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
 
         // Example fields for a User model
         $userFields = [
@@ -113,7 +116,7 @@ class GeneratorsSeeder extends Seeder
             'timestamps' => true,
             'soft_deletes' => false,
             'relations' => [
-                ['type' => 'belongsTo', 'model' => 'App\\Models\\Category', 'foreignKey' => 'category_id', 'localKey' => 'id', 'description' => 'Product category']
+                ['type' => 'belongsTo', 'model' => 'App\\Models\\Category', 'foreignKey' => 'category_id', 'localKey' => 'id', 'description' => 'Product category'],
             ],
             'group' => 'Commerce',
             'icon' => 'heroicon-o-shopping-bag',

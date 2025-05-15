@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 
 class CleanupFilamentClasses extends Command
 {
     protected $signature = 'filament:cleanup-classes';
+
     protected $description = 'Cleanup and validate Filament-related classes';
 
     public function handle()
@@ -36,8 +38,9 @@ class CleanupFilamentClasses extends Command
     {
         $panelProviderPath = app_path('Providers/Filament/AdminPanelProvider.php');
 
-        if (!File::exists($panelProviderPath)) {
+        if (! File::exists($panelProviderPath)) {
             $this->warn("AdminPanelProvider not found at: {$panelProviderPath}");
+
             return;
         }
 
@@ -45,7 +48,7 @@ class CleanupFilamentClasses extends Command
 
         // Check for duplicate PHP tags or class declarations
         if (substr_count($content, '<?php') > 1 || substr_count($content, 'class AdminPanelProvider') > 1) {
-            $this->error("Duplicate PHP tags or class declarations in AdminPanelProvider");
+            $this->error('Duplicate PHP tags or class declarations in AdminPanelProvider');
 
             // Create a fixed version
             $fixedContent = $this->fixPanelProviderContent($content);
@@ -57,7 +60,7 @@ class CleanupFilamentClasses extends Command
 
             // Save the fixed version
             File::put($panelProviderPath, $fixedContent);
-            $this->info("Fixed AdminPanelProvider");
+            $this->info('Fixed AdminPanelProvider');
         }
     }
 
@@ -67,9 +70,8 @@ class CleanupFilamentClasses extends Command
         $content = preg_replace('/^<\?php\s+<\?php/', '<?php', (string) $content);
 
         // Extract namespace, imports and class content from both parts
-        if (preg_match('/namespace\s+([^;]+);(.*?)class\s+AdminPanelProvider.*?{(.*?)}\s*namespace/s', $content, $firstMatch) &&
-            preg_match('/namespace\s+([^;]+);(.*?)class\s+AdminPanelProvider.*?{(.*?)}/s', $content, $secondMatch, 0, strpos($content, 'namespace', 10))) {
-
+        if (preg_match('/namespace\s+([^;]+);(.*?)class\s+AdminPanelProvider.*?{(.*?)}\s*namespace/s', (string) $content, $firstMatch) &&
+            preg_match('/namespace\s+([^;]+);(.*?)class\s+AdminPanelProvider.*?{(.*?)}/s', (string) $content, $secondMatch, 0, strpos((string) $content, 'namespace', 10))) {
             // Extract imports from both parts
             preg_match_all('/use\s+([^;]+);/', $firstMatch[2], $firstImports);
             preg_match_all('/use\s+([^;]+);/', $secondMatch[2], $secondImports);
@@ -128,17 +130,18 @@ class CleanupFilamentClasses extends Command
         }
 
         // If regex didn't match, just remove duplicate PHP tags and namespaces
-        $content = preg_replace('/(<\?php.*?namespace\s+[^;]+;)/s', '<?php', $content, 1);
+        $content = preg_replace('/(<\?php.*?namespace\s+[^;]+;)/s', '<?php', (string) $content, 1);
 
-        return preg_replace('/namespace\s+([^;]+);/', 'namespace App\\Providers\\Filament;', $content, 1);
+        return preg_replace('/namespace\s+([^;]+);/', 'namespace App\\Providers\\Filament;', (string) $content, 1);
     }
 
     private function checkFilamentPages()
     {
         $pagesDir = app_path('Filament/Pages');
 
-        if (!File::isDirectory($pagesDir)) {
+        if (! File::isDirectory($pagesDir)) {
             $this->warn("Filament Pages directory not found: {$pagesDir}");
+
             return;
         }
 
@@ -163,8 +166,9 @@ class CleanupFilamentClasses extends Command
     {
         $resourcesDir = app_path('Filament/Resources');
 
-        if (!File::isDirectory($resourcesDir)) {
+        if (! File::isDirectory($resourcesDir)) {
             $this->warn("Filament Resources directory not found: {$resourcesDir}");
+
             return;
         }
 
@@ -189,8 +193,9 @@ class CleanupFilamentClasses extends Command
     {
         $widgetsDir = app_path('Filament/Widgets');
 
-        if (!File::isDirectory($widgetsDir)) {
+        if (! File::isDirectory($widgetsDir)) {
             $this->warn("Filament Widgets directory not found: {$widgetsDir}");
+
             return;
         }
 

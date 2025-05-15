@@ -1,0 +1,13 @@
+name: Local Assistant
+version: 1.0.0
+$schema: https://webhost.nm-digitalhub.com/valid-schema.json
+schema: v1
+models: []
+context:
+  - provider: code
+  - provider: docs
+  - provider: diff
+  - provider: terminal
+  - provider: problems
+  - provider: folder
+  - provider: codebase

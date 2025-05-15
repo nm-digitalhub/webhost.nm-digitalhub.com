@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -26,7 +28,7 @@ class Generator extends Model
         'confirm_overwrite',
         'target_path',
     ];
-    
+
     protected $casts = [
         'fillable' => 'boolean',
         'timestamps' => 'boolean',
@@ -36,7 +38,7 @@ class Generator extends Model
         'fields' => 'array',
         'relations' => 'array',
     ];
-    
+
     public function generationLogs()
     {
         return $this->hasMany(GenerationLog::class);

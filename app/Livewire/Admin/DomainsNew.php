@@ -1,20 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire\Admin;
 
-use App\Models\User;
 use App\Models\Domain;
-use Livewire\Component;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Livewire\Component;
 
 class DomainsNew extends Component
 {
     public $name;
+
     public $domain_type = 'new';
+
     public $client_id;
+
     public $period = 1;
+
     public $nameserver1 = 'ns1.webhost.nm-digitalhub.com';
+
     public $nameserver2 = 'ns2.webhost.nm-digitalhub.com';
+
     public $clients = [];
 
     protected $rules = [
@@ -33,7 +41,7 @@ class DomainsNew extends Component
 
         // If no clients found with 'role' column, try using roles relationship
         if ($this->clients->isEmpty()) {
-            $this->clients = User::whereHas('roles', function($query) {
+            $this->clients = User::whereHas('roles', function ($query) {
                 $query->where('name', 'client');
             })->get();
         }
@@ -60,12 +68,13 @@ class DomainsNew extends Component
 
             DB::commit();
             session()->flash('message', 'הדומיין נוצר בהצלחה!');
-            return redirect()->route('admin.domains');
 
+            return redirect()->route('admin.domains');
         } catch (\Exception $e) {
             DB::rollBack();
             session()->flash('error', 'אירעה שגיאה ביצירת הדומיין: ' . $e->getMessage());
         }
+
         return null;
     }
 

@@ -1,18 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire\Auth;
 
 use App\Models\User;
-use Livewire\Component;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Auth\Events\Registered;
+use Livewire\Component;
 
 class Register extends Component
 {
     public $name = '';
+
     public $email = '';
+
     public $password = '';
+
     public $password_confirmation = '';
 
     protected $rules = [

@@ -1,50 +1,20 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Filament\Pages;
 
-use Filament\Pages\Page;
-
-class Dashboard extends Page
-{
-    protected static ?string $navigationIcon = 'heroicon-o-home';
-
-    protected static string $view = 'filament.pages.dashboard';
-
-    protected static ?int $navigationSort = -2;
-
-    public static function getNavigationLabel(): string
-    {
-        return 'Dashboard';
-    }
-
-    public static function getNavigationGroup(): ?string
-    {
-        return null;
-    }
-
-    public function getTitle(): string
-    {
-        return 'Dashboard';
-    }
-
-    public static function getSlug(): string
-    {
-        return 'dashboard';
-    }
-}
-namespace App\Filament\Pages;
-
-use Illuminate\Contracts\View\View;
+use App\Filament\Widgets\LatestActivityWidget;
+use App\Filament\Widgets\ModulesStatsWidget;
+use App\Filament\Widgets\SystemHealthWidget;
+use App\Filament\Widgets\SystemResourcesWidget;
+use App\Filament\Widgets\UsersStatsWidget;
 use Filament\Pages\Dashboard as BaseDashboard;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
-use App\Filament\Widgets\UsersStatsWidget;
-use App\Filament\Widgets\ModulesStatsWidget;
-use App\Filament\Widgets\SystemResourcesWidget;
-use App\Filament\Widgets\LatestActivityWidget;
-use App\Filament\Widgets\SystemHealthWidget;
+use Illuminate\Contracts\View\View;
 
+// ודא שיש רק הגדרה אחת של המחלקה Dashboard
 class Dashboard extends BaseDashboard
 {
     // Override default widgets

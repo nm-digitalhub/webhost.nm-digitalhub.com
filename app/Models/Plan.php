@@ -1,15 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Plan extends Model
 {
-    use HasFactory;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -25,7 +24,7 @@ class Plan extends Model
         'is_featured',
         'is_active',
         'sort_order',
-        'metadata'
+        'metadata',
     ];
 
     /**
@@ -55,16 +54,17 @@ class Plan extends Model
     {
         return $this->hasMany(Product::class);
     }
-    
+
     /**
      * Format the price with currency symbol.
      */
     public function formattedPrice(): string
     {
         $symbol = $this->currency === 'ILS' ? '₪' : ($this->currency === 'USD' ? '$' : '€');
+
         return $symbol . number_format($this->price, 2);
     }
-    
+
     /**
      * Get active plans.
      */
@@ -72,7 +72,7 @@ class Plan extends Model
     {
         return $query->where('is_active', true);
     }
-    
+
     /**
      * Get featured plans.
      */
@@ -80,7 +80,7 @@ class Plan extends Model
     {
         return $query->where('is_featured', true);
     }
-    
+
     /**
      * Order plans by sort_order.
      */

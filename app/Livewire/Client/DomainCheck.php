@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire\Client;
 
 use Livewire\Component;
@@ -7,7 +9,9 @@ use Livewire\Component;
 class DomainCheck extends Component
 {
     public $domainName = '';
+
     public $searchResults = [];
+
     public $isSearching = false;
 
     protected $rules = [

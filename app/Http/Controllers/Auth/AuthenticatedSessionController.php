@@ -1,6 +1,4 @@
-<?php
-
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
@@ -24,20 +22,34 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+        // Authenticate the user
         $request->authenticate();
 
+        // Regenerate session to prevent session fixation
         $request->session()->regenerate();
 
-        // ניתוב מותאם אישית לפי תפקיד
+        // Get the authenticated user
         $user = $request->user();
-        
-        if ($user->hasRole('admin')) {
-            return redirect()->intended(route('admin.dashboard'));
-        } elseif ($user->hasRole('client')) {
-            return redirect()->intended(route('client.dashboard'));
+
+        // Redirect based on role
+        try {
+            if ($user->hasRole('admin')) {
+                // If user is admin, redirect to admin dashboard
+                return redirect()->intended(route('admin.dashboard'));
+            } elseif ($user->hasRole('client')) {
+                // If user is client, redirect to client dashboard
+                return redirect()->intended(route('client.dashboard'));
+            } else {
+                // In case the role is not recognized, fall back to a default dashboard
+                return redirect()->intended(route('dashboard'));
+            }
+        } catch (\Exception $e) {
+            // Log any errors with role checking
+            logger()->error('Role check failed: ' . $e->getMessage());
+
+            // Optionally, redirect to a default page or show an error message
+            return redirect()->route('login')->withErrors(['login' => 'There was an issue with your login. Please try again.']);
         }
-    
-        return redirect()->intended(route('dashboard', absolute: false));
     }
 
     /**
@@ -45,12 +57,16 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        // Log out the user
         Auth::guard('web')->logout();
 
+        // Invalidate the session
         $request->session()->invalidate();
 
+        // Regenerate CSRF token
         $request->session()->regenerateToken();
 
+        // Redirect to home page
         return redirect('/');
     }
 }

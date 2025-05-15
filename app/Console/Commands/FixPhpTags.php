@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -8,6 +10,7 @@ use Illuminate\Support\Facades\File;
 class FixPhpTags extends Command
 {
     protected $signature = 'fix:php-tags';
+
     protected $description = 'Fix files with duplicate PHP opening tags';
 
     public function handle()

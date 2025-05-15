@@ -1,16 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
 class ClientPage extends Model
 {
-    use HasFactory;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -120,7 +119,7 @@ class ClientPage extends Model
         }
 
         // Private or role-restricted pages require a user
-        if (!$user instanceof \App\Models\User) {
+        if (! $user instanceof \App\Models\User) {
             return false;
         }
 
@@ -130,12 +129,13 @@ class ClientPage extends Model
         }
 
         // For role-restricted pages, check the user's roles
-        if ($this->visibility === 'role_restricted' && !empty($this->role_restrictions)) {
+        if ($this->visibility === 'role_restricted' && ! empty($this->role_restrictions)) {
             foreach ($this->role_restrictions as $role) {
                 if ($user->hasRole($role)) {
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -163,6 +163,6 @@ class ClientPage extends Model
      */
     public function scopeOrdered($query)
     {
-        return $query->orderBy('menu_position', 'asc');
+        return $query->orderBy('menu_position');
     }
 }

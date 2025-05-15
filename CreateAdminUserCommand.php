@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
-use App\Models\User;
 use App\Models\Role;
+use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
 
@@ -31,15 +33,16 @@ class CreateAdminUser extends Command
         $email = $this->argument('email') ?? $this->ask('מה האימייל של המנהל?');
         $name = $this->argument('name') ?? $this->ask('מה השם של המנהל?');
         $password = $this->argument('password') ?? $this->secret('מה הסיסמה של המנהל?');
-        
+
         // בדיקה אם המשתמש כבר קיים
         $existingUser = User::where('email', $email)->first();
-        
+
         if ($existingUser) {
             if ($this->confirm("משתמש עם האימייל {$email} כבר קיים. האם ברצונך להפוך אותו למנהל?")) {
                 $user = $existingUser;
             } else {
                 $this->error('הפעולה בוטלה.');
+
                 return;
             }
         } else {
@@ -50,16 +53,16 @@ class CreateAdminUser extends Command
                 'password' => Hash::make($password),
                 'email_verified_at' => now(),
             ]);
-            
+
             $this->info('משתמש חדש נוצר בהצלחה.');
         }
-        
+
         // יצירת תפקיד admin אם לא קיים
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
-        
+
         // הקצאת תפקיד למשתמש
         $user->assignRole('admin');
-        
+
         $this->info("המשתמש {$name} ({$email}) הוגדר כמנהל בהצלחה.");
     }
 }

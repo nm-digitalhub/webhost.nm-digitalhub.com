@@ -1,14 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\MailTemplateResource\Pages;
 use App\Models\MailTemplate;
-use App\Services\Mail\MailTemplateManager;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Tabs;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -17,21 +18,21 @@ use Illuminate\Support\HtmlString;
 class MailTemplateResource extends Resource
 {
     protected static ?string $model = MailTemplate::class;
-    
+
     public static function canAccess(): bool
     {
-        return auth()->user()->hasRole(['Super-Admin']) || 
+        return auth()->user()->hasRole(['Super-Admin']) ||
                auth()->user()->can('mail.manage');
     }
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
-    
+
     protected static ?string $navigationGroup = 'הגדרות מערכת';
-    
+
     protected static ?string $modelLabel = 'תבנית אימייל';
-    
+
     protected static ?string $pluralModelLabel = 'תבניות אימייל';
-    
+
     protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
@@ -48,12 +49,12 @@ class MailTemplateResource extends Resource
                                     ->helperText('משמש לזיהוי התבנית במערכת, למשל: user_welcome')
                                     ->required()
                                     ->maxLength(255),
-                                
+
                                 Forms\Components\TextInput::make('subject')
                                     ->label('נושא האימייל')
                                     ->required()
                                     ->maxLength(255),
-                                
+
                                 Forms\Components\RichEditor::make('body')
                                     ->label('תוכן האימייל')
                                     ->required()
@@ -73,7 +74,7 @@ class MailTemplateResource extends Resource
                                         'undo',
                                     ])
                                     ->columnSpanFull(),
-                                    
+
                                 Forms\Components\Select::make('lang')
                                     ->label('שפה')
                                     ->options([
@@ -82,14 +83,14 @@ class MailTemplateResource extends Resource
                                     ])
                                     ->default('he')
                                     ->required(),
-                                    
+
                                 Forms\Components\Toggle::make('is_active')
                                     ->label('פעיל')
                                     ->helperText('האם התבנית פעילה?')
                                     ->default(true)
                                     ->required(),
                             ]),
-                            
+
                         Tabs\Tab::make('תצוגה מקדימה')
                             ->icon('heroicon-o-eye')
                             ->schema([
@@ -98,13 +99,13 @@ class MailTemplateResource extends Resource
                                         Forms\Components\Placeholder::make('preview_heading')
                                             ->label('תצוגה מקדימה עם נתוני דוגמה')
                                             ->content(function ($record, $state) {
-                                                if (!$record && !$state) {
+                                                if (! $record && ! $state) {
                                                     return new HtmlString('<div class="p-4 bg-gray-100 rounded text-gray-500 text-center">שמור את התבנית כדי לראות תצוגה מקדימה</div>');
                                                 }
-                                                
+
                                                 $subject = $state['subject'] ?? ($record->subject ?? 'נושא האימייל');
                                                 $body = $state['body'] ?? ($record->body ?? 'תוכן האימייל');
-                                                
+
                                                 return new HtmlString(
                                                     '<div class="preview-frame bg-white shadow rounded-lg overflow-hidden">' .
                                                     '<div class="border-b border-gray-200 bg-gray-50 px-4 py-3">' .
@@ -114,7 +115,7 @@ class MailTemplateResource extends Resource
                                                     '</div>'
                                                 );
                                             }),
-                                        
+
                                         Forms\Components\Actions::make([
                                             Forms\Components\Actions\Action::make('refresh_preview')
                                                 ->label('רענן תצוגה מקדימה')
@@ -125,11 +126,11 @@ class MailTemplateResource extends Resource
                                                         ->title('תצוגה מקדימה רועננה')
                                                         ->success()
                                                         ->send();
-                                                })
+                                                }),
                                         ]),
                                     ]),
                             ]),
-                            
+
                         Tabs\Tab::make('משתנים')
                             ->icon('heroicon-o-variable')
                             ->schema([
@@ -149,7 +150,7 @@ class MailTemplateResource extends Resource
                                         'action_url',
                                         'code',
                                     ]),
-                                    
+
                                 Section::make('תצוגה מקדימה בסימולציית משתנים')
                                     ->schema([
                                         Forms\Components\Actions::make([
@@ -170,21 +171,21 @@ class MailTemplateResource extends Resource
                                                         'code' => '123456',
                                                         'date' => now()->format('Y-m-d H:i:s'),
                                                     ];
-                                                    
+
                                                     $preview = \App\Services\Mail\MailTemplateManager::preview($record);
-                                                    
+
                                                     \Filament\Notifications\Notification::make()
                                                         ->title('תצוגה מקדימה')
-                                                        ->body(new HtmlString('<div style="max-height:350px;overflow-y:auto;">' . 
-                                                            '<h3>' . htmlspecialchars((string) $preview['subject']) . '</h3>' . 
+                                                        ->body(new HtmlString('<div style="max-height:350px;overflow-y:auto;">' .
+                                                            '<h3>' . htmlspecialchars((string) $preview['subject']) . '</h3>' .
                                                             $preview['body'] . '</div>'))
                                                         ->info()
                                                         ->persistent()
                                                         ->send();
-                                                })
-                                        ])
+                                                }),
+                                        ]),
                                     ]),
-                                    
+
                                 Section::make('רשימת משתנים זמינים')
                                     ->schema([
                                         Forms\Components\Grid::make()
@@ -192,42 +193,42 @@ class MailTemplateResource extends Resource
                                                 Forms\Components\Placeholder::make('var_name')
                                                     ->label('שם משתמש')
                                                     ->content('{{ name }}'),
-                                                    
+
                                                 Forms\Components\Placeholder::make('var_email')
                                                     ->label('אימייל')
                                                     ->content('{{ email }}'),
-                                                    
+
                                                 Forms\Components\Placeholder::make('var_password')
                                                     ->label('סיסמה')
                                                     ->content('{{ password }}'),
-                                                    
+
                                                 Forms\Components\Placeholder::make('var_login_url')
                                                     ->label('קישור להתחברות')
                                                     ->content('{{ login_url }}'),
-                                                    
+
                                                 Forms\Components\Placeholder::make('var_reset_url')
                                                     ->label('קישור לאיפוס סיסמה')
                                                     ->content('{{ reset_url }}'),
-                                                    
+
                                                 Forms\Components\Placeholder::make('var_verification_url')
                                                     ->label('קישור לאימות אימייל')
                                                     ->content('{{ verification_url }}'),
-                                                    
+
                                                 Forms\Components\Placeholder::make('var_app_name')
                                                     ->label('שם האפליקציה')
                                                     ->content('{{ app_name }}'),
-                                                    
+
                                                 Forms\Components\Placeholder::make('var_date')
                                                     ->label('תאריך')
                                                     ->content('{{ date }}'),
-                                                    
+
                                                 Forms\Components\Placeholder::make('var_code')
                                                     ->label('קוד אימות')
                                                     ->content('{{ code }}'),
                                             ])
                                             ->columns(3),
                                     ]),
-                                    
+
                                 Section::make('עזרה')
                                     ->schema([
                                         Forms\Components\Placeholder::make('variables_help')
@@ -265,20 +266,20 @@ class MailTemplateResource extends Resource
                     ->label('שם')
                     ->searchable()
                     ->sortable(),
-                    
+
                 Tables\Columns\TextColumn::make('subject')
                     ->label('נושא')
                     ->searchable()
                     ->sortable(),
-                    
+
                 Tables\Columns\TextColumn::make('lang')
                     ->label('שפה')
                     ->badge(),
-                    
+
                 Tables\Columns\IconColumn::make('is_active')
                     ->label('פעיל')
                     ->boolean(),
-                    
+
                 Tables\Columns\TextColumn::make('updated_at')
                     ->label('עודכן')
                     ->dateTime('d/m/Y H:i')
@@ -292,7 +293,7 @@ class MailTemplateResource extends Resource
                         'en' => 'English',
                         'he' => 'עברית',
                     ]),
-                    
+
                 Tables\Filters\TernaryFilter::make('is_active')
                     ->label('פעיל'),
             ])
@@ -314,7 +315,7 @@ class MailTemplateResource extends Resource
                         ->label('הפעל')
                         ->icon('heroicon-o-check')
                         ->action(fn ($records) => $records->each->update(['is_active' => true])),
-                        
+
                     Tables\Actions\BulkAction::make('deactivate')
                         ->label('השבת')
                         ->icon('heroicon-o-x-mark')
@@ -331,9 +332,25 @@ class MailTemplateResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListMailTemplates::route('/'),
-            'create' => Pages\CreateMailTemplate::route('/create'),
-            'edit' => Pages\EditMailTemplate::route('/{record}/edit'),
+            'index' => Pages\ListMailTemplates::class,
+            'create' => Pages\CreateMailTemplate::class,
+            'edit' => Pages\EditMailTemplate::class,
         ];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [];
+    }
+
+    public static function isEmailVerificationRequired(\Filament\Panel $panel): bool
+    {
+        return $panel->isEmailVerificationRequired();
+    }
+
+
+    public static function isTenantSubscriptionRequired(\Filament\Panel $panel): bool
+    {
+        return $panel->isTenantSubscriptionRequired();
     }
 }

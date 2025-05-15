@@ -1,17 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+declare(strict_types=1);
+
+namespace App\Http\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -32,7 +30,7 @@ class AdminController extends Controller
             'activeHostingPlans' => 84,
             'activeVpsServers' => 47,
             'totalRevenue' => 12589.45,
-            'pendingInvoices' => 18
+            'pendingInvoices' => 18,
         ];
 
         // Mock data for recent activities
@@ -42,14 +40,14 @@ class AdminController extends Controller
                 'domain' => 'example.com',
                 'user' => 'John Doe',
                 'amount' => 12.99,
-                'date' => now()->subHours(2)
+                'date' => now()->subHours(2),
             ],
             [
                 'type' => 'hosting_purchase',
                 'plan' => 'Premium Hosting',
                 'user' => 'Jane Smith',
                 'amount' => 8.99,
-                'date' => now()->subHours(5)
+                'date' => now()->subHours(5),
             ],
             [
                 'type' => 'vps_upgrade',
@@ -57,22 +55,22 @@ class AdminController extends Controller
                 'to' => 'Standard VPS',
                 'user' => 'David Brown',
                 'amount' => 20.00,
-                'date' => now()->subHours(8)
+                'date' => now()->subHours(8),
             ],
             [
                 'type' => 'payment_received',
                 'invoice' => 'INV-2023-054',
                 'user' => 'Sarah Johnson',
                 'amount' => 149.99,
-                'date' => now()->subHours(12)
+                'date' => now()->subHours(12),
             ],
             [
                 'type' => 'domain_renewal',
                 'domain' => 'mywebsite.com',
                 'user' => 'Michael Wilson',
                 'amount' => 14.99,
-                'date' => now()->subHours(24)
-            ]
+                'date' => now()->subHours(24),
+            ],
         ];
 
         return view('admin.dashboard', ['stats' => $stats, 'recentActivities' => $recentActivities]);

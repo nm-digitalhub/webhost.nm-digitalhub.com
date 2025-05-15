@@ -1,16 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Services\ModuleInstaller;
+use Illuminate\Database\Seeder;
 
 class ClientModulesSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run()
     {
@@ -18,7 +18,7 @@ class ClientModulesSeeder extends Seeder
 
         // Install core modules
         $this->command->info('Installing core client panel modules...');
-        
+
         // Dashboard module - always the first one
         $dashboard = $moduleInstaller->installClientPanelModule(
             'דף הבית', // Dashboard in Hebrew
@@ -61,7 +61,7 @@ class ClientModulesSeeder extends Seeder
         } else {
             $this->command->error('  ✗ Failed to install Support module: ' . $support['message']);
         }
-        
+
         // Stats module
         $stats = $moduleInstaller->installClientPanelModule(
             'סטטיסטיקה', // Statistics in Hebrew
@@ -80,7 +80,7 @@ class ClientModulesSeeder extends Seeder
         } else {
             $this->command->error('  ✗ Failed to install Statistics module: ' . $stats['message']);
         }
-        
+
         $this->command->info('Client panel modules installation completed.');
     }
 }

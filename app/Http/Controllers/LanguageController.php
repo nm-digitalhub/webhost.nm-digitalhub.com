@@ -1,8 +1,10 @@
 <?php
-namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
+declare(strict_types=1);
+
+namespace App\Http\Http\Controllers;
+
+use App\Http\Controllers\Controller;
 
 class LanguageController extends Controller
 {

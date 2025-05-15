@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Client;
+declare(strict_types=1);
+
+namespace App\Http\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 class DomainController extends Controller
 {
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct()
     {

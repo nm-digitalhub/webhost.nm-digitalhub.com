@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\View\Components;
 
 use Closure;
@@ -13,7 +15,6 @@ class PrimaryButton extends Component
      *
      * @param  string  $type
      * @param  string  $size
-     * @return void
      */
     public function __construct(
         /**
@@ -24,9 +25,7 @@ class PrimaryButton extends Component
          * The button size.
          */
         public $size = 'md'
-    )
-    {
-    }
+    ) {}
 
     /**
      * Get the view / contents that represent the component.

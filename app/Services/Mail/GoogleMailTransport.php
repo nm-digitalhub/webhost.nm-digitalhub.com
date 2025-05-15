@@ -1,17 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Mail;
 
-use App\Services\Mail\GoogleOAuthService;
 use Google\Service\Gmail;
 use Google\Service\Gmail\Message;
 use Illuminate\Mail\Transport\Transport;
-use Swift_Mime_SimpleMessage;
 use Symfony\Component\Mailer\SentMessage;
 use Symfony\Component\Mailer\Transport\AbstractTransport;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\MessageConverter;
-use Symfony\Component\Mime\RawMessage;
 
 class GoogleMailTransport extends AbstractTransport
 {
@@ -21,8 +19,8 @@ class GoogleMailTransport extends AbstractTransport
     public function __construct(/**
      * GoogleOAuthService instance
      */
-    protected GoogleOAuthService $oauthService)
-    {
+        protected GoogleOAuthService $oauthService
+    ) {
         parent::__construct();
     }
 
@@ -32,30 +30,30 @@ class GoogleMailTransport extends AbstractTransport
     protected function doSend(SentMessage $message): void
     {
         $originalMessage = $message->getOriginalMessage();
-        
+
         $originalMessage = MessageConverter::toEmail($originalMessage);
-        
+
         $gmailMessage = $this->buildGmailMessage($originalMessage);
         $this->sendMessage($gmailMessage);
     }
-    
+
     /**
      * Build the Gmail message object
      *
-     * @param \Symfony\Component\Mime\Email $email
+     * @param  \Symfony\Component\Mime\Email  $email
      */
     protected function buildGmailMessage($email): Message
     {
         // Get MIME content
         $mimeMessage = $email->toString();
-        
+
         // Create Gmail message
-        $googleMessage = new Message();
+        $googleMessage = new Message;
         $googleMessage->setRaw(base64_encode($mimeMessage));
-        
+
         return $googleMessage;
     }
-    
+
     /**
      * Send the message via Gmail API
      */
@@ -63,22 +61,22 @@ class GoogleMailTransport extends AbstractTransport
     {
         // Setup OAuth client
         $this->oauthService->setupClient();
-        
+
         // Get access token
         $accessToken = $this->oauthService->getAccessToken();
-        
-        if (!$accessToken) {
+
+        if (! $accessToken) {
             throw new \RuntimeException('No valid Google OAuth access token available');
         }
-        
+
         // Create Gmail service
         $client = $this->oauthService->getClient();
         $gmailService = new Gmail($client);
-        
+
         // Send message
         $gmailService->users_messages->send('me', $message);
     }
-    
+
     /**
      * Get the string representation of the transport.
      */

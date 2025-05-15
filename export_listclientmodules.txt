@@ -1,0 +1,7 @@
+Smart search for 'ListClientModules' across PHP files...
+Output file: export_listclientmodules.txt
+----------------------------------------
+./app/Filament/Resources/ClientModuleResource.php:56: [UNKNOWN]              'index' => Pages\ListClientModules::route('/'),
+./app/Filament/Resources/ClientModuleResource/Pages/ListClientModules.php:11: [UNKNOWN]  class ListClientModules extends ListRecords
+./export_resources/app/Filament/Resources/ClientModuleResource.php:46: [UNKNOWN]              'index' => Pages\ListClientModules::route('/'),
+./fix_backups_20250514_171315/ClientModuleResource.php:46: [UNKNOWN]              'index' => Pages\ListClientModules::route('/'),

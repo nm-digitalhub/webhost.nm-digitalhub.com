@@ -1,46 +1,42 @@
 <?php
 
+declare(strict_types=1);
+
+use App\Http\Controllers\AuthenticatedSessionController;
+use App\Http\Controllers\BillingController;
+use App\Http\Controllers\Client\ClientController;
+use App\Http\Controllers\Client\DomainController;
+use App\Http\Controllers\Client\SupportController;
+use App\Http\Controllers\GoogleOAuthController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Middleware\IsAdmin;
+use App\Http\Middleware\IsClient;
+use App\Http\Middleware\SetLocale;
+use App\Livewire\Admin\Dashboard as AdminDashboard;
+use App\Livewire\Admin\Domains as AdminDomains;
+use App\Livewire\Admin\DomainsNew;
+use App\Livewire\Admin\Hosting as AdminHosting;
+use App\Livewire\Admin\Invoices as AdminInvoices;
+use App\Livewire\Admin\Orders;
+use App\Livewire\Admin\Plans;
+use App\Livewire\Admin\Settings as AdminSettings;
+use App\Livewire\Admin\Tickets as AdminTickets;
+use App\Livewire\Admin\Users;
+use App\Livewire\Admin\Vps as AdminVps;
+use App\Livewire\Client\Dashboard as ClientDashboard;
+use App\Livewire\Client\DomainCheck;
+use App\Livewire\Client\Domains;
+use App\Livewire\Client\Hosting;
+use App\Livewire\Client\HostingNew;
+use App\Livewire\Client\Invoices;
+use App\Livewire\Client\Settings;
+use App\Livewire\Client\Support;
+use App\Livewire\Client\SupportNew;
+use App\Livewire\Client\Vps;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
-use App\Http\Controllers\{
-    AuthenticatedSessionController,
-    BillingController,
-    Client\ClientController,
-    Client\DomainController,
-    Client\SupportController,
-    DashboardController,
-    GoogleOAuthController,
-    HomeController,
-    LanguageController,
-    PageController,
-    ProfileController
-};
-use App\Http\Middleware\{IsAdmin, IsClient, SetLocale};
-use App\Livewire\Admin\{
-    Dashboard as AdminDashboard,
-    Users,
-    Domains as AdminDomains,
-    DomainsNew,
-    Hosting as AdminHosting,
-    Vps as AdminVps,
-    Invoices as AdminInvoices,
-    Plans,
-    Orders,
-    Tickets as AdminTickets,
-    Settings as AdminSettings
-};
-use App\Livewire\Client\{
-    Dashboard as ClientDashboard,
-    Domains,
-    DomainCheck,
-    Hosting,
-    HostingNew,
-    Vps,
-    Invoices,
-    Settings,
-    Support,
-    SupportNew
-};
 
 // Default Home Route
 Route::get('/', function () {
@@ -53,7 +49,6 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    
     Route::view('/dashboard', 'dashboard')->name('dashboard');
     Route::view('/profile', 'profile.show')->name('profile.show');
     Route::view('/hosting', 'hosting')->name('hosting');

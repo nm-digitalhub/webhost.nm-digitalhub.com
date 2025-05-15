@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use Database\Seeders\CreateRolesAndSetAdminSeeder;
+use Illuminate\Console\Command;
 
 class SetupRolesAndAdmin extends Command
 {
@@ -27,14 +29,14 @@ class SetupRolesAndAdmin extends Command
     public function handle()
     {
         $this->info('Setting up roles and admin user...');
-        
-        $seeder = new CreateRolesAndSetAdminSeeder();
+
+        $seeder = new CreateRolesAndSetAdminSeeder;
         $seeder->setCommand($this);
         $seeder->run();
-        
+
         $this->info('Roles and admin user setup completed successfully!');
         $this->info('Admin user can now access the Filament admin panel at /admin');
-        
+
         return Command::SUCCESS;
     }
 }

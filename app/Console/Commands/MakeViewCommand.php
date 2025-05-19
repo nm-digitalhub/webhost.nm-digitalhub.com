@@ -34,7 +34,7 @@ class MakeViewCommand extends Command
         $force = $this->option('force');
 
         // Convert dot notation to directory structure
-        $viewPath = resource_path('views/' . str_replace('.', '/', $name) . '.' . $type);
+        $viewPath = resource_path('views/'.str_replace('.', '/', $name).'.'.$type);
 
         // Check if the file already exists
         if (File::exists($viewPath) && ! $force) {

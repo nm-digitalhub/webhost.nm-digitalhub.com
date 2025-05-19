@@ -83,7 +83,7 @@ class MailTemplateManager
     {
         $sampleData = [
             'name' => $template->lang === 'he' ? 'משתמש לדוגמה' : 'John Doe',
-            'email' => 'example@' . parse_url((string) config('app.url'), PHP_URL_HOST),
+            'email' => 'example@'.parse_url((string) config('app.url'), PHP_URL_HOST),
             'password' => $template->lang === 'he' ? 'סיסמה_לדוגמה_123' : 'sample-password-123',
             'reset_url' => url('/reset-password?token=sample-token'),
             'login_url' => url('/login'),

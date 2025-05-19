@@ -73,7 +73,7 @@ class DomainController extends Controller
         // Add TLD variations
         foreach ($tlds as $tld) {
             if (! str_ends_with($domain, $tld)) {
-                $suggestion = $name . $tld;
+                $suggestion = $name.$tld;
                 $price = 12.99;
 
                 if ($tld === '.io') {
@@ -94,7 +94,7 @@ class DomainController extends Controller
 
         // Add prefix variations (with .com)
         foreach ($prefixes as $prefix) {
-            $suggestion = $prefix . $name . '.com';
+            $suggestion = $prefix.$name.'.com';
             $suggestions[] = [
                 'domain' => $suggestion,
                 'available' => random_int(0, 1) > 0.2, // 80% chance it's available
@@ -104,7 +104,7 @@ class DomainController extends Controller
 
         // Add suffix variations (with .com)
         foreach ($suffixes as $suffix) {
-            $suggestion = $name . $suffix . '.com';
+            $suggestion = $name.$suffix.'.com';
             $suggestions[] = [
                 'domain' => $suggestion,
                 'available' => random_int(0, 1) > 0.2, // 80% chance it's available

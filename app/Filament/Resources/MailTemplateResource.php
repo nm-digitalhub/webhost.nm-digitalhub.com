@@ -107,11 +107,11 @@ class MailTemplateResource extends Resource
                                                 $body = $state['body'] ?? ($record->body ?? 'תוכן האימייל');
 
                                                 return new HtmlString(
-                                                    '<div class="preview-frame bg-white shadow rounded-lg overflow-hidden">' .
-                                                    '<div class="border-b border-gray-200 bg-gray-50 px-4 py-3">' .
-                                                    '<h3 class="text-lg font-medium">נושא: ' . htmlspecialchars($subject) . '</h3>' .
-                                                    '</div>' .
-                                                    '<div class="p-4">' . $body . '</div>' .
+                                                    '<div class="preview-frame bg-white shadow rounded-lg overflow-hidden">'.
+                                                    '<div class="border-b border-gray-200 bg-gray-50 px-4 py-3">'.
+                                                    '<h3 class="text-lg font-medium">נושא: '.htmlspecialchars($subject).'</h3>'.
+                                                    '</div>'.
+                                                    '<div class="p-4">'.$body.'</div>'.
                                                     '</div>'
                                                 );
                                             }),
@@ -176,9 +176,9 @@ class MailTemplateResource extends Resource
 
                                                     \Filament\Notifications\Notification::make()
                                                         ->title('תצוגה מקדימה')
-                                                        ->body(new HtmlString('<div style="max-height:350px;overflow-y:auto;">' .
-                                                            '<h3>' . htmlspecialchars((string) $preview['subject']) . '</h3>' .
-                                                            $preview['body'] . '</div>'))
+                                                        ->body(new HtmlString('<div style="max-height:350px;overflow-y:auto;">'.
+                                                            '<h3>'.htmlspecialchars((string) $preview['subject']).'</h3>'.
+                                                            $preview['body'].'</div>'))
                                                         ->info()
                                                         ->persistent()
                                                         ->send();
@@ -234,11 +234,11 @@ class MailTemplateResource extends Resource
                                         Forms\Components\Placeholder::make('variables_help')
                                             ->label('כיצד להשתמש במשתנים בתבנית')
                                             ->content(new HtmlString(
-                                                '<p>יש להשתמש בסינטקס של Blade לצורך שילוב משתנים:</p>' .
-                                                '<div class="p-2 bg-gray-100 rounded mb-2"><code>{{ name }}</code> - שם המשתמש</div>' .
-                                                '<div class="p-2 bg-gray-100 rounded mb-2"><code>{{ email }}</code> - כתובת אימייל</div>' .
-                                                '<div class="p-2 bg-gray-100 rounded mb-4"><code>{{ password }}</code> - סיסמה</div>' .
-                                                '<p>דוגמה לתבנית עם משתנים:</p>' .
+                                                '<p>יש להשתמש בסינטקס של Blade לצורך שילוב משתנים:</p>'.
+                                                '<div class="p-2 bg-gray-100 rounded mb-2"><code>{{ name }}</code> - שם המשתמש</div>'.
+                                                '<div class="p-2 bg-gray-100 rounded mb-2"><code>{{ email }}</code> - כתובת אימייל</div>'.
+                                                '<div class="p-2 bg-gray-100 rounded mb-4"><code>{{ password }}</code> - סיסמה</div>'.
+                                                '<p>דוגמה לתבנית עם משתנים:</p>'.
                                                 '<div class="p-4 bg-gray-100 rounded font-mono text-sm whitespace-pre-wrap">שלום {{ name }},
 
 חשבונך נוצר בהצלחה.
@@ -304,7 +304,7 @@ class MailTemplateResource extends Resource
                     ->icon('heroicon-o-document-duplicate')
                     ->action(function (MailTemplate $record) {
                         $duplicate = $record->replicate();
-                        $duplicate->name = $record->name . '_copy';
+                        $duplicate->name = $record->name.'_copy';
                         $duplicate->save();
                     }),
             ])
@@ -347,7 +347,6 @@ class MailTemplateResource extends Resource
     {
         return $panel->isEmailVerificationRequired();
     }
-
 
     public static function isTenantSubscriptionRequired(\Filament\Panel $panel): bool
     {

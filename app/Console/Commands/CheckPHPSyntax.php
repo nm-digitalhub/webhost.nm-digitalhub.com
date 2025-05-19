@@ -29,7 +29,7 @@ class CheckPHPSyntax extends Command
 
         // Report results
         if (count($this->errorFiles) > 0) {
-            $this->error('Found ' . count($this->errorFiles) . ' files with syntax errors:');
+            $this->error('Found '.count($this->errorFiles).' files with syntax errors:');
 
             foreach ($this->errorFiles as $file => $error) {
                 $this->warn(" - {$file}");
@@ -117,7 +117,7 @@ class CheckPHPSyntax extends Command
                 if (isset($lines[$lineNumber - 1])) {
                     $line = $lines[$lineNumber - 1];
                     if (! Str::endsWith(trim($line), ';') && ! Str::endsWith(trim($line), '{') && ! Str::endsWith(trim($line), '}')) {
-                        $lines[$lineNumber - 1] = rtrim($line) . ';';
+                        $lines[$lineNumber - 1] = rtrim($line).';';
                         $content = implode("\n", $lines);
                         $fixed = true;
                         $this->info("Fixed missing semicolon on line {$lineNumber} in {$file}");
@@ -129,7 +129,7 @@ class CheckPHPSyntax extends Command
         // Save fixed content if we made a fix
         if ($fixed) {
             // Make a backup
-            File::put($file . '.syntax-error.bak', File::get($file));
+            File::put($file.'.syntax-error.bak', File::get($file));
 
             // Save the fixed version
             File::put($file, $content);

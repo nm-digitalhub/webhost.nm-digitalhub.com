@@ -59,8 +59,6 @@ class UserResource extends Resource
         return [];
     }
 
-
-
     /**
      * @return array<class-string<\Filament\Resources\RelationManagers\RelationManager>>
      */
@@ -73,7 +71,6 @@ class UserResource extends Resource
     {
         return $panel->isEmailVerificationRequired();
     }
-
 
     public static function isTenantSubscriptionRequired(\Filament\Panel $panel): bool
     {

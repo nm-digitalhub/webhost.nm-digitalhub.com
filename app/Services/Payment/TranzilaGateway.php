@@ -126,7 +126,7 @@ class TranzilaGateway extends AbstractPaymentGateway
         $sum = number_format($order->total * 100, 0, '', '');
 
         // Create a unique order ID for Tranzila (with random string to avoid duplicates)
-        $orderIdForTranzila = $order->id . '-' . substr(md5(uniqid()), 0, 6);
+        $orderIdForTranzila = $order->id.'-'.substr(md5(uniqid()), 0, 6);
 
         // Base URL for the Tranzila hosted payment page
         $baseUrl = $this->mode === 'sandbox' ? self::SANDBOX_URL : self::PRODUCTION_URL;
@@ -153,7 +153,7 @@ class TranzilaGateway extends AbstractPaymentGateway
             'notify_url' => route('checkout.notify', ['gateway' => $this->getIdentifier()]),
         ]);
 
-        $redirectUrl = $baseUrl . '/cgi-bin/tranzila71u.cgi?' . $queryParams;
+        $redirectUrl = $baseUrl.'/cgi-bin/tranzila71u.cgi?'.$queryParams;
 
         // Create transaction record
         $transaction = $this->createTransactionRecord($order, null, Transaction::STATUS_PENDING, [
@@ -236,7 +236,7 @@ class TranzilaGateway extends AbstractPaymentGateway
                     'approval_code' => $data['AuthCode'] ?? null,
                     'card_type' => $data['cardtype'] ?? null,
                     'card_brand' => $data['Cardtype'] ?? null,
-                    'card_expiration' => $data['expmonth'] . '/' . $data['expyear'] ?? null,
+                    'card_expiration' => $data['expmonth'].'/'.$data['expyear'] ?? null,
                     'last_digits' => $data['last4digits'] ?? null,
                     'auth_number' => $data['AuthCode'] ?? null,
                 ]
@@ -281,7 +281,7 @@ class TranzilaGateway extends AbstractPaymentGateway
 
             return false;
         } catch (\Exception $e) {
-            Log::error('Tranzila verification error: ' . $e->getMessage(), [
+            Log::error('Tranzila verification error: '.$e->getMessage(), [
                 'transaction_id' => $transactionId,
             ]);
 
@@ -350,14 +350,14 @@ class TranzilaGateway extends AbstractPaymentGateway
 
                     return true;
                 } else {
-                    Log::error('Tranzila refund error: ' . $data, [
+                    Log::error('Tranzila refund error: '.$data, [
                         'transaction_id' => $transaction->id,
                     ]);
 
                     return false;
                 }
             } else {
-                Log::error('Tranzila refund request failed: ' . $response->status(), [
+                Log::error('Tranzila refund request failed: '.$response->status(), [
                     'transaction_id' => $transaction->id,
                     'response' => $response->body(),
                 ]);
@@ -365,7 +365,7 @@ class TranzilaGateway extends AbstractPaymentGateway
                 return false;
             }
         } catch (\Exception $e) {
-            Log::error('Tranzila refund error: ' . $e->getMessage(), [
+            Log::error('Tranzila refund error: '.$e->getMessage(), [
                 'transaction_id' => $transaction->id,
             ]);
 

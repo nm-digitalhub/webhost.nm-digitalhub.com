@@ -110,6 +110,6 @@ class Transaction extends Model
     {
         $symbol = $this->currency === 'ILS' ? '₪' : ($this->currency === 'USD' ? '$' : '€');
 
-        return $symbol . number_format($this->amount, 2);
+        return $symbol.number_format($this->amount, 2);
     }
 }

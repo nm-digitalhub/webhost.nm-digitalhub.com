@@ -35,7 +35,7 @@ class ClientModulesSeeder extends Seeder
         if ($dashboard['success']) {
             $this->command->info('  ✓ Dashboard module installed');
         } else {
-            $this->command->error('  ✗ Failed to install Dashboard module: ' . $dashboard['message']);
+            $this->command->error('  ✗ Failed to install Dashboard module: '.$dashboard['message']);
         }
 
         // Install domains module
@@ -43,7 +43,7 @@ class ClientModulesSeeder extends Seeder
         if ($domains['success']) {
             $this->command->info('  ✓ Domains module installed');
         } else {
-            $this->command->error('  ✗ Failed to install Domains module: ' . $domains['message']);
+            $this->command->error('  ✗ Failed to install Domains module: '.$domains['message']);
         }
 
         // Install billing module
@@ -51,7 +51,7 @@ class ClientModulesSeeder extends Seeder
         if ($billing['success']) {
             $this->command->info('  ✓ Billing module installed');
         } else {
-            $this->command->error('  ✗ Failed to install Billing module: ' . $billing['message']);
+            $this->command->error('  ✗ Failed to install Billing module: '.$billing['message']);
         }
 
         // Install support module
@@ -59,7 +59,7 @@ class ClientModulesSeeder extends Seeder
         if ($support['success']) {
             $this->command->info('  ✓ Support module installed');
         } else {
-            $this->command->error('  ✗ Failed to install Support module: ' . $support['message']);
+            $this->command->error('  ✗ Failed to install Support module: '.$support['message']);
         }
 
         // Stats module
@@ -78,7 +78,7 @@ class ClientModulesSeeder extends Seeder
         if ($stats['success']) {
             $this->command->info('  ✓ Statistics module installed');
         } else {
-            $this->command->error('  ✗ Failed to install Statistics module: ' . $stats['message']);
+            $this->command->error('  ✗ Failed to install Statistics module: '.$stats['message']);
         }
 
         $this->command->info('Client panel modules installation completed.');

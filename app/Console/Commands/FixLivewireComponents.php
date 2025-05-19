@@ -38,7 +38,7 @@ class FixLivewireComponents extends Command
         }
 
         $files = File::files($directory);
-        $this->info('Processing ' . count($files) . " files in {$directory}");
+        $this->info('Processing '.count($files)." files in {$directory}");
 
         foreach ($files as $file) {
             if ($file->getExtension() !== 'php') {
@@ -48,7 +48,7 @@ class FixLivewireComponents extends Command
             $content = File::get($file->getPathname());
             $originalContent = $content;
             $className = $file->getFilenameWithoutExtension();
-            $namespace = 'App\\Livewire\\' . basename($directory);
+            $namespace = 'App\\Livewire\\'.basename($directory);
 
             // Fix duplicate PHP tags
             $content = preg_replace('/^<\?php\s+<\?php/', '<?php', $content);
@@ -98,7 +98,7 @@ class FixLivewireComponents extends Command
                 // Add the trait if not already present
                 if (! Str::contains($content, 'use WithPagination;')) {
                     $content = preg_replace(
-                        '/(class\s+' . $className . '\s+extends\s+Component\s*{)/',
+                        '/(class\s+'.$className.'\s+extends\s+Component\s*{)/',
                         "$1\n    use WithPagination;\n",
                         (string) $content
                     );
@@ -107,7 +107,7 @@ class FixLivewireComponents extends Command
                 // Add pagination theme if not already present
                 if (! Str::contains($content, 'protected $paginationTheme')) {
                     $content = preg_replace(
-                        '/(class\s+' . $className . '\s+extends\s+Component\s*{)/',
+                        '/(class\s+'.$className.'\s+extends\s+Component\s*{)/',
                         "$1\n    protected \$paginationTheme = 'tailwind';",
                         (string) $content
                     );
@@ -118,7 +118,7 @@ class FixLivewireComponents extends Command
 
             // Ensure render method is present
             if (! Str::contains($content, 'public function render()')) {
-                $viewPath = Str::kebab(basename($directory)) . '.' . Str::kebab($className);
+                $viewPath = Str::kebab(basename($directory)).'.'.Str::kebab($className);
                 $content = preg_replace(
                     '/(}\s*)$/',
                     "\n    public function render()\n    {\n        return view('livewire.{$viewPath}');\n    }\n$1",
@@ -131,7 +131,7 @@ class FixLivewireComponents extends Command
             if (Str::contains($content, '->layout(')) {
                 $content = preg_replace(
                     '/return\s+view\([^)]+\)\s*->layout\([^)]+\);/',
-                    'return view(\'livewire.' . Str::kebab(basename($directory)) . '.' . Str::kebab($className) . '\');',
+                    'return view(\'livewire.'.Str::kebab(basename($directory)).'.'.Str::kebab($className).'\');',
                     (string) $content
                 );
                 $this->info("Removed hardcoded ->layout() in {$file->getFilename()}");
@@ -146,7 +146,7 @@ class FixLivewireComponents extends Command
             // Save changes if any were made
             if ($content !== $originalContent) {
                 // Create backup
-                File::put($file->getPathname() . '.bak', $originalContent);
+                File::put($file->getPathname().'.bak', $originalContent);
                 $this->info("Created backup of {$file->getFilename()}");
 
                 // Save changes

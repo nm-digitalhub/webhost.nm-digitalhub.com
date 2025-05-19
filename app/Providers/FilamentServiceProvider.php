@@ -33,7 +33,7 @@ class FilamentServiceProvider extends ServiceProvider
 
         // Add custom RTL styles
         FilamentAsset::register([
-            Css::make('custom-rtl', __DIR__ . '/../../resources/css/filament-rtl.css'),
+            Css::make('custom-rtl', __DIR__.'/../../resources/css/filament-rtl.css'),
         ]);
 
         // Affect all views rendered by Filament

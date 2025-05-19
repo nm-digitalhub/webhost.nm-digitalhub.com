@@ -66,7 +66,7 @@ class Tickets extends Component
     {
         $tickets = Ticket::query()
             ->when($this->search, function (Builder $query) {
-                $searchTerm = '%' . $this->search . '%';
+                $searchTerm = '%'.$this->search.'%';
 
                 return $query->where(function (Builder $q) use ($searchTerm) {
                     $q->where('subject', 'like', $searchTerm)

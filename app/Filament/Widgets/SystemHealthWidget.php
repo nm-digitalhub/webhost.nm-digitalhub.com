@@ -36,14 +36,14 @@ class SystemHealthWidget extends Widget
             return [
                 'name' => 'Database Connection',
                 'status' => 'passing',
-                'message' => 'Connected to ' . config('database.connections.mysql.database'),
+                'message' => 'Connected to '.config('database.connections.mysql.database'),
                 'icon' => 'heroicon-o-circle-stack',
             ];
         } catch (\Exception $e) {
             return [
                 'name' => 'Database Connection',
                 'status' => 'failing',
-                'message' => 'Database connection failed: ' . $e->getMessage(),
+                'message' => 'Database connection failed: '.$e->getMessage(),
                 'icon' => 'heroicon-o-circle-stack',
             ];
         }
@@ -53,7 +53,7 @@ class SystemHealthWidget extends Widget
     {
         try {
             $cacheDriver = config('cache.default');
-            $value = 'test_' . time();
+            $value = 'test_'.time();
             Cache::put('health_check', $value, 1);
             $retrieved = Cache::get('health_check');
 
@@ -61,7 +61,7 @@ class SystemHealthWidget extends Widget
                 return [
                     'name' => 'Cache System',
                     'status' => 'passing',
-                    'message' => 'Using ' . $cacheDriver . ' driver',
+                    'message' => 'Using '.$cacheDriver.' driver',
                     'icon' => 'heroicon-o-bolt',
                 ];
             } else {
@@ -76,7 +76,7 @@ class SystemHealthWidget extends Widget
             return [
                 'name' => 'Cache System',
                 'status' => 'failing',
-                'message' => 'Cache error: ' . $e->getMessage(),
+                'message' => 'Cache error: '.$e->getMessage(),
                 'icon' => 'heroicon-o-bolt',
             ];
         }
@@ -113,21 +113,21 @@ class SystemHealthWidget extends Widget
             return [
                 'name' => 'Storage Space',
                 'status' => 'failing',
-                'message' => 'Storage is ' . $usedPercentage . '% full. Only ' . $this->formatBytes($freeSpace) . ' free',
+                'message' => 'Storage is '.$usedPercentage.'% full. Only '.$this->formatBytes($freeSpace).' free',
                 'icon' => 'heroicon-o-folder',
             ];
         } elseif ($usedPercentage > 75) {
             return [
                 'name' => 'Storage Space',
                 'status' => 'warning',
-                'message' => 'Storage is ' . $usedPercentage . '% full. ' . $this->formatBytes($freeSpace) . ' free',
+                'message' => 'Storage is '.$usedPercentage.'% full. '.$this->formatBytes($freeSpace).' free',
                 'icon' => 'heroicon-o-folder',
             ];
         } else {
             return [
                 'name' => 'Storage Space',
                 'status' => 'passing',
-                'message' => $this->formatBytes($freeSpace) . ' free (' . $usedPercentage . '% used)',
+                'message' => $this->formatBytes($freeSpace).' free ('.$usedPercentage.'% used)',
                 'icon' => 'heroicon-o-folder',
             ];
         }
@@ -153,18 +153,18 @@ class SystemHealthWidget extends Widget
 
                 if ($failedCount > 0) {
                     $queueStatus = 'warning';
-                    $message = $failedCount . ' failed jobs in queue';
+                    $message = $failedCount.' failed jobs in queue';
                 } else {
                     $queueStatus = 'passing';
-                    $message = 'Queue has ' . $jobsCount . ' pending jobs';
+                    $message = 'Queue has '.$jobsCount.' pending jobs';
                 }
             } catch (\Exception $e) {
                 $queueStatus = 'failing';
-                $message = 'Queue error: ' . $e->getMessage();
+                $message = 'Queue error: '.$e->getMessage();
             }
         } elseif (in_array($queueConnection, ['redis', 'beanstalkd', 'sqs'])) {
             $queueStatus = 'passing';
-            $message = 'Using ' . $queueConnection . ' driver';
+            $message = 'Using '.$queueConnection.' driver';
         }
 
         return [
@@ -185,7 +185,7 @@ class SystemHealthWidget extends Widget
 
         $bytes /= 1024 ** $pow;
 
-        return round($bytes, $precision) . ' ' . $units[$pow];
+        return round($bytes, $precision).' '.$units[$pow];
     }
 
     protected function getViewData(): array

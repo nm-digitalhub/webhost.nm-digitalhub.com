@@ -103,7 +103,7 @@ class Order extends Model
     {
         $symbol = $this->currency === 'ILS' ? '₪' : ($this->currency === 'USD' ? '$' : '€');
 
-        return $symbol . number_format($this->total, 2);
+        return $symbol.number_format($this->total, 2);
     }
 
     /**
@@ -131,12 +131,12 @@ class Order extends Model
         $timestamp = now()->format('Ymd');
         $random = str_pad(mt_rand(1, 9999), 4, '0', STR_PAD_LEFT);
 
-        $orderNumber = $prefix . $timestamp . $random;
+        $orderNumber = $prefix.$timestamp.$random;
 
         // Ensure uniqueness
         while (self::where('order_number', $orderNumber)->exists()) {
             $random = str_pad(mt_rand(1, 9999), 4, '0', STR_PAD_LEFT);
-            $orderNumber = $prefix . $timestamp . $random;
+            $orderNumber = $prefix.$timestamp.$random;
         }
 
         return $orderNumber;

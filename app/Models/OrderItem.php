@@ -59,7 +59,7 @@ class OrderItem extends Model
     {
         $symbol = $this->order->currency === 'ILS' ? '₪' : ($this->order->currency === 'USD' ? '$' : '€');
 
-        return $symbol . number_format($this->price, 2);
+        return $symbol.number_format($this->price, 2);
     }
 
     /**
@@ -69,6 +69,6 @@ class OrderItem extends Model
     {
         $symbol = $this->order->currency === 'ILS' ? '₪' : ($this->order->currency === 'USD' ? '$' : '€');
 
-        return $symbol . number_format($this->total, 2);
+        return $symbol.number_format($this->total, 2);
     }
 }

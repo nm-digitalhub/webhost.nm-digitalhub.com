@@ -24,7 +24,7 @@ class GoogleOAuthService
         $this->client->setPrompt('consent');
         $this->client->setIncludeGrantedScopes(true);
         $this->client->addScope(Gmail::GMAIL_SEND);
-        $this->client->setRedirectUri(config('app.url') . '/oauth/google/callback');
+        $this->client->setRedirectUri(config('app.url').'/oauth/google/callback');
 
         $this->settings = MailSetting::getActiveSettings();
     }
@@ -41,7 +41,7 @@ class GoogleOAuthService
             try {
                 $this->client->setAuthConfig($jsonPath);
             } catch (\Exception $e) {
-                Log::error('Failed to load Google OAuth credentials from JSON: ' . $e->getMessage());
+                Log::error('Failed to load Google OAuth credentials from JSON: '.$e->getMessage());
 
                 return $this;
             }
@@ -71,7 +71,7 @@ class GoogleOAuthService
                     return $newToken['access_token'];
                 }
             } catch (\Exception $e) {
-                Log::error('Failed to refresh Google OAuth token: ' . $e->getMessage());
+                Log::error('Failed to refresh Google OAuth token: '.$e->getMessage());
             }
         }
 
@@ -97,7 +97,7 @@ class GoogleOAuthService
 
             return $this->client->fetchAccessTokenWithAuthCode($code);
         } catch (\Exception $e) {
-            Log::error('Failed to fetch token with code: ' . $e->getMessage());
+            Log::error('Failed to fetch token with code: '.$e->getMessage());
 
             return [];
         }

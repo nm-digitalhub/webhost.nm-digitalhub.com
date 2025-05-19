@@ -47,7 +47,7 @@ class FixDuplicatePhpTags extends Command
                         $className = $matches[2];
 
                         // Check how many class declarations we have with the same name
-                        preg_match_all('/class\s+' . $className . '\s+/s', (string) $content, $classMatches);
+                        preg_match_all('/class\s+'.$className.'\s+/s', (string) $content, $classMatches);
 
                         if (count($classMatches[0]) > 1) {
                             // This is more complex - we need manual intervention
@@ -55,7 +55,7 @@ class FixDuplicatePhpTags extends Command
                             $this->info('Please manually merge the class implementations');
 
                             // Create a backup
-                            $backupPath = $file->getPathname() . '.bak';
+                            $backupPath = $file->getPathname().'.bak';
                             File::copy($file->getPathname(), $backupPath);
                             $this->info("Created backup at {$backupPath}");
                         }
@@ -70,7 +70,7 @@ class FixDuplicatePhpTags extends Command
                         $this->info('This requires manual intervention to fix properly.');
 
                         // Create a backup
-                        $backupPath = $file->getPathname() . '.bak';
+                        $backupPath = $file->getPathname().'.bak';
                         File::copy($file->getPathname(), $backupPath);
                         $this->info("Created backup at {$backupPath}");
 
@@ -92,7 +92,7 @@ class FixDuplicatePhpTags extends Command
         if ($fixedFiles === []) {
             $this->info('No files with duplicate PHP tags or class declarations found.');
         } else {
-            $this->info(count($fixedFiles) . ' files fixed.');
+            $this->info(count($fixedFiles).' files fixed.');
         }
 
         return 0;

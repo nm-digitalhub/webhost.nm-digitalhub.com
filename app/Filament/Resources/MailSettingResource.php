@@ -231,26 +231,26 @@ class MailSettingResource extends Resource
                                                 if (! empty($settings->reply_to_address)) {
                                                     $message->replyTo($settings->reply_to_address, $settings->reply_to_name);
                                                 } elseif ($settings->use_no_reply) {
-                                                    $message->replyTo('noreply@' . parse_url((string) config('app.url'), PHP_URL_HOST), 'No Reply');
+                                                    $message->replyTo('noreply@'.parse_url((string) config('app.url'), PHP_URL_HOST), 'No Reply');
                                                 }
                                             });
                                         } else {
                                             // Fallback to simple text email
-                                            Mail::raw('This is a test email from ' . config('app.name') . "\n\nSent at: " . now()->format('Y-m-d H:i:s'), function (Message $message) use ($settings) {
+                                            Mail::raw('This is a test email from '.config('app.name')."\n\nSent at: ".now()->format('Y-m-d H:i:s'), function (Message $message) use ($settings) {
                                                 $message->to($settings->from_address)
-                                                    ->subject('Test Email from ' . config('app.name'));
+                                                    ->subject('Test Email from '.config('app.name'));
 
                                                 if (! empty($settings->reply_to_address)) {
                                                     $message->replyTo($settings->reply_to_address, $settings->reply_to_name);
                                                 } elseif ($settings->use_no_reply) {
-                                                    $message->replyTo('noreply@' . parse_url((string) config('app.url'), PHP_URL_HOST), 'No Reply');
+                                                    $message->replyTo('noreply@'.parse_url((string) config('app.url'), PHP_URL_HOST), 'No Reply');
                                                 }
                                             });
                                         }
 
                                         Notification::make()
                                             ->title('אימייל נשלח בהצלחה')
-                                            ->body('נשלח אימייל לכתובת: ' . $settings->from_address)
+                                            ->body('נשלח אימייל לכתובת: '.$settings->from_address)
                                             ->success()
                                             ->send();
                                     } catch (\Exception $e) {
@@ -315,7 +315,6 @@ class MailSettingResource extends Resource
     {
         return $panel->isEmailVerificationRequired();
     }
-
 
     public static function isTenantSubscriptionRequired(\Filament\Panel $panel): bool
     {

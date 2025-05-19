@@ -49,7 +49,7 @@ class FixPhpTags extends Command
         if ($fixedFiles === []) {
             $this->info('No files with duplicate PHP tags found.');
         } else {
-            $this->info(count($fixedFiles) . ' files fixed.');
+            $this->info(count($fixedFiles).' files fixed.');
         }
 
         return 0;

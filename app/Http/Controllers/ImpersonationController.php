@@ -43,7 +43,7 @@ class ImpersonationController extends Controller
         }
 
         return redirect()->route('client.dashboard')
-            ->with('warning', 'You are now impersonating ' . $user->name . '. Remember to exit impersonation when finished.');
+            ->with('warning', 'You are now impersonating '.$user->name.'. Remember to exit impersonation when finished.');
     }
 
     /**

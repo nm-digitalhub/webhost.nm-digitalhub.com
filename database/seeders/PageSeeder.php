@@ -110,12 +110,12 @@ class PageSeeder extends Seeder
 
         Page::create([
             'title' => $title,
-            'slug' => $language === 'en' ? 'home' : 'home-' . $language,
+            'slug' => $language === 'en' ? 'home' : 'home-'.$language,
             'type' => 'home',
             'language' => $language,
-            'content' => '<p>' . ($language === 'en' ?
+            'content' => '<p>'.($language === 'en' ?
                 'Welcome to NM-DigitalHUB, your complete hosting solution. We provide reliable hosting, domain registration, and cloud services for businesses of all sizes.' :
-                'ברוכים הבאים ל-NM-DigitalHUB, פתרון האחסון המושלם שלך. אנו מספקים שירותי אחסון אמינים, רישום דומיינים ושירותי ענן לעסקים בכל הגדלים.') . '</p>',
+                'ברוכים הבאים ל-NM-DigitalHUB, פתרון האחסון המושלם שלך. אנו מספקים שירותי אחסון אמינים, רישום דומיינים ושירותי ענן לעסקים בכל הגדלים.').'</p>',
             'meta_title' => $language === 'en' ? 'NM-DigitalHUB - Web Hosting & Domain Registration' : 'NM-DigitalHUB - אחסון אתרים ורישום דומיינים',
             'meta_description' => $language === 'en' ?
                 'Reliable web hosting, domain registration, VPS and cloud solutions for your business. 24/7 support and great prices.' :
@@ -215,7 +215,7 @@ class PageSeeder extends Seeder
 
         Page::create([
             'title' => $title,
-            'slug' => 'domains-' . $language,
+            'slug' => 'domains-'.$language,
             'type' => 'domains',
             'language' => $language,
             'content' => $content,
@@ -342,7 +342,7 @@ class PageSeeder extends Seeder
 
         Page::create([
             'title' => $title,
-            'slug' => 'hosting-' . $language,
+            'slug' => 'hosting-'.$language,
             'type' => 'hosting',
             'language' => $language,
             'content' => $content,
@@ -521,7 +521,7 @@ class PageSeeder extends Seeder
 
         Page::create([
             'title' => $title,
-            'slug' => 'vps-' . $language,
+            'slug' => 'vps-'.$language,
             'type' => 'vps',
             'language' => $language,
             'content' => $content,
@@ -685,7 +685,7 @@ class PageSeeder extends Seeder
 
         Page::create([
             'title' => $title,
-            'slug' => 'cloud-' . $language,
+            'slug' => 'cloud-'.$language,
             'type' => 'cloud',
             'language' => $language,
             'content' => $content,
@@ -713,7 +713,7 @@ class PageSeeder extends Seeder
     {
         // Create Terms Page
         $termsContent = '';
-        $termsPath = resource_path('markdown/' . ($language === 'en' ? 'terms.md' : 'terms_he.md'));
+        $termsPath = resource_path('markdown/'.($language === 'en' ? 'terms.md' : 'terms_he.md'));
 
         if (File::exists($termsPath)) {
             $termsContent = File::get($termsPath);
@@ -747,7 +747,7 @@ Permission is granted to temporarily download one copy of the materials (informa
 
         Page::create([
             'title' => $language === 'en' ? 'Terms of Service' : 'תנאי שירות',
-            'slug' => 'terms-' . $language,
+            'slug' => 'terms-'.$language,
             'type' => 'legal',
             'language' => $language,
             'content' => $termsContent,
@@ -763,7 +763,7 @@ Permission is granted to temporarily download one copy of the materials (informa
 
         // Create Privacy Policy Page
         $policyContent = '';
-        $policyPath = resource_path('markdown/' . ($language === 'en' ? 'policy.md' : 'policy_he.md'));
+        $policyPath = resource_path('markdown/'.($language === 'en' ? 'policy.md' : 'policy_he.md'));
 
         if (File::exists($policyPath)) {
             $policyContent = File::get($policyPath);
@@ -817,7 +817,7 @@ We automatically collect some information about your visit to our website. This 
 
         Page::create([
             'title' => $language === 'en' ? 'Privacy Policy' : 'מדיניות פרטיות',
-            'slug' => 'policy-' . $language,
+            'slug' => 'policy-'.$language,
             'type' => 'legal',
             'language' => $language,
             'content' => $policyContent,

@@ -21,7 +21,7 @@ class TestSmtpNotification extends Notification
     {
         return (new MailMessage)
             ->subject('בדיקת SMTP - NM-DigitalHUB')
-            ->greeting('שלום ' . $notifiable->name)
+            ->greeting('שלום '.$notifiable->name)
             ->line('זהו מייל בדיקה מהמערכת NM-DigitalHUB.')
             ->line('אם קיבלת מייל זה – ההגדרות שלך תקינות!')
             ->line('תודה, צוות NM-DigitalHUB');

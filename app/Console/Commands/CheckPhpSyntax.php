@@ -54,7 +54,7 @@ class CheckPhpSyntax extends Command
 
             return 0;
         } else {
-            $this->error(count($errors) . ' syntax errors found.');
+            $this->error(count($errors).' syntax errors found.');
 
             return 1;
         }

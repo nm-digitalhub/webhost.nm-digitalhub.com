@@ -60,7 +60,7 @@ class GeneratorService
                 'message' => 'Code generated successfully.',
             ];
         } catch (\Exception $e) {
-            Log::error('Code generation failed: ' . $e->getMessage(), [
+            Log::error('Code generation failed: '.$e->getMessage(), [
                 'generator' => $generator->toArray(),
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
@@ -79,7 +79,7 @@ class GeneratorService
 
             return [
                 'success' => false,
-                'message' => 'Error generating code: ' . $e->getMessage(),
+                'message' => 'Error generating code: '.$e->getMessage(),
             ];
         }
     }
@@ -98,23 +98,23 @@ class GeneratorService
 
         switch ($generator->type) {
             case 'model':
-                $path = 'Models/' . $name . '.php';
+                $path = 'Models/'.$name.'.php';
                 break;
             case 'resource':
-                $resourceName = str_ends_with($name, 'Resource') ? $name : $name . 'Resource';
-                $path = 'Filament/Resources/' . $resourceName . '.php';
+                $resourceName = str_ends_with($name, 'Resource') ? $name : $name.'Resource';
+                $path = 'Filament/Resources/'.$resourceName.'.php';
                 break;
             case 'page':
-                $path = 'Filament/Pages/' . $name . '.php';
+                $path = 'Filament/Pages/'.$name.'.php';
                 break;
             case 'widget':
-                $path = 'Filament/Widgets/' . $name . '.php';
+                $path = 'Filament/Widgets/'.$name.'.php';
                 break;
             default:
-                $path = $name . '.php';
+                $path = $name.'.php';
         }
 
-        return $basePath . '/' . $path;
+        return $basePath.'/'.$path;
     }
 
     /**
@@ -193,13 +193,13 @@ class GeneratorService
         $name = Str::kebab($generator->name);
 
         if ($generator->type === 'page') {
-            $viewName = 'filament.pages.' . $name;
+            $viewName = 'filament.pages.'.$name;
             Artisan::call('make:view', [
                 'name' => $viewName,
                 '--type' => 'blade',
             ]);
         } elseif ($generator->type === 'widget') {
-            $viewName = 'filament.widgets.' . $name;
+            $viewName = 'filament.widgets.'.$name;
             Artisan::call('make:view', [
                 'name' => $viewName,
                 '--type' => 'blade',

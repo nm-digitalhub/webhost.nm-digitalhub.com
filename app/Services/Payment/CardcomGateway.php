@@ -207,7 +207,7 @@ class CardcomGateway extends AbstractPaymentGateway
                     ];
                 }
             } else {
-                $errorMessage = 'Failed to communicate with Cardcom. Status: ' . $response->status();
+                $errorMessage = 'Failed to communicate with Cardcom. Status: '.$response->status();
                 $this->createTransactionRecord(
                     $order,
                     null,
@@ -224,7 +224,7 @@ class CardcomGateway extends AbstractPaymentGateway
                 ];
             }
         } catch (\Exception $e) {
-            Log::error('Cardcom payment error: ' . $e->getMessage(), [
+            Log::error('Cardcom payment error: '.$e->getMessage(), [
                 'order_id' => $order->id,
                 'request_data' => $requestData,
             ]);
@@ -241,7 +241,7 @@ class CardcomGateway extends AbstractPaymentGateway
 
             return [
                 'success' => false,
-                'message' => 'An error occurred while processing your payment: ' . $e->getMessage(),
+                'message' => 'An error occurred while processing your payment: '.$e->getMessage(),
             ];
         }
     }
@@ -343,7 +343,7 @@ class CardcomGateway extends AbstractPaymentGateway
 
             return false;
         } catch (\Exception $e) {
-            Log::error('Cardcom verification error: ' . $e->getMessage(), [
+            Log::error('Cardcom verification error: '.$e->getMessage(), [
                 'transaction_id' => $transactionId,
             ]);
 
@@ -409,7 +409,7 @@ class CardcomGateway extends AbstractPaymentGateway
                     return true;
                 } else {
                     $errorMessage = $data['OperationResponse']['message'] ?? 'Unknown error';
-                    Log::error('Cardcom refund error: ' . $errorMessage, [
+                    Log::error('Cardcom refund error: '.$errorMessage, [
                         'transaction_id' => $transaction->id,
                         'response' => $data,
                     ]);
@@ -417,7 +417,7 @@ class CardcomGateway extends AbstractPaymentGateway
                     return false;
                 }
             } else {
-                Log::error('Cardcom refund request failed: ' . $response->status(), [
+                Log::error('Cardcom refund request failed: '.$response->status(), [
                     'transaction_id' => $transaction->id,
                     'response' => $response->body(),
                 ]);
@@ -425,7 +425,7 @@ class CardcomGateway extends AbstractPaymentGateway
                 return false;
             }
         } catch (\Exception $e) {
-            Log::error('Cardcom refund error: ' . $e->getMessage(), [
+            Log::error('Cardcom refund error: '.$e->getMessage(), [
                 'transaction_id' => $transaction->id,
             ]);
 
@@ -478,7 +478,7 @@ class CardcomGateway extends AbstractPaymentGateway
                     return true;
                 } else {
                     $errorMessage = $data['OperationResponse']['message'] ?? 'Unknown error';
-                    Log::error('Cardcom cancel error: ' . $errorMessage, [
+                    Log::error('Cardcom cancel error: '.$errorMessage, [
                         'transaction_id' => $transaction->id,
                         'response' => $data,
                     ]);
@@ -486,7 +486,7 @@ class CardcomGateway extends AbstractPaymentGateway
                     return false;
                 }
             } else {
-                Log::error('Cardcom cancel request failed: ' . $response->status(), [
+                Log::error('Cardcom cancel request failed: '.$response->status(), [
                     'transaction_id' => $transaction->id,
                     'response' => $response->body(),
                 ]);
@@ -494,7 +494,7 @@ class CardcomGateway extends AbstractPaymentGateway
                 return false;
             }
         } catch (\Exception $e) {
-            Log::error('Cardcom cancel error: ' . $e->getMessage(), [
+            Log::error('Cardcom cancel error: '.$e->getMessage(), [
                 'transaction_id' => $transaction->id,
             ]);
 

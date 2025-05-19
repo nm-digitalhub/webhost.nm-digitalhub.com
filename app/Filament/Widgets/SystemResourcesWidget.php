@@ -30,29 +30,29 @@ class SystemResourcesWidget extends BaseWidget
 
         // PHP version and extensions
         $phpVersion = phpversion();
-        $phpExtensions = implode(', ', array_slice(get_loaded_extensions(), 0, 3)) . '...';
+        $phpExtensions = implode(', ', array_slice(get_loaded_extensions(), 0, 3)).'...';
 
         return [
-            Stat::make('CPU Usage', $cpuLoad['percentage'] . '%')
+            Stat::make('CPU Usage', $cpuLoad['percentage'].'%')
                 ->description($cpuLoad['description'])
                 ->descriptionIcon('heroicon-m-cpu-chip')
                 ->color($cpuLoad['color'])
                 ->chart($cpuLoad['chart']),
 
-            Stat::make('Memory Usage', $memoryUsage['percentage'] . '%')
+            Stat::make('Memory Usage', $memoryUsage['percentage'].'%')
                 ->description($memoryUsage['description'])
                 ->descriptionIcon('heroicon-m-variable')
                 ->color($memoryUsage['color'])
                 ->chart($memoryUsage['chart']),
 
-            Stat::make('Disk Usage', $diskUsage['percentage'] . '%')
+            Stat::make('Disk Usage', $diskUsage['percentage'].'%')
                 ->description($diskUsage['description'])
                 ->descriptionIcon('heroicon-m-circle-stack')
                 ->color($diskUsage['color'])
                 ->chart($diskUsage['chart']),
 
             Stat::make('PHP Version', $phpVersion)
-                ->description('Extensions: ' . $phpExtensions)
+                ->description('Extensions: '.$phpExtensions)
                 ->descriptionIcon('heroicon-m-code-bracket')
                 ->color('gray'),
         ];
@@ -121,7 +121,7 @@ class SystemResourcesWidget extends BaseWidget
                 $memLimitBytes = $this->getMemoryLimitInBytes($memLimit);
 
                 $percentage = $memLimitBytes > 0 ? round(($memUsage / $memLimitBytes) * 100) : 0;
-                $description = 'Using ' . $this->formatBytes($memUsage) . ' of ' . $memLimit;
+                $description = 'Using '.$this->formatBytes($memUsage).' of '.$memLimit;
             }
         } else {
             // Fallback if memory_get_usage is not available
@@ -158,7 +158,7 @@ class SystemResourcesWidget extends BaseWidget
             $used = $total - $free;
 
             $percentage = $total > 0 ? round(($used / $total) * 100) : 0;
-            $description = 'Free: ' . $this->formatBytes($free) . ' of ' . $this->formatBytes($total);
+            $description = 'Free: '.$this->formatBytes($free).' of '.$this->formatBytes($total);
         } else {
             $percentage = 0;
             $description = 'Disk info unavailable';
@@ -194,7 +194,7 @@ class SystemResourcesWidget extends BaseWidget
 
         $bytes /= 1024 ** $pow;
 
-        return round($bytes, $precision) . ' ' . $units[$pow];
+        return round($bytes, $precision).' '.$units[$pow];
     }
 
     private function getMemoryLimitInBytes($memoryLimit): int

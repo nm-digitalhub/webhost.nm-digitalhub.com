@@ -47,7 +47,7 @@ class ModulesStatsWidget extends BaseWidget
                 ]),
 
             Stat::make('Active Modules', $activeModules)
-                ->description($activePercentage . '% of all modules')
+                ->description($activePercentage.'% of all modules')
                 ->descriptionIcon('heroicon-m-check-circle')
                 ->color('success'),
 

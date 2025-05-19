@@ -146,7 +146,7 @@ class UserResource extends Resource
 
                         \Filament\Notifications\Notification::make()
                             ->title('אימייל ברוכים הבאים נשלח')
-                            ->body('נשלח אימייל ברוכים הבאים לכתובת: ' . $record->email)
+                            ->body('נשלח אימייל ברוכים הבאים לכתובת: '.$record->email)
                             ->success()
                             ->send();
                     })

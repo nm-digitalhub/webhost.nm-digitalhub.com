@@ -63,7 +63,7 @@ class DetectMisplacedViews extends Command
                         $pageName = $file->getFilename();
                         $correctPath = app_path("Filament/Resources/{$resourceName}/Pages/{$pageName}");
 
-                        $this->info('Suggested action: mkdir -p ' . dirname($correctPath));
+                        $this->info('Suggested action: mkdir -p '.dirname($correctPath));
                         $this->info("Suggested action: mv {$file->getPathname()} {$correctPath}");
                     }
                 }
@@ -73,7 +73,7 @@ class DetectMisplacedViews extends Command
         if ($suspiciousFiles === []) {
             $this->info('No misplaced view files detected.');
         } else {
-            $this->info(count($suspiciousFiles) . ' suspicious files found.');
+            $this->info(count($suspiciousFiles).' suspicious files found.');
         }
 
         return 0;
@@ -88,7 +88,7 @@ class DetectMisplacedViews extends Command
             if (str_starts_with($filename, $prefix)) {
                 $remainder = substr($filename, strlen($prefix), -4); // Remove .php
 
-                return $remainder . 'Resource';
+                return $remainder.'Resource';
             }
         }
 

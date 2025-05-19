@@ -351,7 +351,7 @@ class RouteAndImportScanner extends Command
                     // Skip file name
                     continue;
                 }
-                $namespace .= '\\' . $part;
+                $namespace .= '\\'.$part;
             }
 
             return $namespace;
@@ -365,7 +365,7 @@ class RouteAndImportScanner extends Command
                     // Skip file name
                     continue;
                 }
-                $namespace .= '\\' . $part;
+                $namespace .= '\\'.$part;
             }
 
             return $namespace;
@@ -398,7 +398,7 @@ class RouteAndImportScanner extends Command
             }
 
             // Check if the class name is used in the file
-            if (! preg_match('/\b' . preg_quote($className, '/') . '\b(?!\s*;)/', (string) $content)) {
+            if (! preg_match('/\b'.preg_quote($className, '/').'\b(?!\s*;)/', (string) $content)) {
                 $this->addIssue(
                     'unused_import',
                     $filePath,
@@ -554,8 +554,8 @@ class RouteAndImportScanner extends Command
         }
 
         $this->line('');
-        $this->info('Total issues found: ' . count($this->issues));
-        $this->info('Fixable issues: ' . count($this->fixes));
+        $this->info('Total issues found: '.count($this->issues));
+        $this->info('Fixable issues: '.count($this->fixes));
 
         // Generate detailed report if requested
         if ($this->option('report')) {
@@ -565,7 +565,7 @@ class RouteAndImportScanner extends Command
 
     private function generateDetailedReport()
     {
-        $reportPath = storage_path('logs/route-import-scan-' . date('Y-m-d-His') . '.json');
+        $reportPath = storage_path('logs/route-import-scan-'.date('Y-m-d-His').'.json');
 
         $report = [
             'timestamp' => now()->toDateTimeString(),
@@ -666,7 +666,7 @@ class RouteAndImportScanner extends Command
                             $useStatement = $matches[1];
 
                             // Remove the use statement
-                            $content = str_replace($useStatement . "\n", '', $content);
+                            $content = str_replace($useStatement."\n", '', $content);
                             $content = str_replace($useStatement, '', $content);
 
                             $this->line(" - Removed: {$useStatement}");
@@ -693,7 +693,7 @@ class RouteAndImportScanner extends Command
             // Save changes if any were made
             if ($content !== $originalContent) {
                 // Create backup
-                File::put($filePath . '.bak', $originalContent);
+                File::put($filePath.'.bak', $originalContent);
                 $this->line(" - Created backup: {$file}.bak");
 
                 // Save changes
@@ -703,10 +703,10 @@ class RouteAndImportScanner extends Command
         }
 
         $this->line('');
-        $this->info("Fixed {$fixedCount} issues out of " . count($this->fixes) . ' fixable issues.');
+        $this->info("Fixed {$fixedCount} issues out of ".count($this->fixes).' fixable issues.');
 
         if ($fixedCount < count($this->fixes)) {
-            $this->warn((count($this->fixes) - $fixedCount) . ' issues could not be fixed automatically.');
+            $this->warn((count($this->fixes) - $fixedCount).' issues could not be fixed automatically.');
         }
     }
 }

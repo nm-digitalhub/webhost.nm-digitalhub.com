@@ -88,7 +88,7 @@ class FixLivewireNamespaces extends Command
         }
 
         $files = File::files($directory);
-        $this->info('Processing ' . count($files) . " files in {$directory}");
+        $this->info('Processing '.count($files)." files in {$directory}");
 
         foreach ($files as $file) {
             if ($file->getExtension() !== 'php') {
@@ -98,7 +98,7 @@ class FixLivewireNamespaces extends Command
             $content = File::get($file->getPathname());
             $originalContent = $content;
             $fileName = $file->getFilename();
-            $expectedNamespace = 'App\\Livewire\\' . basename($directory);
+            $expectedNamespace = 'App\\Livewire\\'.basename($directory);
 
             // Check for incorrect namespaces like App\Http\Livewire
             if (preg_match('/namespace\s+App\\\\Http\\\\Livewire/', $content)) {
@@ -114,7 +114,7 @@ class FixLivewireNamespaces extends Command
                 $this->info("Fixed namespace in {$fileName}");
             }
             // Check for missing namespace or other incorrect namespace
-            elseif (! preg_match('/namespace\s+' . preg_quote($expectedNamespace) . ';/', $content)) {
+            elseif (! preg_match('/namespace\s+'.preg_quote($expectedNamespace).';/', $content)) {
                 // Extract any existing namespace
                 if (preg_match('/namespace\s+([^;]+);/', $content, $matches)) {
                     $content = str_replace(
@@ -136,7 +136,7 @@ class FixLivewireNamespaces extends Command
 
             // Check for class name matching file name
             $className = $file->getFilenameWithoutExtension();
-            if (! preg_match('/class\s+' . preg_quote($className) . '\s+extends\s+Component/i', (string) $content)) {
+            if (! preg_match('/class\s+'.preg_quote($className).'\s+extends\s+Component/i', (string) $content)) {
                 $this->warn("Class name might not match file name in {$fileName}");
 
                 // If we can detect the actual class name, we can fix it
@@ -156,7 +156,7 @@ class FixLivewireNamespaces extends Command
             // Save changes if any were made
             if ($content !== $originalContent) {
                 // Create backup
-                File::put($file->getPathname() . '.bak', $originalContent);
+                File::put($file->getPathname().'.bak', $originalContent);
                 $this->info("Created backup of {$fileName}");
 
                 // Save changes

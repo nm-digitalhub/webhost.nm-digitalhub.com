@@ -57,7 +57,7 @@ class UsersStatsWidget extends BaseWidget
                 ]),
 
             Stat::make('New Users (30 Days)', $newUsers)
-                ->description($newUsers > 0 ? number_format(($newUsers / $totalUsers) * 100, 1) . '% growth' : 'No growth')
+                ->description($newUsers > 0 ? number_format(($newUsers / $totalUsers) * 100, 1).'% growth' : 'No growth')
                 ->descriptionIcon($newUsers > 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->color($newUsers > 0 ? 'success' : 'danger'),
 

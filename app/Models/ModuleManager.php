@@ -188,7 +188,8 @@ class ModuleManager extends Model
     public function newEloquentBuilder($query)
     {
         // This method is required for Filament's table filters to work properly
-        return new class($query) extends Builder {
+        return new class($query) extends Builder
+        {
             public function __construct($query)
             {
                 parent::__construct($query);

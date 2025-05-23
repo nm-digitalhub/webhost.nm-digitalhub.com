@@ -82,10 +82,10 @@ class GeneratorResource extends Resource
                                         $name = $get('name');
 
                                         return match ($type) {
-                                            'model' => app_path('Models/' . $name . '.php'),
-                                            'resource' => app_path('Filament/Resources/' . $name . 'Resource.php'),
-                                            'page' => app_path('Filament/Pages/' . $name . '.php'),
-                                            'widget' => app_path('Filament/Widgets/' . $name . '.php'),
+                                            'model' => app_path('Models/'.$name.'.php'),
+                                            'resource' => app_path('Filament/Resources/'.$name.'Resource.php'),
+                                            'page' => app_path('Filament/Pages/'.$name.'.php'),
+                                            'widget' => app_path('Filament/Widgets/'.$name.'.php'),
                                             default => app_path(),
                                         };
                                     })
@@ -183,7 +183,7 @@ class GeneratorResource extends Resource
                                         Forms\Components\TextInput::make('local_key')
                                             ->label('Local Key'),
                                     ])
-                                    ->itemLabel(fn (array $state): ?string => ($state['type'] ?? '') . ' ' . ($state['name'] ?? ''))
+                                    ->itemLabel(fn (array $state): ?string => ($state['type'] ?? '').' '.($state['name'] ?? ''))
                                     ->collapsible()
                                     ->defaultItems(0),
                             ])
@@ -443,7 +443,6 @@ class GeneratorResource extends Resource
     {
         return $panel->isEmailVerificationRequired();
     }
-
 
     public static function isTenantSubscriptionRequired(\Filament\Panel $panel): bool
     {

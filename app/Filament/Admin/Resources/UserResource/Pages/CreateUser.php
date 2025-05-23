@@ -48,7 +48,7 @@ class CreateUser extends CreateRecord
             // Add notification
             \Filament\Notifications\Notification::make()
                 ->title('אימייל ברוכים הבאים נשלח')
-                ->body('נשלח אימייל ברוכים הבאים לכתובת: ' . $user->email)
+                ->body('נשלח אימייל ברוכים הבאים לכתובת: '.$user->email)
                 ->success()
                 ->send();
         }

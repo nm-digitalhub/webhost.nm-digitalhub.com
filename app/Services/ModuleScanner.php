@@ -132,7 +132,7 @@ class ModuleScanner
         $files = collect();
 
         foreach ($paths as $path) {
-            $fullPath = $this->basePath . '/' . $path;
+            $fullPath = $this->basePath.'/'.$path;
 
             if ($this->filesystem->exists($fullPath)) {
                 $pathFiles = collect($this->filesystem->allFiles($fullPath))
@@ -236,14 +236,14 @@ class ModuleScanner
     protected function analyzeComponentFile(\SplFileInfo $file, string $expectedType): ?array
     {
         // Get the file's relative path
-        $relativePath = str_replace($this->basePath . '/', '', $file->getRealPath());
+        $relativePath = str_replace($this->basePath.'/', '', $file->getRealPath());
 
         // Extract the class name
         $className = $file->getBasename('.php');
 
         // Determine the namespace and full class name
         $namespace = $this->getNamespaceFromPath($relativePath);
-        $fullClassName = $namespace . '\\' . $className;
+        $fullClassName = $namespace.'\\'.$className;
 
         // Initialize component metadata
         $componentData = [
@@ -301,7 +301,7 @@ class ModuleScanner
         $namespace = str_replace('/', '\\', $directory);
 
         // Remove 'app' prefix and add 'App' namespace
-        $namespace = 'App\\' . ltrim(str_replace('app', '', $namespace), '\\');
+        $namespace = 'App\\'.ltrim(str_replace('app', '', $namespace), '\\');
 
         return $namespace;
     }
@@ -544,7 +544,7 @@ class ModuleScanner
             foreach ($generators as $generator) {
                 // Try to match generators to discovered components
                 $targetPath = $generator->target_path;
-                $relativePath = str_replace($this->basePath . '/', '', $targetPath);
+                $relativePath = str_replace($this->basePath.'/', '', $targetPath);
 
                 foreach ($this->components as $type => $componentList) {
                     foreach ($componentList as $index => $component) {

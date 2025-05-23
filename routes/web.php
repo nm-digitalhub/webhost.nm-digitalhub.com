@@ -60,21 +60,21 @@ Route::middleware([SetLocale::class])->group(function () {
     Route::get('/cloud', [PageController::class, 'servicePage'])->name('service.cloud')->defaults('type', 'cloud');
     Route::post('/contact', [HomeController::class, 'contactSubmit'])->middleware('throttle:5,1')->name('contact.submit');
     Route::get('/domains', [DomainController::class, 'index'])->name('domains');
-Route::get('/support/report', function (\Illuminate\Http\Request $request) {
-    return view('support.report', [
-        'errorCode' => $request->input('error'),
-    ]);
-})->name('support.report');
+    Route::get('/support/report', function (\Illuminate\Http\Request $request) {
+        return view('support.report', [
+            'errorCode' => $request->input('error'),
+        ]);
+    })->name('support.report');
     // נתיבים מאומתים
     Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
         Route::get('/settings', [HomeController::class, 'settings'])->name('settings');
-Route::post('/support/submit', function (\Illuminate\Http\Request $request) {
-    // כאן תוכל לשמור DB או לשלוח מייל
-    Log::error('User reported error ' . $request->error_code . ': ' . $request->message);
+        Route::post('/support/submit', function (\Illuminate\Http\Request $request) {
+            // כאן תוכל לשמור DB או לשלוח מייל
+            Log::error('User reported error '.$request->error_code.': '.$request->message);
 
-    return redirect('/')->with('status', 'Thank you for your report. Our team will review it.');
-})->name('support.submit');
+            return redirect('/')->with('status', 'Thank you for your report. Our team will review it.');
+        })->name('support.submit');
         // נתיבי פרופיל
         Route::prefix('profile')->name('profile.')->group(function () {
             Route::get('/', [HomeController::class, 'profile'])->name('index');

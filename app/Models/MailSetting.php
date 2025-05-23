@@ -118,7 +118,7 @@ class MailSetting extends Model
             ];
         } elseif ($this->use_no_reply) {
             $config['reply_to'] = [
-                'address' => 'noreply@' . parse_url((string) config('app.url'), PHP_URL_HOST),
+                'address' => 'noreply@'.parse_url((string) config('app.url'), PHP_URL_HOST),
                 'name' => 'No Reply',
             ];
         }

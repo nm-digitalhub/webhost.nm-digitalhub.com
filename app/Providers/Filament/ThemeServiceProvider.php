@@ -27,7 +27,7 @@ class ThemeServiceProvider extends ServiceProvider
     {
         // Register custom theme CSS
         FilamentAsset::register([
-            Css::make('nm-digitalhub-theme', __DIR__ . '/../../../resources/css/filament/theme/theme.css'),
+            Css::make('nm-digitalhub-theme', __DIR__.'/../../../resources/css/filament/theme/theme.css'),
         ]);
 
         // Register custom components

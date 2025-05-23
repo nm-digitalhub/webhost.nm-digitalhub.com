@@ -51,23 +51,23 @@ class GenerateCode extends Page
 
         switch ($this->record->type) {
             case 'model':
-                $path = 'Models/' . $name . '.php';
+                $path = 'Models/'.$name.'.php';
                 break;
             case 'resource':
-                $name = str_ends_with($name, 'Resource') ? $name : $name . 'Resource';
-                $path = 'Filament/Resources/' . $name . '.php';
+                $name = str_ends_with($name, 'Resource') ? $name : $name.'Resource';
+                $path = 'Filament/Resources/'.$name.'.php';
                 break;
             case 'page':
-                $path = 'Filament/Pages/' . $name . '.php';
+                $path = 'Filament/Pages/'.$name.'.php';
                 break;
             case 'widget':
-                $path = 'Filament/Widgets/' . $name . '.php';
+                $path = 'Filament/Widgets/'.$name.'.php';
                 break;
             default:
-                $path = $name . '.php';
+                $path = $name.'.php';
         }
 
-        return $basePath . '/' . $path;
+        return $basePath.'/'.$path;
     }
 
     protected function loadGenerationData(): void
@@ -155,7 +155,7 @@ class GenerateCode extends Page
 
         $fillableStr = $fillableFields === []
             ? '    // protected $fillable = [];'
-            : "    protected \$fillable = [\n        " . implode(",\n        ", $fillableFields) . ",\n    ];";
+            : "    protected \$fillable = [\n        ".implode(",\n        ", $fillableFields).",\n    ];";
 
         $useSoftDeletes = $this->generationData['soft_deletes']
             ? "use Illuminate\\Database\\Eloquent\\SoftDeletes;\n"
@@ -194,7 +194,7 @@ namespace {$namespace};
 
 {$useSoftDeletes}use {$extends};
 
-class {$name} extends " . class_basename($extends) . "
+class {$name} extends ".class_basename($extends)."
 {
 {$softDeletesTrait}{$timestamps}{$fillableStr}
 {$relations}}
@@ -209,7 +209,7 @@ class {$name} extends " . class_basename($extends) . "
         }
 
         $modelName = str_replace('Resource', '', $name);
-        $modelClass = 'App\\Models\\' . $modelName;
+        $modelClass = 'App\\Models\\'.$modelName;
 
         $icon = $this->generationData['icon'] ?? 'heroicon-o-rectangle-stack';
         $group = $this->generationData['group'] ? "\n    protected static ?string \$navigationGroup = '{$this->generationData['group']}';" : '';
@@ -342,10 +342,10 @@ use Filament\\Widgets\\Widget;
 
 class {$name} extends Widget
 {
-    protected static string \$view = 'filament.widgets." . strtolower($name) . "';
-" .
+    protected static string \$view = 'filament.widgets.".strtolower($name)."';
+".
     ($this->generationData['poll'] ? '
-    protected int $pollInterval = ' . ($this->generationData['poll_interval'] ?? 60) . ';' : '') . '
+    protected int $pollInterval = '.($this->generationData['poll_interval'] ?? 60).';' : '').'
 }';
         }
     }
@@ -359,14 +359,14 @@ class {$name} extends Widget
             return;
         }
 
-        $generatorService = new GeneratorService();
+        $generatorService = new GeneratorService;
         $result = $generatorService->generate($this->record, $this->showConfirmOverwrite);
 
         if ($result['success']) {
             // Notify success
             Notification::make()
                 ->title('קוד נוצר בהצלחה')
-                ->body('הקובץ נוצר בנתיב: ' . $result['file_path'])
+                ->body('הקובץ נוצר בנתיב: '.$result['file_path'])
                 ->success()
                 ->send();
 
@@ -402,7 +402,7 @@ class {$name} extends Widget
         }
 
         $fileName = basename($this->filePath);
-        $tempFile = storage_path('app/public/' . $fileName);
+        $tempFile = storage_path('app/public/'.$fileName);
 
         // Save code to a temporary file
         File::put($tempFile, $this->code);
@@ -410,11 +410,11 @@ class {$name} extends Widget
         // Set download headers
         header('Content-Description: File Transfer');
         header('Content-Type: application/octet-stream');
-        header('Content-Disposition: attachment; filename="' . $fileName . '"');
+        header('Content-Disposition: attachment; filename="'.$fileName.'"');
         header('Expires: 0');
         header('Cache-Control: must-revalidate');
         header('Pragma: public');
-        header('Content-Length: ' . filesize($tempFile));
+        header('Content-Length: '.filesize($tempFile));
         readfile($tempFile);
 
         // Clean up
@@ -436,14 +436,14 @@ class {$name} extends Widget
     {
         $this->showConfirmOverwrite = false;
 
-        $generatorService = new GeneratorService();
+        $generatorService = new GeneratorService;
         $result = $generatorService->generate($this->record, true); // Force overwrite
 
         if ($result['success']) {
             // Notify success
             Notification::make()
                 ->title('קוד נוצר בהצלחה')
-                ->body('הקובץ נוצר בנתיב: ' . $result['file_path'])
+                ->body('הקובץ נוצר בנתיב: '.$result['file_path'])
                 ->success()
                 ->send();
 

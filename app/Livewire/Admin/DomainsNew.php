@@ -72,7 +72,7 @@ class DomainsNew extends Component
             return redirect()->route('admin.domains');
         } catch (\Exception $e) {
             DB::rollBack();
-            session()->flash('error', 'אירעה שגיאה ביצירת הדומיין: ' . $e->getMessage());
+            session()->flash('error', 'אירעה שגיאה ביצירת הדומיין: '.$e->getMessage());
         }
 
         return null;

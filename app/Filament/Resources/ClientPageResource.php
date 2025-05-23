@@ -285,12 +285,11 @@ class ClientPageResource extends Resource
             //
         ];
     }
-public static function getWidgets(): array
+
+    public static function getWidgets(): array
     {
         return [];
     }
-
-  
 
     public static function getPages(): array
     {
@@ -300,11 +299,11 @@ public static function getWidgets(): array
             'edit' => Pages\EditClientPage::class,
         ];
     }
+
     public static function isEmailVerificationRequired(\Filament\Panel $panel): bool
     {
         return $panel->isEmailVerificationRequired();
     }
-
 
     public static function isTenantSubscriptionRequired(\Filament\Panel $panel): bool
     {

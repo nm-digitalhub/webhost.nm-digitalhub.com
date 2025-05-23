@@ -41,7 +41,7 @@ class FixBladeViews extends Command
         }
 
         $files = File::glob("{$directory}/*.blade.php");
-        $this->info('Processing ' . count($files) . " blade files in {$directory}");
+        $this->info('Processing '.count($files)." blade files in {$directory}");
 
         foreach ($files as $filePath) {
             $content = File::get($filePath);
@@ -105,7 +105,7 @@ class FixBladeViews extends Command
             // Save changes if any were made
             if ($content !== $originalContent) {
                 // Create backup
-                File::put($filePath . '.bak', $originalContent);
+                File::put($filePath.'.bak', $originalContent);
                 $this->info("Created backup of {$fileName}");
 
                 // Save changes

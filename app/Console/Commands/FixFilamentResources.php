@@ -39,7 +39,7 @@ class FixFilamentResources extends Command
         }
 
         $resourceFiles = File::glob("{$resourcesDir}/*.php");
-        $this->info('Processing ' . count($resourceFiles) . ' resources');
+        $this->info('Processing '.count($resourceFiles).' resources');
 
         foreach ($resourceFiles as $filePath) {
             $content = File::get($filePath);
@@ -88,7 +88,7 @@ class FixFilamentResources extends Command
             // Save changes if any were made
             if ($content !== $originalContent) {
                 // Create backup
-                File::put($filePath . '.bak', $originalContent);
+                File::put($filePath.'.bak', $originalContent);
                 $this->info("Created backup of {$fileName}");
 
                 // Save changes
@@ -143,7 +143,7 @@ class FixFilamentResources extends Command
         // Save changes if any were made
         if ($content !== $originalContent) {
             // Create backup
-            File::put($panelProviderPath . '.bak', $originalContent);
+            File::put($panelProviderPath.'.bak', $originalContent);
             $this->info('Created backup of AdminPanelProvider.php');
 
             // Save changes

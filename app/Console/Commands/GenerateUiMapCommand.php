@@ -113,7 +113,7 @@ class GenerateUiMapCommand extends Command
             $this->ignorePatterns = array_map('trim', $this->ignorePatterns);
 
             if (! $this->option('silent')) {
-                $this->info('Ignoring files matching patterns: ' . implode(', ', $this->ignorePatterns));
+                $this->info('Ignoring files matching patterns: '.implode(', ', $this->ignorePatterns));
             }
         }
 
@@ -271,7 +271,7 @@ class GenerateUiMapCommand extends Command
         foreach ($files as $file) {
             if ($file->getExtension() === 'php' && ! $this->shouldIgnoreFile($file->getPathname())) {
                 $path = $file->getPathname();
-                $relativePath = str_replace($viewsPath . '/', '', $path);
+                $relativePath = str_replace($viewsPath.'/', '', $path);
                 $viewName = str_replace('/', '.', str_replace('.blade.php', '', $relativePath));
 
                 $content = File::get($path);
@@ -395,9 +395,9 @@ class GenerateUiMapCommand extends Command
         foreach ($files as $file) {
             if ($file->getExtension() === 'php' && ! $this->shouldIgnoreFile($file->getPathname())) {
                 $path = $file->getPathname();
-                $relativePath = str_replace(app_path() . '/', '', $path);
+                $relativePath = str_replace(app_path().'/', '', $path);
                 $className = str_replace(['.php', '/'], ['', '\\'], $relativePath);
-                $fullyQualifiedClassName = 'App\\' . $className;
+                $fullyQualifiedClassName = 'App\\'.$className;
 
                 if (! class_exists($fullyQualifiedClassName)) {
                     continue;
@@ -493,9 +493,9 @@ class GenerateUiMapCommand extends Command
         foreach ($files as $file) {
             if ($file->getExtension() === 'php' && ! Str::contains($file->getPathname(), '/Pages/') && ! $this->shouldIgnoreFile($file->getPathname())) {
                 $path = $file->getPathname();
-                $relativePath = str_replace(app_path() . '/', '', $path);
+                $relativePath = str_replace(app_path().'/', '', $path);
                 $className = str_replace(['.php', '/'], ['', '\\'], $relativePath);
-                $fullyQualifiedClassName = 'App\\' . $className;
+                $fullyQualifiedClassName = 'App\\'.$className;
 
                 if (! class_exists($fullyQualifiedClassName)) {
                     continue;
@@ -567,9 +567,9 @@ class GenerateUiMapCommand extends Command
         foreach ($files as $file) {
             if ($file->getExtension() === 'php' && ! $this->shouldIgnoreFile($file->getPathname())) {
                 $path = $file->getPathname();
-                $relativePath = str_replace(app_path() . '/', '', $path);
+                $relativePath = str_replace(app_path().'/', '', $path);
                 $className = str_replace(['.php', '/'], ['', '\\'], $relativePath);
-                $fullyQualifiedClassName = 'App\\' . $className;
+                $fullyQualifiedClassName = 'App\\'.$className;
 
                 if (! class_exists($fullyQualifiedClassName)) {
                     continue;
@@ -599,9 +599,9 @@ class GenerateUiMapCommand extends Command
                         $componentName = Str::kebab($componentName);
 
                         if ($componentNamespace) {
-                            $view = 'livewire.' . rtrim($componentNamespace, '.') . '.' . $componentName;
+                            $view = 'livewire.'.rtrim($componentNamespace, '.').'.'.$componentName;
                         } else {
-                            $view = 'livewire.' . $componentName;
+                            $view = 'livewire.'.$componentName;
                         }
                     }
 
@@ -638,7 +638,7 @@ class GenerateUiMapCommand extends Command
     protected function generateMarkdownMap()
     {
         $output = "# NM-DigitalHUB UI Interface Map\n\n";
-        $output .= 'Generated on: ' . date('Y-m-d H:i:s') . "\n\n";
+        $output .= 'Generated on: '.date('Y-m-d H:i:s')."\n\n";
 
         // Routes section
         $output .= "## Routes\n\n";
@@ -656,7 +656,7 @@ class GenerateUiMapCommand extends Command
 
             foreach ($publicRoutes as $route) {
                 $methods = implode(', ', $route['methods']);
-                $controller = $route['controller'] ? class_basename($route['controller']) . '@' . $route['method'] : 'N/A';
+                $controller = $route['controller'] ? class_basename($route['controller']).'@'.$route['method'] : 'N/A';
                 $middleware = implode(', ', array_map(fn ($m) => is_string($m) ? $m : 'Closure', $route['middleware']));
 
                 $output .= "| {$route['uri']} | {$methods} | {$route['name']} | {$controller} | {$middleware} |\n";
@@ -673,7 +673,7 @@ class GenerateUiMapCommand extends Command
 
             foreach ($adminRoutes as $route) {
                 $methods = implode(', ', $route['methods']);
-                $controller = $route['controller'] ? class_basename($route['controller']) . '@' . $route['method'] : 'N/A';
+                $controller = $route['controller'] ? class_basename($route['controller']).'@'.$route['method'] : 'N/A';
                 $middleware = implode(', ', array_map(fn ($m) => is_string($m) ? $m : 'Closure', $route['middleware']));
 
                 $output .= "| {$route['uri']} | {$methods} | {$route['name']} | {$controller} | {$middleware} |\n";
@@ -774,7 +774,7 @@ class GenerateUiMapCommand extends Command
             if ($missingComponents === []) {
                 $output .= "No missing components detected.\n\n";
             } else {
-                $output .= '- ' . implode("\n- ", $missingComponents) . "\n\n";
+                $output .= '- '.implode("\n- ", $missingComponents)."\n\n";
             }
 
             // Unused Models
@@ -799,7 +799,7 @@ class GenerateUiMapCommand extends Command
             if ($unusedModels === []) {
                 $output .= "No unused models detected.\n\n";
             } else {
-                $output .= '- ' . implode("\n- ", $unusedModels) . "\n\n";
+                $output .= '- '.implode("\n- ", $unusedModels)."\n\n";
             }
 
             // Potentially Unused Views
@@ -838,7 +838,7 @@ class GenerateUiMapCommand extends Command
             if ($unusedViews === []) {
                 $output .= "No potentially unused views detected.\n\n";
             } else {
-                $output .= '- ' . implode("\n- ", $unusedViews) . "\n\n";
+                $output .= '- '.implode("\n- ", $unusedViews)."\n\n";
             }
 
             // Views without Titles
@@ -858,7 +858,7 @@ class GenerateUiMapCommand extends Command
             if ($viewsWithoutTitles === []) {
                 $output .= "No views without titles detected.\n\n";
             } else {
-                $output .= '- ' . implode("\n- ", $viewsWithoutTitles) . "\n\n";
+                $output .= '- '.implode("\n- ", $viewsWithoutTitles)."\n\n";
             }
 
             // Routes without Names
@@ -868,14 +868,14 @@ class GenerateUiMapCommand extends Command
             $routesWithoutNames = [];
             foreach ($this->routes as $route) {
                 if (empty($route['name'])) {
-                    $routesWithoutNames[] = $route['uri'] . ' (' . implode(', ', $route['methods']) . ')';
+                    $routesWithoutNames[] = $route['uri'].' ('.implode(', ', $route['methods']).')';
                 }
             }
 
             if ($routesWithoutNames === []) {
                 $output .= "No routes without names detected.\n\n";
             } else {
-                $output .= '- ' . implode("\n- ", $routesWithoutNames) . "\n\n";
+                $output .= '- '.implode("\n- ", $routesWithoutNames)."\n\n";
             }
 
             // Structure Recommendations
@@ -921,7 +921,7 @@ class GenerateUiMapCommand extends Command
             if ($recommendations === []) {
                 $output .= "No structure recommendations at this time.\n\n";
             } else {
-                $output .= '- ' . implode("\n- ", $recommendations) . "\n\n";
+                $output .= '- '.implode("\n- ", $recommendations)."\n\n";
             }
         }
 
@@ -1068,7 +1068,7 @@ class GenerateUiMapCommand extends Command
 </head>
 <body>
     <h1>NM-DigitalHUB UI Interface Map</h1>
-    <p>Generated on: ' . date('Y-m-d H:i:s') . '</p>';
+    <p>Generated on: '.date('Y-m-d H:i:s').'</p>';
 
         // Routes section
         $html .= '<h2>Routes</h2>';
@@ -1092,7 +1092,7 @@ class GenerateUiMapCommand extends Command
 
             foreach ($publicRoutes as $route) {
                 $methods = implode(', ', $route['methods']);
-                $controller = $route['controller'] ? class_basename($route['controller']) . '@' . $route['method'] : 'N/A';
+                $controller = $route['controller'] ? class_basename($route['controller']).'@'.$route['method'] : 'N/A';
                 $middleware = implode(', ', array_map(fn ($m) => is_string($m) ? $m : 'Closure', $route['middleware']));
 
                 $html .= "<tr>
@@ -1121,7 +1121,7 @@ class GenerateUiMapCommand extends Command
 
             foreach ($adminRoutes as $route) {
                 $methods = implode(', ', $route['methods']);
-                $controller = $route['controller'] ? class_basename($route['controller']) . '@' . $route['method'] : 'N/A';
+                $controller = $route['controller'] ? class_basename($route['controller']).'@'.$route['method'] : 'N/A';
                 $middleware = implode(', ', array_map(fn ($m) => is_string($m) ? $m : 'Closure', $route['middleware']));
 
                 $html .= "<tr>
@@ -1258,7 +1258,7 @@ class GenerateUiMapCommand extends Command
         $routeKeys = [];
 
         foreach ($this->routes as $route) {
-            $key = $route['uri'] . '|' . implode(',', $route['methods']);
+            $key = $route['uri'].'|'.implode(',', $route['methods']);
             if (! isset($routeKeys[$key])) {
                 $routeKeys[$key] = true;
                 $uniqueRoutes[] = $route;
@@ -1320,7 +1320,7 @@ class GenerateUiMapCommand extends Command
 
         // Add routes as entities
         foreach ($this->routes as $index => $route) {
-            $entityId = 'route_' . $index;
+            $entityId = 'route_'.$index;
             $relations['entities'][$entityId] = [
                 'type' => 'route',
                 'name' => $route['name'] ?? $route['uri'],
@@ -1331,7 +1331,7 @@ class GenerateUiMapCommand extends Command
 
             // Link routes to controllers
             if ($route['controller']) {
-                $controllerId = 'controller_' . md5((string) $route['controller']);
+                $controllerId = 'controller_'.md5((string) $route['controller']);
 
                 if (! isset($relations['entities'][$controllerId])) {
                     $relations['entities'][$controllerId] = [
@@ -1352,7 +1352,7 @@ class GenerateUiMapCommand extends Command
 
         // Add views as entities
         foreach ($this->views as $name => $view) {
-            $entityId = 'view_' . md5((string) $name);
+            $entityId = 'view_'.md5((string) $name);
             $relations['entities'][$entityId] = [
                 'type' => 'view',
                 'name' => $name,
@@ -1362,7 +1362,7 @@ class GenerateUiMapCommand extends Command
 
             // Link views to their parent views (extends)
             if ($view['extends']) {
-                $parentId = 'view_' . md5((string) $view['extends']);
+                $parentId = 'view_'.md5((string) $view['extends']);
 
                 if (! isset($relations['entities'][$parentId])) {
                     $relations['entities'][$parentId] = [
@@ -1382,7 +1382,7 @@ class GenerateUiMapCommand extends Command
 
             // Link views to included views
             foreach ($view['includes'] as $included) {
-                $includedId = 'view_' . md5((string) $included);
+                $includedId = 'view_'.md5((string) $included);
 
                 if (! isset($relations['entities'][$includedId])) {
                     $relations['entities'][$includedId] = [
@@ -1402,7 +1402,7 @@ class GenerateUiMapCommand extends Command
 
             // Link views to components
             foreach ($view['components'] as $component) {
-                $componentId = 'component_' . md5((string) $component);
+                $componentId = 'component_'.md5((string) $component);
 
                 if (! isset($relations['entities'][$componentId])) {
                     $relations['entities'][$componentId] = [
@@ -1421,7 +1421,7 @@ class GenerateUiMapCommand extends Command
 
         // Add models as entities
         foreach ($this->models as $name => $model) {
-            $entityId = 'model_' . md5((string) $name);
+            $entityId = 'model_'.md5((string) $name);
             $relations['entities'][$entityId] = [
                 'type' => 'model',
                 'name' => $name,
@@ -1433,7 +1433,7 @@ class GenerateUiMapCommand extends Command
                 $targetModelName = $this->extractModelFromRelationship($relationship);
 
                 if ($targetModelName) {
-                    $targetModelId = 'model_' . md5((string) $targetModelName);
+                    $targetModelId = 'model_'.md5((string) $targetModelName);
 
                     if (! isset($relations['entities'][$targetModelId])) {
                         $relations['entities'][$targetModelId] = [
@@ -1455,7 +1455,7 @@ class GenerateUiMapCommand extends Command
 
         // Add Filament resources as entities
         foreach ($this->filamentResources as $name => $resource) {
-            $entityId = 'resource_' . md5((string) $name);
+            $entityId = 'resource_'.md5((string) $name);
             $relations['entities'][$entityId] = [
                 'type' => 'filament_resource',
                 'name' => $name,
@@ -1466,7 +1466,7 @@ class GenerateUiMapCommand extends Command
             // Link resources to their models
             if ($resource['model']) {
                 $modelName = class_basename($resource['model']);
-                $modelId = 'model_' . md5($modelName);
+                $modelId = 'model_'.md5($modelName);
 
                 if (! isset($relations['entities'][$modelId])) {
                     $relations['entities'][$modelId] = [
@@ -1486,7 +1486,7 @@ class GenerateUiMapCommand extends Command
 
         // Add Livewire components as entities
         foreach ($this->livewireComponents as $name => $component) {
-            $entityId = 'livewire_' . md5((string) $name);
+            $entityId = 'livewire_'.md5((string) $name);
             $relations['entities'][$entityId] = [
                 'type' => 'livewire_component',
                 'name' => $name,
@@ -1495,7 +1495,7 @@ class GenerateUiMapCommand extends Command
 
             // Link Livewire components to their views
             if ($component['view']) {
-                $viewId = 'view_' . md5((string) $component['view']);
+                $viewId = 'view_'.md5((string) $component['view']);
 
                 if (! isset($relations['entities'][$viewId])) {
                     $relations['entities'][$viewId] = [

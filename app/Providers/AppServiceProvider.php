@@ -71,7 +71,7 @@ class AppServiceProvider extends ServiceProvider
                 }
             }
         } catch (\Exception $e) {
-            Log::error('Failed to load mail settings: ' . $e->getMessage());
+            Log::error('Failed to load mail settings: '.$e->getMessage());
         }
     }
 }

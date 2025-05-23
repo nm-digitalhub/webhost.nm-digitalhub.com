@@ -64,11 +64,11 @@ class NewUserWelcomeNotification extends Notification
 
         // Fallback if no template is found
         return (new MailMessage)
-            ->subject('Welcome to ' . config('app.name'))
-            ->greeting('Hello ' . $notifiable->name . '!')
+            ->subject('Welcome to '.config('app.name'))
+            ->greeting('Hello '.$notifiable->name.'!')
             ->line('Your account has been created successfully.')
-            ->line('Email: ' . $notifiable->email)
-            ->line('Password: ' . $this->plainPassword)
+            ->line('Email: '.$notifiable->email)
+            ->line('Password: '.$this->plainPassword)
             ->action('Login Now', url('/login'))
             ->line('Thank you for using our application!');
     }

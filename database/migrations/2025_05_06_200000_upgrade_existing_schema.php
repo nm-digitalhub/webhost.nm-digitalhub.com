@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Apply schema optimizations incrementally to preserve data.
      *
@@ -398,7 +399,7 @@ return new class extends Migration {
                     } catch (\Exception $e) {
                         // If there are duplicate entries, we can't add the constraint
                         // Log the error but continue with other optimizations
-                        Log::error('Error adding unique constraint to cart_items: ' . $e->getMessage());
+                        Log::error('Error adding unique constraint to cart_items: '.$e->getMessage());
                     }
                 }
             });
@@ -590,7 +591,7 @@ return new class extends Migration {
             }
         } catch (\Exception $e) {
             // Log error but continue with other optimizations
-            Log::error("Error modifying column {$column} on table {$table}: " . $e->getMessage());
+            Log::error("Error modifying column {$column} on table {$table}: ".$e->getMessage());
         }
     }
 
@@ -627,7 +628,7 @@ return new class extends Migration {
             }
         } catch (\Exception $e) {
             // Log error but continue with other optimizations
-            Log::error("Error converting column {$column} on table {$table} to enum: " . $e->getMessage());
+            Log::error("Error converting column {$column} on table {$table} to enum: ".$e->getMessage());
         }
     }
 };

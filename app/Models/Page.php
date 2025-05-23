@@ -151,7 +151,7 @@ class Page extends Model
         }
 
         // Return storage URL
-        return asset('storage/' . $this->featured_image);
+        return asset('storage/'.$this->featured_image);
     }
 
     /**
@@ -165,6 +165,6 @@ class Page extends Model
             return $content;
         }
 
-        return substr($content, 0, $length) . '...';
+        return substr($content, 0, $length).'...';
     }
 }

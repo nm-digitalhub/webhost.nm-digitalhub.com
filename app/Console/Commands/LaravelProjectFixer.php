@@ -59,14 +59,14 @@ class LaravelProjectFixer extends Command
 
     protected function executeCommand(string $command, string $description)
     {
-        $this->info("\n" . str_repeat('-', 50));
+        $this->info("\n".str_repeat('-', 50));
         $this->info($description);
         $this->info(str_repeat('-', 50));
 
         try {
             Artisan::call($command, [], $this->output);
         } catch (\Exception $e) {
-            $this->error("Error running command '{$command}': " . $e->getMessage());
+            $this->error("Error running command '{$command}': ".$e->getMessage());
         }
     }
 
@@ -75,7 +75,7 @@ class LaravelProjectFixer extends Command
         $panelProviderPath = app_path('Providers/Filament/AdminPanelProvider.php');
 
         if (! File::exists($panelProviderPath)) {
-            $this->line("\n" . str_repeat('-', 50));
+            $this->line("\n".str_repeat('-', 50));
             $this->info('Creating Filament Admin Panel Provider');
             $this->info(str_repeat('-', 50));
 
@@ -167,7 +167,7 @@ class AdminPanelProvider extends PanelProvider
 
             if (! str_contains($content, $providerClass)) {
                 $pattern = "/(\'providers\'\s*=>\s*\[\s*)/";
-                $replacement = "$1\n        " . $providerClass . ",\n        ";
+                $replacement = "$1\n        ".$providerClass.",\n        ";
 
                 $content = preg_replace($pattern, $replacement, $content);
                 File::put($configPath, $content);

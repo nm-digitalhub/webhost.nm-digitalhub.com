@@ -174,11 +174,11 @@ class CreateAdminUserCommand extends Command
             $this->line("Name: $name");
             $this->line("Email: $email");
             $this->line("Role: $role");
-            $this->line("\nThe administrator can now log in at " . config('app.url') . '/admin');
+            $this->line("\nThe administrator can now log in at ".config('app.url').'/admin');
 
             return 0;
         } catch (\Exception $e) {
-            $this->error("\n❌ Error creating administrator: " . $e->getMessage());
+            $this->error("\n❌ Error creating administrator: ".$e->getMessage());
 
             return 1;
         }

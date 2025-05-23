@@ -122,7 +122,7 @@ class PageController extends Controller
 
             return view('home', ['shuffledDomains' => $shuffledDomains]);
         } catch (\Exception $e) {
-            Log::error('Home page error: ' . $e->getMessage());
+            Log::error('Home page error: '.$e->getMessage());
 
             return view('home')->with('error', 'שגיאה בטעינת העמוד. אנא נסה שוב מאוחר יותר.');
         }
@@ -164,7 +164,7 @@ class PageController extends Controller
             try {
                 return view($type);
             } catch (\Exception $e) {
-                Log::error("{$type} page error: " . $e->getMessage());
+                Log::error("{$type} page error: ".$e->getMessage());
 
                 return view('home')->with('error', "שגיאה בטעינת עמוד {$type}. אנא נסה שוב מאוחר יותר.");
             }
@@ -208,7 +208,7 @@ class PageController extends Controller
 
             return view('terms', ['terms' => $terms]);
         } catch (\Exception $e) {
-            Log::error('Terms page error: ' . $e->getMessage());
+            Log::error('Terms page error: '.$e->getMessage());
 
             return view('home')->with('error', 'שגיאה בטעינת עמוד התקנון. אנא נסה שוב מאוחר יותר.');
         }
@@ -248,7 +248,7 @@ class PageController extends Controller
 
             return view('policy', ['policy' => $policy]);
         } catch (\Exception $e) {
-            Log::error('Policy page error: ' . $e->getMessage());
+            Log::error('Policy page error: '.$e->getMessage());
 
             return view('home')->with('error', 'שגיאה בטעינת עמוד מדיניות הפרטיות. אנא נסה שוב מאוחר יותר.');
         }

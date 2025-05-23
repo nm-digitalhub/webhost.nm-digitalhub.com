@@ -255,7 +255,6 @@ class ModuleManagerResource extends Resource
         return $panel->isEmailVerificationRequired();
     }
 
-
     public static function isTenantSubscriptionRequired(\Filament\Panel $panel): bool
     {
         return $panel->isTenantSubscriptionRequired();

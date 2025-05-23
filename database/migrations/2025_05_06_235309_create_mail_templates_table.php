@@ -7,7 +7,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -28,7 +29,7 @@ return new class extends Migration {
         // Insert default welcome template
         DB::table('mail_templates')->insert([
             'name' => 'user_welcome',
-            'subject' => 'Welcome to ' . config('app.name'),
+            'subject' => 'Welcome to '.config('app.name'),
             'body' => 'Hello {{ name }},
 
 Your account was created successfully.
@@ -47,7 +48,7 @@ Thank you for joining us!',
         // Insert Hebrew version
         DB::table('mail_templates')->insert([
             'name' => 'user_welcome_he',
-            'subject' => 'ברוך הבא ל-' . config('app.name'),
+            'subject' => 'ברוך הבא ל-'.config('app.name'),
             'body' => 'שלום {{ name }},
 
 החשבון שלך נוצר בהצלחה.

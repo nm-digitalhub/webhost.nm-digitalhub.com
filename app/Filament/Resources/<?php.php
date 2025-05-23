@@ -46,16 +46,16 @@ class ClientModuleResource extends Resource
      */
     public static function getPages(): array
     {
-        return [            'index' => Pages\ListClientModule::route('/'),
+        return ['index' => Pages\ListClientModule::route('/'),
             'create' => Pages\CreateClientModule::route('/create'),
             'edit' => Pages\EditClientModule::route('/{record}/edit'),
         ];
     }
+
     public static function isEmailVerificationRequired(\Filament\Panel $panel): bool
     {
         return $panel->isEmailVerificationRequired();
     }
-
 
     public static function isTenantSubscriptionRequired(\Filament\Panel $panel): bool
     {

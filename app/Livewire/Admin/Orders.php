@@ -19,9 +19,9 @@ class Orders extends Component
     public function render()
     {
         $orders = Order::query()
-            ->when($this->search, fn ($query) => $query->where('order_number', 'like', '%' . $this->search . '%')
+            ->when($this->search, fn ($query) => $query->where('order_number', 'like', '%'.$this->search.'%')
                 ->orWhereHas('user', function ($query) {
-                    $query->where('name', 'like', '%' . $this->search . '%');
+                    $query->where('name', 'like', '%'.$this->search.'%');
                 }))
             ->when($this->status, fn ($query) => $query->where('status', $this->status))
             ->latest()

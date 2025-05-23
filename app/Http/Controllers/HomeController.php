@@ -44,7 +44,7 @@ class HomeController extends Controller
 
             return view('home', ['shuffledDomains' => $shuffledDomains]);
         } catch (\Exception $e) {
-            Log::error('Home page error: ' . $e->getMessage());
+            Log::error('Home page error: '.$e->getMessage());
 
             return view('home')->with('error', 'שגיאה בטעינת העמוד. אנא נסה שוב מאוחר יותר.');
         }
@@ -74,7 +74,7 @@ class HomeController extends Controller
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->route('home')->withErrors($e->validator)->withInput();
         } catch (\Exception $e) {
-            Log::error('Domain search error: ' . $e->getMessage());
+            Log::error('Domain search error: '.$e->getMessage());
 
             return redirect()->route('home')->with('error', 'שגיאה בחיפוש הדומיין. אנא נסה שוב.');
         }
@@ -88,7 +88,7 @@ class HomeController extends Controller
         try {
             return view('domains');
         } catch (\Exception $e) {
-            Log::error('Domains page error: ' . $e->getMessage());
+            Log::error('Domains page error: '.$e->getMessage());
 
             return view('home')->with('error', 'שגיאה בטעינת עמוד הדומיינים. אנא נסה שוב מאוחר יותר.');
         }
@@ -102,7 +102,7 @@ class HomeController extends Controller
         try {
             return view('hosting');
         } catch (\Exception $e) {
-            Log::error('Hosting page error: ' . $e->getMessage());
+            Log::error('Hosting page error: '.$e->getMessage());
 
             return view('home')->with('error', 'שגיאה בטעינת עמוד האחסון. אנא נסה שוב מאוחר יותר.');
         }
@@ -116,7 +116,7 @@ class HomeController extends Controller
         try {
             return view('vps');
         } catch (\Exception $e) {
-            Log::error('VPS page error: ' . $e->getMessage());
+            Log::error('VPS page error: '.$e->getMessage());
 
             return view('home')->with('error', 'שגיאה בטעינת עמוד ה-VPS. אנא נסה שוב מאוחר יותר.');
         }
@@ -130,7 +130,7 @@ class HomeController extends Controller
         try {
             return view('cloud');
         } catch (\Exception $e) {
-            Log::error('Cloud page error: ' . $e->getMessage());
+            Log::error('Cloud page error: '.$e->getMessage());
 
             return view('home')->with('error', 'שגיאה בטעינת עמוד הענן. אנא נסה שוב מאוחר יותר.');
         }
@@ -155,7 +155,7 @@ class HomeController extends Controller
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->route('home')->withErrors($e->validator)->withInput();
         } catch (\Exception $e) {
-            Log::error('Contact form error: ' . $e->getMessage());
+            Log::error('Contact form error: '.$e->getMessage());
 
             return redirect()->route('home')->with('error', 'שגיאה בשליחת הטופס. אנא נסה שוב.');
         }
@@ -171,7 +171,7 @@ class HomeController extends Controller
 
             return view('dashboard', ['user' => $user]);
         } catch (\Exception $e) {
-            Log::error('Dashboard page error: ' . $e->getMessage());
+            Log::error('Dashboard page error: '.$e->getMessage());
 
             return view('home')->with('error', 'שגיאה בטעינת הדשבורד. אנא נסה שוב מאוחר יותר.');
         }
@@ -187,7 +187,7 @@ class HomeController extends Controller
 
             return view('profile', ['user' => $user]);
         } catch (\Exception $e) {
-            Log::error('Profile page error: ' . $e->getMessage());
+            Log::error('Profile page error: '.$e->getMessage());
 
             return view('home')->with('error', 'שגיאה בטעינת עמוד הפרופיל. אנא נסה שוב מאוחר יותר.');
         }
@@ -203,7 +203,7 @@ class HomeController extends Controller
 
             return view('settings', ['user' => $user]);
         } catch (\Exception $e) {
-            Log::error('Settings page error: ' . $e->getMessage());
+            Log::error('Settings page error: '.$e->getMessage());
 
             return view('home')->with('error', 'שגיאה בטעינת עמוד ההגדרות. אנא נסה שוב מאוחר יותר.');
         }
@@ -217,7 +217,7 @@ class HomeController extends Controller
         try {
             return view('terms');
         } catch (\Exception $e) {
-            Log::error('Terms page error: ' . $e->getMessage());
+            Log::error('Terms page error: '.$e->getMessage());
 
             return view('home')->with('error', 'שגיאה בטעינת עמוד התקנון. אנא נסה שוב מאוחר יותר.');
         }
@@ -231,7 +231,7 @@ class HomeController extends Controller
         try {
             return view('policy');
         } catch (\Exception $e) {
-            Log::error('Policy page error: ' . $e->getMessage());
+            Log::error('Policy page error: '.$e->getMessage());
 
             return view('home')->with('error', 'שגיאה בטעינת עמוד מדיניות הפרטיות. אנא נסה שוב מאוחר יותר.');
         }

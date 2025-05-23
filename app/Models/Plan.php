@@ -62,7 +62,7 @@ class Plan extends Model
     {
         $symbol = $this->currency === 'ILS' ? '₪' : ($this->currency === 'USD' ? '$' : '€');
 
-        return $symbol . number_format($this->price, 2);
+        return $symbol.number_format($this->price, 2);
     }
 
     /**

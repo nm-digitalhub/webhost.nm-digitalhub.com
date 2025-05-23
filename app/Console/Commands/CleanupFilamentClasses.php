@@ -54,7 +54,7 @@ class CleanupFilamentClasses extends Command
             $fixedContent = $this->fixPanelProviderContent($content);
 
             // Create a backup
-            $backupPath = $panelProviderPath . '.bak';
+            $backupPath = $panelProviderPath.'.bak';
             File::copy($panelProviderPath, $backupPath);
             $this->info("Created backup at {$backupPath}");
 
@@ -81,7 +81,7 @@ class CleanupFilamentClasses extends Command
 
             // Create new content with merged panel method
             $newContent = "<?php\n\nnamespace {$firstMatch[1]};\n\n";
-            $newContent .= implode("\n", $allImports) . "\n\n";
+            $newContent .= implode("\n", $allImports)."\n\n";
             $newContent .= "class AdminPanelProvider extends PanelProvider\n{\n";
             $newContent .= "    public function panel(Panel \$panel): Panel\n    {\n";
             $newContent .= "        return \$panel\n";
@@ -126,7 +126,7 @@ class CleanupFilamentClasses extends Command
             $newContent .= "            ->sidebarCollapsibleOnDesktop(true);\n";
             $newContent .= "    }\n";
 
-            return $newContent . "}\n";
+            return $newContent."}\n";
         }
 
         // If regex didn't match, just remove duplicate PHP tags and namespaces

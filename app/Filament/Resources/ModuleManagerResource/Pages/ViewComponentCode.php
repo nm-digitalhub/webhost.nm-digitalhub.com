@@ -189,11 +189,11 @@ class ViewComponentCode extends Page
         $bytes = $this->fileInfo['size'] ?? 0;
 
         if ($bytes > 1024 * 1024) {
-            return round($bytes / (1024 * 1024), 2) . ' MB';
+            return round($bytes / (1024 * 1024), 2).' MB';
         } elseif ($bytes > 1024) {
-            return round($bytes / 1024, 2) . ' KB';
+            return round($bytes / 1024, 2).' KB';
         } else {
-            return $bytes . ' bytes';
+            return $bytes.' bytes';
         }
     }
 
@@ -302,7 +302,7 @@ class ViewComponentCode extends Page
         } catch (\Exception $e) {
             Notification::make()
                 ->title('השינויים לא נשמרו')
-                ->body('אירעה שגיאה בעת שמירת הקובץ: ' . $e->getMessage())
+                ->body('אירעה שגיאה בעת שמירת הקובץ: '.$e->getMessage())
                 ->danger()
                 ->send();
         }

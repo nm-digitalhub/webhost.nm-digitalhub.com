@@ -71,10 +71,10 @@ class CheckFilamentResources extends Command
 
         // Output issues
         if (count($issues) > 0) {
-            $this->info("\nFound " . count($issues) . ' issues that need attention:');
+            $this->info("\nFound ".count($issues).' issues that need attention:');
 
             foreach ($issues as $index => $issue) {
-                $this->warn(($index + 1) . '. ' . $issue);
+                $this->warn(($index + 1).'. '.$issue);
             }
 
             $this->info("\nPlease fix these issues manually or run the appropriate fix commands.");

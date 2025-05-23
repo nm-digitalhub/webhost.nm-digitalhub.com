@@ -70,11 +70,11 @@ class ClientModuleResource extends Resource
             'edit' => Pages\EditClientModule::route('/{record}/edit'),
         ];
     }
+
     public static function isEmailVerificationRequired(\Filament\Panel $panel): bool
     {
         return $panel->isEmailVerificationRequired();
     }
-
 
     public static function isTenantSubscriptionRequired(\Filament\Panel $panel): bool
     {

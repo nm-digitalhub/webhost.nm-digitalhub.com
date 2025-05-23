@@ -105,7 +105,7 @@ class Product extends Model
     {
         $symbol = $this->currency === 'ILS' ? '₪' : ($this->currency === 'USD' ? '$' : '€');
 
-        return $symbol . number_format($this->price, 2);
+        return $symbol.number_format($this->price, 2);
     }
 
     /**
@@ -119,7 +119,7 @@ class Product extends Model
 
         $symbol = $this->currency === 'ILS' ? '₪' : ($this->currency === 'USD' ? '$' : '€');
 
-        return $symbol . number_format($this->sale_price, 2);
+        return $symbol.number_format($this->sale_price, 2);
     }
 
     /**

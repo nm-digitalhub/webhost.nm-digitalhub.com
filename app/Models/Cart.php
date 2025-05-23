@@ -192,7 +192,7 @@ class Cart extends Model
     {
         $symbol = $this->currency === 'ILS' ? '₪' : ($this->currency === 'USD' ? '$' : '€');
 
-        return $symbol . number_format($this->total, 2);
+        return $symbol.number_format($this->total, 2);
     }
 
     /**

@@ -75,7 +75,7 @@ class ModuleInstaller
         } catch (\Exception $e) {
             return [
                 'success' => false,
-                'message' => "Failed to install client module '{$name}': " . $e->getMessage(),
+                'message' => "Failed to install client module '{$name}': ".$e->getMessage(),
                 'exception' => $e,
             ];
         }
@@ -165,7 +165,7 @@ class ModuleInstaller
         } catch (\Exception $e) {
             return [
                 'success' => false,
-                'message' => 'Failed to install Support module for client panel: ' . $e->getMessage(),
+                'message' => 'Failed to install Support module for client panel: '.$e->getMessage(),
                 'exception' => $e,
             ];
         }
@@ -257,7 +257,7 @@ class ModuleInstaller
         } catch (\Exception $e) {
             return [
                 'success' => false,
-                'message' => 'Failed to install Billing module for client panel: ' . $e->getMessage(),
+                'message' => 'Failed to install Billing module for client panel: '.$e->getMessage(),
                 'exception' => $e,
             ];
         }
@@ -331,7 +331,7 @@ class ModuleInstaller
         } catch (\Exception $e) {
             return [
                 'success' => false,
-                'message' => 'Failed to install Domains module for client panel: ' . $e->getMessage(),
+                'message' => 'Failed to install Domains module for client panel: '.$e->getMessage(),
                 'exception' => $e,
             ];
         }
@@ -392,7 +392,7 @@ class ModuleInstaller
         } catch (\Exception $e) {
             return [
                 'success' => false,
-                'message' => 'Failed to install Product module: ' . $e->getMessage(),
+                'message' => 'Failed to install Product module: '.$e->getMessage(),
                 'exception' => $e,
             ];
         }
@@ -456,7 +456,7 @@ class ModuleInstaller
         } catch (\Exception $e) {
             return [
                 'success' => false,
-                'message' => 'Failed to install Checkout module: ' . $e->getMessage(),
+                'message' => 'Failed to install Checkout module: '.$e->getMessage(),
                 'exception' => $e,
             ];
         }
@@ -531,7 +531,7 @@ class ModuleInstaller
         } catch (\Exception $e) {
             return [
                 'success' => false,
-                'message' => 'Failed to install Cart module: ' . $e->getMessage(),
+                'message' => 'Failed to install Cart module: '.$e->getMessage(),
                 'exception' => $e,
             ];
         }
@@ -592,7 +592,7 @@ class ModuleInstaller
         } catch (\Exception $e) {
             return [
                 'success' => false,
-                'message' => 'Failed to install Coupon module: ' . $e->getMessage(),
+                'message' => 'Failed to install Coupon module: '.$e->getMessage(),
                 'exception' => $e,
             ];
         }
@@ -656,7 +656,7 @@ class ModuleInstaller
         } catch (\Exception $e) {
             return [
                 'success' => false,
-                'message' => 'Failed to install Page Editor module: ' . $e->getMessage(),
+                'message' => 'Failed to install Page Editor module: '.$e->getMessage(),
                 'exception' => $e,
             ];
         }
@@ -836,7 +836,7 @@ class ModuleInstaller
             $routeStub = $this->getRouteStubForPrefix($routePrefix);
 
             // Append to web.php
-            File::append($routesPath, "\n" . $routeStub);
+            File::append($routesPath, "\n".$routeStub);
         }
     }
 
